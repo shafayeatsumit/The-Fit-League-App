@@ -8,7 +8,7 @@ import React, { Component } from 'react';
 
 import { AppRegistry } from 'react-native';
 
-import App from './components/App';
+import App from './app/components/App';
 
 export default class FanFit extends Component {
   render() {

@@ -3,13 +3,12 @@ import React, { Component } from 'react';
 import {
   StyleSheet,
   View,
-  ActivityIndicator,
-  AsyncStorage
+  ActivityIndicator
 } from 'react-native';
 
 import { Actions } from 'react-native-router-flux';
 
-const TOKEN_STORAGE_KEY = 'auth_token';
+import { Session } from '../services/Session'
 
 export default class Loading extends Component {
   constructor(props) {
@@ -17,17 +16,11 @@ export default class Loading extends Component {
     this.state = { animating: true };
   }
 
-  async _checkSession() {
-    const token = await AsyncStorage.getItem(TOKEN_STORAGE_KEY);
-    if (token !== null){
-      Actions.home({ token });
-    } else {
-      Actions.welcome();
-    }
-  }
-
   componentWillMount() {
-    this._checkSession()
+    Session.check(
+      (token) => Actions.home({ token }), 
+      () => Actions.welcome({ endpoint: 'registrations', label: 'Join' })
+    )
   }
 
   render() {
@@ -51,5 +44,5 @@ const styles = StyleSheet.create({
   },
   activityIndicator: {
 
-  },
+  }
 });
