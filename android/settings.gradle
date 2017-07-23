@@ -1,0 +1,3 @@
+rootProject.name = 'FanFit'
+
+include ':app'
