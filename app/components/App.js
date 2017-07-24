@@ -4,6 +4,7 @@ import { Router, Scene } from 'react-native-router-flux';
 import Welcome from './Welcome';
 import Loading from './Loading';
 import Home from './Home';
+import NewWorkout from './NewWorkout';
 
 const App = () => {
   return (
@@ -26,6 +27,11 @@ const App = () => {
           hideNavBar={true}
           component={Home}
           title="Home"
+        />
+        <Scene
+          key="newWorkout"
+          component={NewWorkout}
+          title="Add a Workout"
         />
       </Scene>
     </Router>

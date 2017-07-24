@@ -1,5 +1,14 @@
 const BASE_URL = 'http://localhost:5100/v1';
 
+let headersFor = (token) => {
+  let headers = {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json'
+  };
+  if (token) headers['Authorization'] = 'Bearer ' + token;
+  return headers;
+}
+
 const handleErrors = (response) => {
   return response.json().then(responseData => {
     if (responseData.errors) {
@@ -11,11 +20,14 @@ const handleErrors = (response) => {
 
 export const HttpUtils = {
   handleErrors,
+  get: (endpoint, token) => {
+    let headers = headersFor(token);
+    return fetch([BASE_URL, endpoint].join('/'), { 
+      method: 'GET', headers
+    }).then(handleErrors);
+  },
   post: (endpoint, data, token) => {
-    let headers = {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    };
+    let headers = headersFor(token);
     if (token) headers['Authorization'] = 'Bearer ' + token;
     let body = JSON.stringify(data);
     return fetch([BASE_URL, endpoint].join('/'), { 
