@@ -28,19 +28,23 @@ const styles = StyleSheet.create({
     alignItems: 'baseline'
   },
   alternativeCtaLabel: {
-    alignSelf: 'flex-start'
+    alignSelf: 'flex-start',
+    fontFamily: 'Avenir-Black',
+    color: 'white',
+    backgroundColor: 'transparent'
   },
   alternativeCtaButton: {
     height: 24,
-    backgroundColor: '#AADD9A',
-    borderColor: '#AADD9A',
+    backgroundColor: '#1DD65B',
+    borderColor: '#1DD65B',
     borderWidth: 4,
-    borderRadius: 4,
+    borderRadius: 0,
     alignSelf: 'flex-end'
   },
   alternativeCtaText: {
     fontSize: 12,
     color: 'white',
-    alignSelf: 'center'
+    alignSelf: 'center',
+    fontFamily: 'Avenir-Black'
   },
 });

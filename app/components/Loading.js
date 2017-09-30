@@ -7,6 +7,7 @@ import {
 } from 'react-native';
 
 import { Actions } from 'react-native-router-flux';
+import LinearGradient from 'react-native-linear-gradient';
 
 import { Session } from '../services/Session'
 
@@ -19,19 +20,23 @@ export default class Loading extends Component {
   componentWillMount() {
     Session.check(
       (token) => Actions.home({ token }), 
-      () => Actions.welcome({ endpoint: 'registrations', label: 'Join' })
+      () => Actions.welcome({ endpoint: 'registrations', label: 'JOIN' })
     )
   }
 
   render() {
     return (
-      <View style={styles.container}>
+      <LinearGradient 
+        start={{x: 0, y: 1}} end={{x: 1, y: 0}}
+        colors={['#2857ED', '#1DD65B']}
+        style={styles.container}>
         <ActivityIndicator
           animating={this.state.animating}
           style={styles.activityIndicator}
+          color="rgba(255, 255, 255, 0.8)"
           size="large"
         />
-      </View>
+      </LinearGradient>
     );
   }
 }
@@ -39,8 +44,8 @@ export default class Loading extends Component {
 const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
-    marginTop: 50,
-    padding: 20,
+    alignItems: 'center',
+    flex: 1
   },
   activityIndicator: {
 

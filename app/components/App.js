@@ -4,34 +4,43 @@ import { Router, Scene } from 'react-native-router-flux';
 import Welcome from './Welcome';
 import Loading from './Loading';
 import Home from './Home';
-import NewWorkout from './NewWorkout';
+import NewWorkoutWhen from './NewWorkoutWhen';
+import NewWorkoutWhat from './NewWorkoutWhat';
+import NewWorkoutHowMany from './NewWorkoutHowMany';
 
 const App = () => {
   return (
     <Router>
-      <Scene key="root">
+      <Scene key="root" hideNavBar={true}>
         <Scene key="loading"
-          hideNavBar={true}
           component={Loading}
           title="Loading"
           initial
         />
         <Scene
           key="welcome"
-          hideNavBar={true}
           component={Welcome}
           title="Welcome"
         />
         <Scene
           key="home"
-          hideNavBar={true}
           component={Home}
           title="Home"
         />
         <Scene
-          key="newWorkout"
-          component={NewWorkout}
-          title="Add a Workout"
+          key="newWorkoutWhen"
+          component={NewWorkoutWhen}
+          title="When?"
+        />
+        <Scene
+          key="newWorkoutWhat"
+          component={NewWorkoutWhat}
+          title="What?"
+        />
+        <Scene
+          key="newWorkoutHowMany"
+          component={NewWorkoutHowMany}
+          title="How Many?"
         />
       </Scene>
     </Router>
