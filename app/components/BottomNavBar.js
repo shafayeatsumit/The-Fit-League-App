@@ -73,6 +73,6 @@ const styles = StyleSheet.create({
     textAlign: 'right',
     fontFamily: 'Avenir-Black',
     fontWeight: '900',
-    padding: 10
+    paddingRight: 20
   }
 })
