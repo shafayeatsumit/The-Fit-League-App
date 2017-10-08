@@ -15,7 +15,7 @@ import {
 
 const Form = t.form.Form;
 
-import { HttpUtils } from '../services/HttpUtils'
+import { Workout } from '../services/Workout'
 
 import { Actions } from 'react-native-router-flux';
 import LinearGradient from 'react-native-linear-gradient';
@@ -54,15 +54,13 @@ export default class NewWorkoutHowMany extends Component {
       let workout = this.props.workout
       workout.quantity = value.quantity;
       workout.notes = value.notes;
-      this.setState({ loading: true });
-      HttpUtils.post('workouts', workout, this.props.token).then((responseData) => {
-        this.props.successCallback(responseData);
-        this.setState({ loading: false });
-        Actions.home({ token: this.props.token });
-      }).catch((error) => {
-        this.setState({ loading: false });
-        AlertIOS.alert("Sorry! failed to add Workout.", error.message)
-      }).done();
+      if (this.props.workoutKind.attributes.has_specific_exercises) {
+        Actions.newWorkoutSpecificExercises(Object.assign(this.props, { workout }));
+      } else {
+        let self = this
+        self.setState({ loading: true })
+        Workout.save(workout, self.props.token, self.props.thisWeek, () => self.setState({ loading: false }))
+      }
     }
   }
 

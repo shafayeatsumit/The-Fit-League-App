@@ -4,6 +4,7 @@ import {
   StyleSheet,
   View,
   Image,
+  Text,
   TouchableHighlight,
 } from 'react-native';
 
@@ -25,19 +26,25 @@ export default class BottomNavBar extends Component {
   render() {
     return (
       <View style={styles.bottomBar}>
-          <View style={styles.backButton}>
-            { !this.props.hideBack && 
-            <TouchableHighlight onPress={this.back} underlayColor='#508CD8'>
-              <Image source={backButton} />
-            </TouchableHighlight> }
-          </View>
-        <View style={styles.forwardButton}>
-          { !this.props.hideForward && 
-            <TouchableHighlight onPress={this.props.forward} underlayColor='#508CD8'>
-              <Image source={forwardButton} />
-            </TouchableHighlight>
-          }
+        <View style={styles.backButton}>
+          { !this.props.hideBack && 
+          <TouchableHighlight onPress={this.back} underlayColor='#508CD8'>
+            <Image source={backButton} />
+          </TouchableHighlight> }
         </View>
+        { this.props.skipAllowed ? 
+          <TouchableHighlight onPress={this.props.forward} underlayColor='#508CD8'>
+            <Text style={styles.skipThisStep}>Skip this step</Text>
+          </TouchableHighlight>
+          :
+          <View style={styles.forwardButton}>
+            { !this.props.hideForward && 
+              <TouchableHighlight onPress={this.props.forward} underlayColor='#508CD8'>
+                <Image source={forwardButton} />
+              </TouchableHighlight>
+            }
+          </View>
+        }
       </View>
     )
   }
@@ -58,5 +65,14 @@ const styles = StyleSheet.create({
   forwardButton: {
     width: 70,
     paddingRight: 20
+  },
+  skipThisStep: {
+    backgroundColor: 'transparent',
+    color: 'white',
+    fontSize: 14,
+    textAlign: 'right',
+    fontFamily: 'Avenir-Black',
+    fontWeight: '900',
+    padding: 10
   }
 })

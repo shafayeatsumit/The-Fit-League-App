@@ -80,8 +80,8 @@ export default class NewWorkoutWhen extends Component {
       Actions.newWorkoutWhat({ 
         workout: { occurred_at: value.when },
         workoutKinds: this.state.workoutKinds,
-        token: this.props.token, 
-        successCallback: this.props.successCallback });
+        token: this.props.token,
+        thisWeek: this.props.thisWeek });
     }
   }
 

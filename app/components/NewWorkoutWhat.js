@@ -89,13 +89,17 @@ export default class NewWorkoutWhat extends Component {
       Actions.newWorkoutHowMany({ 
         workout, workoutKind,
         token: this.props.token, 
-        successCallback: this.props.successCallback });
+        thisWeek: this.props.thisWeek });
     }
   }
 
   onChange(search) {
     let topEight = topSixify(this.props.workoutKinds.filter((kind) => {
-      return kind.attributes.label.toLowerCase().indexOf(search.text.toLowerCase()) !== -1
+      let kindLabel = kind.attributes.label.toLowerCase()
+      if (kind.attributes.specific_exercise_labels && kind.attributes.specific_exercise_labels.length) {
+        kindLabel += kind.attributes.specific_exercise_labels.join(' ').toLowerCase()
+      }
+      return kindLabel.indexOf(search.text.toLowerCase()) !== -1
     }))
     this.setState({ search, topEight })
   }

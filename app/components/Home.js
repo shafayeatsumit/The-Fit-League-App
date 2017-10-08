@@ -16,28 +16,29 @@ import { Actions } from 'react-native-router-flux';
 import LinearGradient from 'react-native-linear-gradient';
 
 const logo = require('../../assets/images/logo.png');
+const addButton = require('../../assets/images/addButton.png');
 
 export default class Home extends Component {
   constructor(props) {
     super(props);
     this.loadWeeklyStats = this.loadWeeklyStats.bind(this);
     this.newWorkout = this.newWorkout.bind(this);
-    this.onWorkoutAdded = this.onWorkoutAdded.bind(this);
     this.state = { loading: true };
   }
 
   newWorkout() {
-    Actions.newWorkoutWhen({ token: this.props.token, successCallback: this.onWorkoutAdded });
-  }
-
-  onWorkoutAdded() {
-    // Congratulate?
+    let thisWeek = this.state
+    delete thisWeek.loading
+    Actions.newWorkoutWhen({ 
+      thisWeek,
+      token: this.props.token
+    });
   }
 
   loadWeeklyStats() {
     HttpUtils.get('weeks/current', this.props.token)
       .then((responseData) => {
-        let { strength_points, cardio_points, diversity_points, days_worked_out} = responseData.data.attributes;
+        let { strength_points, cardio_points, diversity_points, days_worked_out } = responseData.data.attributes;
         this.setState({
           strength_points, cardio_points, days_worked_out, diversity_points,
           loading: false
@@ -113,10 +114,15 @@ export default class Home extends Component {
             </View>
           }
         </LinearGradient>
-        <View style={styles.newWorkout}>
-          <TouchableHighlight style={styles.newWorkoutButton} onPress={this.newWorkout} underlayColor='#1DD65B'>
-            <Text style={styles.newWorkoutButtonPlus}>+</Text>
-          </TouchableHighlight>
+        <View style={styles.actionDashboard}>
+          <View style={styles.actionHolder}></View>
+          <View style={styles.buttonHolder}>
+            { !this.state.loading &&
+              <TouchableHighlight style={styles.newWorkoutButton} onPress={this.newWorkout} underlayColor='#1DD65B'>
+                <Image style={styles.newWorkoutButtonPlus} source={addButton} />
+              </TouchableHighlight>
+            }
+          </View>
         </View>
       </View>
     );
@@ -180,25 +186,32 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     backgroundColor: 'transparent'
   },
-  newWorkout: {
-    height: 100,
+  actionDashboard: {
+    height: 450,
+    flexDirection: 'column'
+  },
+  actionHolder: {
+    flex: 4
+  },
+  buttonHolder: {
+    flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   newWorkoutButtonPlus: {
-    fontSize: 25,
-    color: 'white',
-    alignSelf: 'center',
-    fontFamily: 'Avenir-Black'
+    height: 39,
+    width: 39
   },
   newWorkoutButton: {
-    height: 50,
-    width: 50,
+    height: 70,
+    width: 70,
     backgroundColor: 'rgba(40, 87, 237, 0.89)',
     borderColor: 'rgba(40, 87, 237, 0.89)',
-    borderRadius: 25,
+    borderRadius: 35,
     marginBottom: 10,
-    paddingBottom: 2,
-    justifyContent: 'center'
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: 'rgba(40, 87, 237, 0.37)',
+    shadowOffset: { width: 0, height: 7 },
   }
 });
