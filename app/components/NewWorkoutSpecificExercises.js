@@ -6,10 +6,12 @@ import {
   StyleSheet,
   View,
   ScrollView,
-  KeyboardAvoidingView,
   Text,
   ActivityIndicator,
   TouchableHighlight,
+  KeyboardAvoidingView,
+  Keyboard, 
+  Platform,
   AlertIOS,
   Image
 } from 'react-native';
@@ -37,21 +39,40 @@ export default class NewWorkoutSpecificExercises extends Component {
     super(props)
     this.newExercise = this.newExercise.bind(this)
     this.newExerciseValue = this.newExerciseValue.bind(this)
-    this.addNewExercise = this.addNewExercise.bind(this)
     this.buildFieldsHash = this.buildFieldsHash.bind(this)
     this.onChange = this.onChange.bind(this)
     this.forward = this.forward.bind(this)
     this.state = { 
       loading: false, 
-      specificExercises: [this.newExercise()],
-      specificExerciseValues: [this.newExerciseValue()],
+      specificExercises: [this.newExercise(), this.newExercise()],
+      specificExerciseValues: [this.newExerciseValue(), this.newExerciseValue()],
       addedAnExercise: false,
       options: {
         stylesheet,
         fields: this.buildFieldsHash()
       }
     }
+    // Awful hack from https://stackoverflow.com/questions/41616457/keyboardavoidingview-reset-height-when-keyboard-is-hidden
+    this.keyboardHideListener = this.keyboardHideListener.bind(this);
+    this.componentDidMount = this.componentDidMount.bind(this);
+    this.componentWillUnmount = this.componentWillUnmount.bind(this);
   }
+
+  // BEGIN HACKETY HACK HACK
+  keyboardHideListener() {
+    this.setState({
+      keyboardAvoidingViewKey: 'keyboardAvoidingViewKey' + new Date().getTime()
+    })
+  }
+
+  componentDidMount() {
+    this.keyboardHideListener = Keyboard.addListener(Platform.OS === 'android' ? 'keyboardDidHide': 'keyboardWillHide', this.keyboardHideListener)
+  }
+
+  componentWillUnmount() {
+    this.keyboardHideListener.remove()
+  }
+  // END HACKETY HACK HACK
 
   buildFieldsHash() {
     let schema = this.props.workoutKind.attributes.specific_exercise_schema
@@ -80,19 +101,18 @@ export default class NewWorkoutSpecificExercises extends Component {
     return exerciseValue
   }
 
-  addNewExercise() {
-    let { specificExercises, specificExerciseValues } = this.state
-    specificExerciseValues.push(this.newExerciseValue())
-    specificExercises.push(this.newExercise())
-    this.setState({ specificExercises, specificExerciseValues })
-  }
-
   onChange(index) {
     let self = this
     return (value) => {
-      let { specificExerciseValues } = self.state
+      let { specificExerciseValues, specificExercises } = self.state
       specificExerciseValues[index] = value
-      self.setState({ specificExerciseValues, addedAnExercise: true })
+      let newState = { specificExerciseValues, addedAnExercise: true }
+      if (index == specificExerciseValues.length - 1) {
+        newState.specificExerciseValues.push(self.newExerciseValue())
+        specificExercises.push(self.newExercise())
+        newState.specificExercises = specificExercises
+      }
+      self.setState(newState)
     }
   }
 
@@ -153,11 +173,6 @@ export default class NewWorkoutSpecificExercises extends Component {
                     options={this.state.options} />
                   })
                 }
-                <View style={styles.buttonHolder}>
-                  <TouchableHighlight style={styles.newWorkoutButton} onPress={this.addNewExercise} underlayColor='#1DD65B'>
-                    <Image style={styles.newWorkoutButtonPlus} source={smallAddButton} />
-                  </TouchableHighlight>
-                </View>
               </ScrollView>
             </View>
           }

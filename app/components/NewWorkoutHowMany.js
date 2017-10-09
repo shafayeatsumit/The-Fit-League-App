@@ -5,10 +5,12 @@ import t from 'tcomb-form-native';
 import {
   StyleSheet,
   View,
-  KeyboardAvoidingView,
   Text,
   ActivityIndicator,
   TouchableHighlight,
+  KeyboardAvoidingView,
+  Keyboard, 
+  Platform,
   AlertIOS,
   Image
 } from 'react-native';
@@ -30,6 +32,7 @@ export default class NewWorkoutHowMany extends Component {
     this.state = { 
       loading: false,
       workoutSchema: { quantity: t.Number, notes: t.maybe(t.String) },
+      keyboardAvoidingViewKey: 'keyboardAvoidingViewKey',
       options: {
         fields: {
           quantity: {
@@ -46,7 +49,27 @@ export default class NewWorkoutHowMany extends Component {
       }
     }
     this.forward = this.forward.bind(this);
+    // Awful hack from https://stackoverflow.com/questions/41616457/keyboardavoidingview-reset-height-when-keyboard-is-hidden
+    this.keyboardHideListener = this.keyboardHideListener.bind(this);
+    this.componentDidMount = this.componentDidMount.bind(this);
+    this.componentWillUnmount = this.componentWillUnmount.bind(this);
   }
+
+  // BEGIN HACKETY HACK HACK
+  keyboardHideListener() {
+    this.setState({
+      keyboardAvoidingViewKey: 'keyboardAvoidingViewKey' + new Date().getTime()
+    });
+  }
+
+  componentDidMount() {
+    this.keyboardHideListener = Keyboard.addListener(Platform.OS === 'android' ? 'keyboardDidHide': 'keyboardWillHide', this.keyboardHideListener);
+  }
+
+  componentWillUnmount() {
+    this.keyboardHideListener.remove()
+  }
+  // END HACKETY HACK HACK
 
   forward() {
     let value = this.refs.form.getValue();
@@ -66,7 +89,7 @@ export default class NewWorkoutHowMany extends Component {
 
   render() {
     return (
-      <KeyboardAvoidingView behavior='height' style={styles.container}>
+      <KeyboardAvoidingView behavior='height' key={this.state.keyboardAvoidingViewKey} style={styles.container}>
         <LinearGradient 
           start={{x: 0, y: 1}} end={{x: 1, y: 0}}
           colors={['#2857ED', '#1DD65B']}
