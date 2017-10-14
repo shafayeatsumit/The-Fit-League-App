@@ -19,7 +19,8 @@ export default class NewWorkoutTitle extends Component {
   }
 
   exit() {
-    Actions.pop();
+    let { token } = this.props
+    Actions.popTo('home', { token })
   }
 
   render() {

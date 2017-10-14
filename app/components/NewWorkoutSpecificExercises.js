@@ -82,7 +82,7 @@ export default class NewWorkoutSpecificExercises extends Component {
       let stylesheet = _.cloneDeep(t.form.Form.stylesheet)
       stylesheet.formGroup.normal.flex = schema[k].width
       stylesheet.formGroup.error.flex = schema[k].width
-      hash[k] = { auto: 'none', stylesheet }
+      hash[k] = { auto: 'none', selectionColor: 'white', stylesheet }
     })
     return hash
   }
@@ -141,7 +141,7 @@ export default class NewWorkoutSpecificExercises extends Component {
           start={{x: 0, y: 1}} end={{x: 1, y: 0}}
           colors={['#2857ED', '#1DD65B']}
           style={styles.backgroundGradient}>
-          <NewWorkoutTitle text='Log workout' />
+          <NewWorkoutTitle token={this.props.token} text='Log workout' />
           { this.state.loading ?
             <ActivityIndicator size="large" style={styles.activityIndicator} color="rgba(255, 255, 255, 0.8)" />
           :

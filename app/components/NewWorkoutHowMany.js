@@ -38,12 +38,14 @@ export default class NewWorkoutHowMany extends Component {
           quantity: {
             auto: 'none',
             placeholder: this.props.workoutKind.attributes.quantity_question,
-            placeholderTextColor: 'white'
+            placeholderTextColor: 'white',
+            selectionColor: 'white'
           },
           notes: {
             auto: 'none',
             placeholder: 'Add notes',
-            placeholderTextColor: 'white'
+            placeholderTextColor: 'white',
+            selectionColor: 'white'
           }
         }
       }
@@ -94,7 +96,7 @@ export default class NewWorkoutHowMany extends Component {
           start={{x: 0, y: 1}} end={{x: 1, y: 0}}
           colors={['#2857ED', '#1DD65B']}
           style={styles.backgroundGradient}>
-          <NewWorkoutTitle text='Log workout' />
+          <NewWorkoutTitle token={this.props.token} text='Log workout' />
           { this.state.loading ?
             <ActivityIndicator size="large" style={styles.activityIndicator} color="rgba(255, 255, 255, 0.8)" />
           :

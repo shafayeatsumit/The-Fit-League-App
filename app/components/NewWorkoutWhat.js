@@ -6,6 +6,7 @@ import {
   StyleSheet,
   View,
   Text,
+  TextInput,
   TouchableHighlight,
   AlertIOS
 } from 'react-native';
@@ -42,17 +43,6 @@ Form.stylesheet.textbox.error.borderColor = 'rgba(255, 255, 255, 0.25)';
 Form.stylesheet.textbox.normal.color = 'white';
 Form.stylesheet.textbox.error.color = 'white';
 
-const options = {
-  fields: {
-    text: {
-      label: 'What kind of workout?',
-      placeholder: 'Search',
-      placeholderTextColor: 'white'
-    }
-  }
-}
-
-
 const topSixify = arr => arr.slice(0, 6)
 
 import BottomNavBar from './BottomNavBar'
@@ -61,8 +51,6 @@ import WorkoutKindOptions from './WorkoutKindOptions'
 
 import { Actions } from 'react-native-router-flux';
 import LinearGradient from 'react-native-linear-gradient';
-
-const Search = t.struct({ text: t.String });
 
 export default class NewWorkoutWhat extends Component {
   constructor(props) {
@@ -99,7 +87,7 @@ export default class NewWorkoutWhat extends Component {
       if (kind.attributes.specific_exercise_labels && kind.attributes.specific_exercise_labels.length) {
         kindLabel += kind.attributes.specific_exercise_labels.join(' ').toLowerCase()
       }
-      return kindLabel.indexOf(search.text.toLowerCase()) !== -1
+      return kindLabel.indexOf(search.toLowerCase()) !== -1
     }))
     this.setState({ search, topEight })
   }
@@ -111,14 +99,15 @@ export default class NewWorkoutWhat extends Component {
           start={{x: 0, y: 1}} end={{x: 1, y: 0}}
           colors={['#2857ED', '#1DD65B']}
           style={styles.backgroundGradient}>
-          <NewWorkoutTitle text='Log workout' />
+          <NewWorkoutTitle token={this.props.token} text='Choose workout type' />
           <View style={styles.formContainer}>
-            <Form
-              ref="form"
-              type={Search}
+            <Text style={styles.searchHeader}>What kind of workout?</Text>
+            <TextInput
+              style={styles.searchText}
+              onChangeText={this.onChange}
               value={this.state.search}
-              onChange={this.onChange}
-              options={options} />
+              selectionColor={'white'}
+            />
             <WorkoutKindOptions kindOptions={this.state.topEight} pickWorkout={this.forward} />
           </View>
         </LinearGradient>
@@ -132,6 +121,21 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'column',
     flex: 1,
+  },
+  searchHeader: {
+    
+  },
+  searchText: {
+    fontSize: 14,
+    fontFamily: 'Avenir-Black',
+    fontWeight: '300',
+    borderWidth: 1,
+    borderRadius: 0,
+    height: 50,
+    paddingLeft: 15,
+    backgroundColor: 'rgba(255, 255, 255, 0.10)',
+    borderColor: 'rgba(255, 255, 255, 0.25)',
+    color: 'white'
   },
   backgroundGradient: {
     flex: 5,

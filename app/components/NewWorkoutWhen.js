@@ -29,7 +29,6 @@ Form.stylesheet.dateValue.error.textAlign = 'center';
 Form.stylesheet.dateValue.normal.fontSize = 24;
 Form.stylesheet.dateValue.error.fontSize = 24;
 
-
 // Form.stylesheet.datepicker.normal.textColor = 'white';
 // Form.stylesheet.datepicker.error.textColor = 'white';
 
@@ -56,8 +55,8 @@ export default class NewWorkoutWhen extends Component {
         }
       }
     }
-    this.getWorkoutKinds = this.getWorkoutKinds.bind(this);
-    this.forward = this.forward.bind(this);
+    this.getWorkoutKinds = this.getWorkoutKinds.bind(this)
+    this.forward = this.forward.bind(this)
   }
 
   getWorkoutKinds() {
@@ -71,7 +70,7 @@ export default class NewWorkoutWhen extends Component {
   }
 
   componentDidMount() {
-    this.getWorkoutKinds();
+    this.getWorkoutKinds()
   }
 
   forward() {
@@ -92,7 +91,7 @@ export default class NewWorkoutWhen extends Component {
           start={{x: 0, y: 1}} end={{x: 1, y: 0}}
           colors={['#2857ED', '#1DD65B']}
           style={styles.backgroundGradient}>
-          <NewWorkoutTitle text='Log or Schedule a workout' />
+          <NewWorkoutTitle token={this.props.token} text='Choose date / time of workout' />
           <View style={styles.formContainer}>
             <Form
               ref="form"
