@@ -7,7 +7,6 @@ import Home from './Home';
 import NewWorkoutWhen from './NewWorkoutWhen';
 import NewWorkoutWhat from './NewWorkoutWhat';
 import NewWorkoutHowMany from './NewWorkoutHowMany';
-import NewWorkoutSpecificExercises from './NewWorkoutSpecificExercises';
 import NewWorkoutSuccess from './NewWorkoutSuccess';
 
 const App = () => {
@@ -43,11 +42,6 @@ const App = () => {
           key="newWorkoutHowMany"
           component={NewWorkoutHowMany}
           title="How Many?"
-        />
-        <Scene
-          key="newWorkoutSpecificExercises"
-          component={NewWorkoutSpecificExercises}
-          title="Add Specific Exercises"
         />
         <Scene
           key="newWorkoutSuccess"
