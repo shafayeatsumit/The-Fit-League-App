@@ -7,7 +7,6 @@ import { HttpUtils } from './HttpUtils'
 export const Workout = {
   save: (workout, token, thisWeek, requestFinished) => {
     return HttpUtils.post('workouts', workout, token).then((responseData) => {
-      requestFinished()
       let { attributes } = responseData.data
       let contribution = {}
       Object.keys(attributes.summary).forEach((k) => {

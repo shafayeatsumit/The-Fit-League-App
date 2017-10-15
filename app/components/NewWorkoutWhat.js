@@ -23,10 +23,10 @@ Form.stylesheet.controlLabel.error.fontWeight = '900';
 
 Form.stylesheet.textbox.normal.fontSize = 14;
 Form.stylesheet.textbox.error.fontSize = 14;
-Form.stylesheet.textbox.normal.fontFamily = 'Avenir-Black';
-Form.stylesheet.textbox.error.fontFamily = 'Avenir-Black';
-Form.stylesheet.textbox.normal.fontWeight = '900';
-Form.stylesheet.textbox.error.fontWeight = '900';
+Form.stylesheet.textbox.normal.fontFamily = 'Avenir';
+Form.stylesheet.textbox.error.fontFamily = 'Avenir';
+Form.stylesheet.textbox.normal.fontWeight = '300';
+Form.stylesheet.textbox.error.fontWeight = '300';
 Form.stylesheet.textbox.normal.borderWidth = 1;
 Form.stylesheet.textbox.error.borderWidth = 1;
 Form.stylesheet.textbox.normal.borderRadius = 0;
@@ -47,7 +47,8 @@ const options = {
     text: {
       label: 'What kind of workout?',
       placeholder: 'Search',
-      placeholderTextColor: 'white'
+      placeholderTextColor: 'white',
+      selectionColor: 'white'
     }
   }
 }
@@ -111,7 +112,7 @@ export default class NewWorkoutWhat extends Component {
           start={{x: 0, y: 1}} end={{x: 1, y: 0}}
           colors={['#2857ED', '#1DD65B']}
           style={styles.backgroundGradient}>
-          <NewWorkoutTitle text='Log workout' />
+          <NewWorkoutTitle token={this.props.token} text='Choose workout type' />
           <View style={styles.formContainer}>
             <Form
               ref="form"

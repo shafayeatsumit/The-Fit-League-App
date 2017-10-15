@@ -187,7 +187,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent'
   },
   actionDashboard: {
-    height: 450,
+    flex: 3,
     flexDirection: 'column'
   },
   actionHolder: {

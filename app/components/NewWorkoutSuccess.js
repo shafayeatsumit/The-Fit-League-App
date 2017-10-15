@@ -71,8 +71,8 @@ export default class NewWorkoutSuccess extends Component {
           </View>
         </LinearGradient>
         <View style={styles.bottomBar}>
-          <TouchableHighlight onPress={this.home} underlayColor='#508CD8'>
-            <Text style={styles.backToHome}>Go to main dashboard</Text>
+          <TouchableHighlight style={styles.backToHomeHolder} onPress={this.home} underlayColor='#508CD8'>
+            <Text style={styles.backToHome}>Back to home</Text>
           </TouchableHighlight>
         </View>
       </View>
@@ -191,8 +191,11 @@ const styles = StyleSheet.create({
   backToHome: {
     color: 'white',
     fontSize: 14,
-    textAlign: 'center',
+    textAlign: 'right',
     fontFamily: 'Avenir-Black',
     fontWeight: '900'
+  },
+  backToHomeHolder: {
+    padding: 20
   }
 });
