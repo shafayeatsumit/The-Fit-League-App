@@ -6,7 +6,10 @@ import {
   StyleSheet,
   View,
   Text,
-  AlertIOS
+  AlertIOS,
+  DatePickerIOS,
+  DatePickerAndroid,
+  Platform
 } from 'react-native';
 
 const Form = t.form.Form;
@@ -45,7 +48,7 @@ export default class NewWorkoutWhen extends Component {
   constructor(props) {
     super(props)
     this.state = { 
-      workoutSchema: { when: t.Date },
+      date: new Date(),
       options: {
         fields: {
           when: {
@@ -55,6 +58,7 @@ export default class NewWorkoutWhen extends Component {
         }
       }
     }
+    this.onDateChange = this.onDateChange.bind(this)
     this.getWorkoutKinds = this.getWorkoutKinds.bind(this)
     this.forward = this.forward.bind(this)
   }
@@ -69,15 +73,18 @@ export default class NewWorkoutWhen extends Component {
       }).done();
   }
 
+  onDateChange(date) {
+    this.setState({ date })
+  }
+
   componentDidMount() {
     this.getWorkoutKinds()
   }
 
   forward() {
-    let value = this.refs.form.getValue();
-    if (value && value.when && this.state.workoutKinds) {
+    if (this.state.workoutKinds) {
       Actions.newWorkoutWhat({ 
-        workout: { occurred_at: value.when },
+        workout: { occurred_at: this.state.date },
         workoutKinds: this.state.workoutKinds,
         token: this.props.token,
         thisWeek: this.props.thisWeek });
@@ -93,10 +100,21 @@ export default class NewWorkoutWhen extends Component {
           style={styles.backgroundGradient}>
           <NewWorkoutTitle token={this.props.token} text='Choose date / time of workout' />
           <View style={styles.formContainer}>
-            <Form
-              ref="form"
-              type={t.struct(this.state.workoutSchema)}
-              options={this.state.options} />
+            <Text style={styles.dateHeader}>{DateConfig.formatDate(this.state.date)}</Text>
+            <Text style={styles.timeHeader}>{DateConfig.formatTime(this.state.date)}</Text>
+            { Platform.OS === 'android' ?
+              <DatePickerAndroid
+                date={this.state.date}
+                style={styles.datePicker}
+                mode="spinner"
+                onDateChange={this.onDateChange} />
+              :
+              <DatePickerIOS
+                style={styles.datePicker}
+                date={this.state.date}
+                mode="datetime"
+                onDateChange={this.onDateChange} />
+            }
           </View>
         </LinearGradient>
         <BottomNavBar forward={this.forward} hideBack={true} />
@@ -113,6 +131,28 @@ const styles = StyleSheet.create({
   backgroundGradient: {
     flex: 5,
     flexDirection: 'column',
+  },
+  dateHeader: {
+    backgroundColor: 'transparent',
+    textAlign: 'center',
+    color: 'white',
+    fontFamily: 'Avenir-Black',
+    fontSize: 24,
+    marginBottom: 5
+  },
+  timeHeader: {
+    backgroundColor: 'transparent',
+    textAlign: 'center',
+    color: 'rgba(255, 255, 255, 0.8)',
+    fontFamily: 'Avenir-Black',
+    fontSize: 16,
+    marginBottom: 5
+  },
+  datePicker: {
+    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+    padding: 5,
+    borderRadius: 5,
+    margin: 20
   },
   formContainer: {
     paddingTop: 20,

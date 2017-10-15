@@ -11,12 +11,15 @@ const withOrdinalSuffix = (i) => {
 }
 
 export const DateConfig = {
-  format: (date) => {
+  formatDate: (date) => {
     let dayOfWeek = DAYS[date.getDay()];
     let dayOfMonth = date.getDate();
     let month = MONTHS[date.getMonth()];
     // becuz javascript
     let year = 1900 + date.getYear();
+    return `${ dayOfWeek }, ${ month } ${ withOrdinalSuffix(dayOfMonth) }, ${ year }`;
+  },
+  formatTime: (date) => {
     let minutes = date.getMinutes();
     if (minutes < 10) minutes = '0' + minutes;
     let hours = date.getHours();
@@ -27,6 +30,7 @@ export const DateConfig = {
       amPm = 'pm';
       hours -= 12;
     }
-    return `${ dayOfWeek }, ${ month } ${ withOrdinalSuffix(dayOfMonth) }, ${ year }\n${ hours }:${ minutes }${ amPm }`;
+    return `at ${ hours }:${ minutes }${ amPm }`;
   }
+
 }

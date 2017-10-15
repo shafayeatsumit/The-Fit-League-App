@@ -38,7 +38,7 @@ export default class NewWorkoutTitle extends Component {
 
 const styles = StyleSheet.create({
   titleContainer: {
-    flex: 1,
+    height: 72,
     backgroundColor: 'transparent',
     flexDirection: 'row',
     alignItems: 'center',

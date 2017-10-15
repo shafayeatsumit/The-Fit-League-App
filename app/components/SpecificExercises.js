@@ -168,11 +168,12 @@ export default class SpecificExercises extends Component {
           }
           <View>
           { pastExercises.length > 0 &&
-            <TouchableHighlight style={styles.pastExercisesLinkHolder}onPress={this.pastExercisesModal} underlayColor='transparent'>
+            <TouchableHighlight style={styles.pastExercisesLinkHolder} onPress={this.pastExercisesModal} underlayColor='transparent'>
               <Text style={styles.pastExercisesLink}>Choose from past exercises</Text>
             </TouchableHighlight>
           }
           </View>
+          <View style={styles.spacer}></View>
         </ScrollView>
       </View>
     )
@@ -191,8 +192,8 @@ const styles = StyleSheet.create({
     fontFamily: 'Avenir-Black',
     fontWeight: '900'    
   },
-  scrollView: {
-    marginBottom: 50
+  spacer: {
+    height: 60
   },
   workoutIconColumn: {
     flex: 1,
@@ -218,7 +219,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: 5,
     paddingBottom: 5,
-    marginTop: 20
+    marginTop: 5
   },
   workoutKindTitle: {
     backgroundColor: 'transparent',
@@ -244,8 +245,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     color: 'white',
     fontSize: 24,
-    paddingTop: 25,
-    paddingBottom: 25,
+    paddingTop: 20,
+    paddingBottom: 20,
     textAlign: 'center',
     fontFamily: 'Avenir-Black',
     fontWeight: '900'
