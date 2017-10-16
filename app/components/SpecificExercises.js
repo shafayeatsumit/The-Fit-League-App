@@ -139,6 +139,7 @@ export default class SpecificExercises extends Component {
             </TouchableHighlight>
           </View>
         </Modal>
+        <Text style={styles.specificExerciseTitle}>Add sets and exercises</Text>
         <View style={styles.headerHolder}>
           <View style={styles.workoutIconColumn}>
             <View style={styles.workoutIcon}>
@@ -148,15 +149,14 @@ export default class SpecificExercises extends Component {
           <Text style={styles.workoutKindTitle}>{this.props.workoutKind.attributes.label}</Text>
           <Text style={styles.workoutQuantity}>{this.state.totalQuantity} total {this.props.workoutKind.attributes.unit}s</Text>
         </View>
+        <View style={styles.labelRow}>
+          { Object.keys(schema).map((k) => {
+            return <View key={k} style={{ flex: schema[k].width }}>
+              <Text style={styles.labelText}>{ schema[k].label }</Text>
+            </View>                  
+          })}
+        </View>
         <ScrollView style={styles.scrollView}> 
-          <Text style={styles.specificExerciseTitle}>Add specific exercise</Text>
-          <View style={styles.labelRow}>
-            { Object.keys(schema).map((k) => {
-              return <View key={k} style={{ flex: schema[k].width }}>
-                <Text style={styles.labelText}>{ schema[k].label }</Text>
-              </View>                  
-            })}
-          </View>
           { this.state.specificExercises.map((exercise, index) => {
             return <Form
               key={index}
@@ -193,7 +193,7 @@ const styles = StyleSheet.create({
     fontWeight: '900'    
   },
   spacer: {
-    height: 60
+    height: 130
   },
   workoutIconColumn: {
     flex: 1,
@@ -219,7 +219,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: 5,
     paddingBottom: 5,
-    marginTop: 5
+    marginTop: 20,
+    marginBottom: 20
   },
   workoutKindTitle: {
     backgroundColor: 'transparent',
@@ -245,8 +246,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     color: 'white',
     fontSize: 24,
-    paddingTop: 20,
-    paddingBottom: 20,
     textAlign: 'center',
     fontFamily: 'Avenir-Black',
     fontWeight: '900'
@@ -261,6 +260,11 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     fontFamily: 'Avenir-Black',
     fontWeight: '900'
+  },
+  scrollView: {
+    // paddingBottom: 100,
+    // marginBottom: 100,
+    // height: 400
   },
   modalHeader: {
     textAlign: 'center',

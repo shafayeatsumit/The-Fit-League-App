@@ -45,30 +45,43 @@ export default class NewWorkoutSuccess extends Component {
           start={{x: 0, y: 1}} end={{x: 1, y: 0}}
           colors={['#2857ED', '#1DD65B']}
           style={styles.backgroundGradient}>
-          <View style={styles.successContainer}>
-            <View style={styles.headerHolder}>
-              <View style={styles.successIcon}>
-                <Image source={buttSlapIcon} style={styles.successIconImage} />
+          { this.props.workoutInTheFuture ? 
+            <View style={styles.futureWorkoutContainer}>
+              <View style={styles.futureWorkoutSpacer}></View>
+              <View style={styles.futureWorkoutBox}>
+                <Text style={styles.futureWorkoutTitle}>You scheduled a future workout!</Text>
+                <Text style={styles.statsWillUpdate}>Your weekly stats will update after the workout is completed.</Text>
+              </View>
+              <View style={styles.futureWorkoutSpacer}>
+                <Text style={styles.howDoIEdit}>Go to Your Workouts to view or edit this workout.</Text>
               </View>
             </View>
-            <Text style={styles.successTitle}>{this.props.successMessage}</Text>
-            { positiveContributions.length > 0 && 
-              <Text style={styles.youAdded}>YOU ADDED</Text>
-            }
-            <View style={styles.statRow}>
-              { positiveContributions.map((k) => {
-                return <View key={k} style={styles.statColumn}>
-                  <View style={styles.statCircle}>
-                    <Text style={styles.statNumber}>{ parseInt(contribution[k]) }</Text>
-                  </View>
-                  <Text style={styles.statLabel}>{ contributionLabels[k] }</Text>
+            :
+            <View style={styles.successContainer}>
+              <View style={styles.headerHolder}>
+                <View style={styles.successIcon}>
+                  <Image source={buttSlapIcon} style={styles.successIconImage} />
                 </View>
-                })
+              </View>
+              <Text style={styles.successTitle}>{this.props.successMessage}</Text>
+              { positiveContributions.length > 0 && 
+                <Text style={styles.youAdded}>YOU ADDED</Text>
               }
+              <View style={styles.statRow}>
+                { positiveContributions.map((k) => {
+                  return <View key={k} style={styles.statColumn}>
+                    <View style={styles.statCircle}>
+                      <Text style={styles.statNumber}>{ parseInt(contribution[k]) }</Text>
+                    </View>
+                    <Text style={styles.statLabel}>{ contributionLabels[k] }</Text>
+                  </View>
+                  })
+                }
+              </View>
+              <Text style={styles.wellDone}>{this.props.wellDoneMessage}</Text>
+              <Text style={styles.howDoIEdit}>Go to Your Workouts to view or edit this workout.</Text>
             </View>
-            <Text style={styles.wellDone}>{this.props.wellDoneMessage}</Text>
-            <Text style={styles.howDoIEdit}>If you would like to edit or delete this workout, you can do so in the Calendar section.</Text>
-          </View>
+          }
         </LinearGradient>
         <View style={styles.bottomBar}>
           <TouchableHighlight style={styles.backToHomeHolder} onPress={this.home} underlayColor='#508CD8'>
@@ -93,6 +106,43 @@ const styles = StyleSheet.create({
     padding: 20,
     paddingTop: 5,
     flex: 10
+  },
+  futureWorkoutContainer: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'space-around'
+  },
+  futureWorkoutSpacer: {
+    flex: 1,
+    justifyContent: 'center'
+  },
+  futureWorkoutBox: {
+    borderRadius: 2,
+    borderWidth: 2,
+    borderColor: 'white',
+    flex: 1,
+    flexDirection: 'column',
+    padding: 20,
+    margin: 20
+  },
+  futureWorkoutTitle: {
+    backgroundColor: 'transparent',
+    color: 'white',
+    fontSize: 30,
+    padding: 10,
+    textAlign: 'center',
+    fontFamily: 'Avenir-Black',
+    fontWeight: '900'
+  },
+  statsWillUpdate: {
+    backgroundColor: 'transparent',
+    color: 'rgba(255, 255, 255, 0.6)',
+    fontSize: 16,
+    paddingTop: 5,
+    paddingBottom: 30,
+    textAlign: 'center',
+    fontFamily: 'Avenir-Black',
+    fontWeight: '900'
   },
   bottomBar: {
     flex: 1,

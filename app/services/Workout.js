@@ -12,8 +12,11 @@ export const Workout = {
       Object.keys(attributes.summary).forEach((k) => {
         contribution[k] = attributes.summary[k] - thisWeek[k]
       })
+      let occurredAt = new Date(attributes.occurred_at)
+      let rightNow = new Date()
       Actions.newWorkoutSuccess({
-        contribution, token, 
+        contribution, token,
+        workoutInTheFuture: (occurredAt > rightNow),
         successMessage: attributes.success_message,
         wellDoneMessage: attributes.well_done_message
       });

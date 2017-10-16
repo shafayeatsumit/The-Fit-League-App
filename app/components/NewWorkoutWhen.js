@@ -32,11 +32,7 @@ Form.stylesheet.dateValue.error.textAlign = 'center';
 Form.stylesheet.dateValue.normal.fontSize = 24;
 Form.stylesheet.dateValue.error.fontSize = 24;
 
-// Form.stylesheet.datepicker.normal.textColor = 'white';
-// Form.stylesheet.datepicker.error.textColor = 'white';
-
 import { HttpUtils } from '../services/HttpUtils'
-import { DateConfig } from '../services/DateConfig'
 
 import BottomNavBar from './BottomNavBar'
 import NewWorkoutTitle from './NewWorkoutTitle'
@@ -47,17 +43,7 @@ import LinearGradient from 'react-native-linear-gradient';
 export default class NewWorkoutWhen extends Component {
   constructor(props) {
     super(props)
-    this.state = { 
-      date: new Date(),
-      options: {
-        fields: {
-          when: {
-            auto: 'none',
-            config: DateConfig          
-          }
-        }
-      }
-    }
+    this.state = { date: new Date() }
     this.onDateChange = this.onDateChange.bind(this)
     this.getWorkoutKinds = this.getWorkoutKinds.bind(this)
     this.forward = this.forward.bind(this)
@@ -98,10 +84,9 @@ export default class NewWorkoutWhen extends Component {
           start={{x: 0, y: 1}} end={{x: 1, y: 0}}
           colors={['#2857ED', '#1DD65B']}
           style={styles.backgroundGradient}>
-          <NewWorkoutTitle token={this.props.token} text='Choose date / time of workout' />
+          <NewWorkoutTitle token={this.props.token} text='Log a workout' />
           <View style={styles.formContainer}>
-            <Text style={styles.dateHeader}>{DateConfig.formatDate(this.state.date)}</Text>
-            <Text style={styles.timeHeader}>{DateConfig.formatTime(this.state.date)}</Text>
+            <Text style={styles.dateHeader}>Select a date and time</Text>
             { Platform.OS === 'android' ?
               <DatePickerAndroid
                 date={this.state.date}

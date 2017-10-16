@@ -45,7 +45,7 @@ Form.stylesheet.textbox.error.color = 'white';
 const options = {
   fields: {
     text: {
-      label: 'What kind of workout?',
+      label: 'Choose workout type',
       placeholder: 'Search',
       placeholderTextColor: 'white',
       selectionColor: 'white'
@@ -112,7 +112,7 @@ export default class NewWorkoutWhat extends Component {
           start={{x: 0, y: 1}} end={{x: 1, y: 0}}
           colors={['#2857ED', '#1DD65B']}
           style={styles.backgroundGradient}>
-          <NewWorkoutTitle token={this.props.token} text='Choose workout type' />
+          <NewWorkoutTitle token={this.props.token} text='Log a workout' />
           <View style={styles.formContainer}>
             <Form
               ref="form"

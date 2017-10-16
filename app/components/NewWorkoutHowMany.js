@@ -126,7 +126,7 @@ export default class NewWorkoutHowMany extends Component {
           start={{x: 0, y: 1}} end={{x: 1, y: 0}}
           colors={['#2857ED', '#1DD65B']}
           style={styles.backgroundGradient}>
-          <NewWorkoutTitle token={this.props.token} text={ hasSpecificExercises ? 'Add sets and exercises' : 'Enter number of minutes' } />
+          <NewWorkoutTitle token={this.props.token} text='Log a workout' />
           { this.state.loading ?
             <ActivityIndicator size="large" style={styles.activityIndicator} color="rgba(255, 255, 255, 0.8)" />
           :
@@ -140,12 +140,12 @@ export default class NewWorkoutHowMany extends Component {
                   specificWorkoutChange={this.onSpecificWorkoutChange} />
               :
                 <View>
+                  <Text style={styles.howManyUnits}>Enter number of {this.props.workoutKind.attributes.unit}s</Text>
                   <View style={styles.headerHolder}>
                     <View style={styles.workoutIcon}>
                       <Image source={workoutIcon} style={styles.workoutIconImage} />
                     </View>
                   </View>
-                  <Text style={styles.workoutKindTitle}>{this.props.workoutKind.attributes.label}</Text>
                   <Form
                     ref="form"
                     value={this.state.workoutValues}
@@ -198,7 +198,9 @@ const styles = StyleSheet.create({
     width: 40
   },
   headerHolder: {
-    alignItems: 'center'
+    alignItems: 'center',
+    margin: 10,
+    marginBottom: 15,
   },
   addNotes: {
     padding: 10,
@@ -212,11 +214,10 @@ const styles = StyleSheet.create({
     fontFamily: 'Avenir-Black',
     fontWeight: '900'
   },
-  workoutKindTitle: {
+  howManyUnits: {
     backgroundColor: 'transparent',
     color: 'white',
     fontSize: 25,
-    padding: 10,
     textAlign: 'center',
     fontFamily: 'Avenir-Black',
     fontWeight: '900'
