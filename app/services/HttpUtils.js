@@ -1,5 +1,5 @@
-const BASE_URL = 'https://fan-fit.herokuapp.com/v1';
-// const BASE_URL = 'http://localhost:5100/v1';
+// const BASE_URL = 'https://fan-fit.herokuapp.com/v1';
+const BASE_URL = 'http://localhost:5100/v1';
 
 let headersFor = (token) => {
   let headers = {

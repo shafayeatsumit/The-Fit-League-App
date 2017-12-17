@@ -16,7 +16,7 @@ import {
 const Form = t.form.Form
 const _ = require('lodash')
 
-const workoutIcon = require('../../assets/images/workoutIcon.png');
+const workoutIcon = require('../../assets/images/light/spin_class.png');
 const smallAddButton = require('../../assets/images/smallAddButton.png');
 
 const stylesheet = _.cloneDeep(t.form.Form.stylesheet);
@@ -208,8 +208,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   workoutIconImage: {
-    height: 15,
-    width: 15
+    height: 30,
+    width: 30
   },
   headerHolder: {
     borderRadius: 2,

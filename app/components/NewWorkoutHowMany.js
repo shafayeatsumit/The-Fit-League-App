@@ -25,7 +25,7 @@ import BottomNavBar from './BottomNavBar'
 import NewWorkoutTitle from './NewWorkoutTitle'
 import SpecificExercises from './SpecificExercises'
 
-const workoutIcon = require('../../assets/images/workoutIcon.png');
+const workoutIcon = require('../../assets/images/light/spin_class.png');
 
 export default class NewWorkoutHowMany extends Component {
   constructor(props) {
@@ -194,8 +194,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   workoutIconImage: {
-    height: 40,
-    width: 40
+    height: 80,
+    width: 80
   },
   headerHolder: {
     alignItems: 'center',

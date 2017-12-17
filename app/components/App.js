@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { StatusBar } from 'react-native';
 import { Router, Scene } from 'react-native-router-flux';
 
 import Welcome from './Welcome';
@@ -8,6 +9,8 @@ import NewWorkoutWhen from './NewWorkoutWhen';
 import NewWorkoutWhat from './NewWorkoutWhat';
 import NewWorkoutHowMany from './NewWorkoutHowMany';
 import NewWorkoutSuccess from './NewWorkoutSuccess';
+
+StatusBar.setBarStyle('light-content', true);
 
 const App = () => {
   return (

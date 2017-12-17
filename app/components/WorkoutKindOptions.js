@@ -8,7 +8,7 @@ import {
   TouchableHighlight,
 } from 'react-native';
 
-const workoutIcon = require('../../assets/images/workoutIcon.png');
+const workoutIcon = require('../../assets/images/light/spin_class.png');
 
 export default class WorkoutKindOptions extends Component {
   render() {
@@ -66,8 +66,8 @@ const styles = StyleSheet.create({
     color: 'white'
   },
   workoutIconImage: {
-    height: 40,
-    width: 40
+    height: 80,
+    width: 80
   },
   workoutLabel: {
     fontSize: 10,

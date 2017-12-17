@@ -10,10 +10,10 @@ import { AppRegistry } from 'react-native';
 
 import App from './app/components/App';
 
-export default class FanFit extends Component {
+export default class TheFitLeague extends Component {
   render() {
     return <App />;
   }
 }
 
-AppRegistry.registerComponent('FanFit', () => FanFit);
+AppRegistry.registerComponent('TheFitLeague', () => TheFitLeague);

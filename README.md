@@ -1,4 +1,4 @@
-# FanFit App
+# TheFitLeague App
 
 
 ### Running iOS
@@ -25,7 +25,7 @@ You may have to remove:
         <true/>
       </dict>
 
-from `ios/FanFit/Info.plist`, but be sure to add it back next time you want to build locally and you get a `No bundle url present` error.
+from `ios/TheFitLeague/Info.plist`, but be sure to add it back next time you want to build locally and you get a `No bundle url present` error.
 
 ### Propagating icons
 
