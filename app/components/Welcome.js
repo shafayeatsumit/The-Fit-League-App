@@ -19,6 +19,7 @@ import AltAuthLink from '../components/AltAuthLink'
 import { HttpUtils } from '../services/HttpUtils'
 import { Session } from '../services/Session'
 
+const badge = require('../../assets/images/badge.png');
 const logo = require('../../assets/images/logo.png');
 
 const FBSDK = require('react-native-fbsdk');
@@ -59,12 +60,18 @@ export default class Welcome extends Component {
           start={{x: 0, y: 1}} end={{x: 1, y: 0}}
           colors={['#2857ED', '#1DD65B']}
           style={styles.contentContainer}>
+          <View style={styles.badgeHolder}>
+            <Image resizeMode='contain' style={styles.badge} source={badge} />
+          </View>
           <View style={styles.logoHolder}>
             <Image resizeMode='contain' style={styles.logo} source={logo} />
           </View>
           <View style={styles.textHolder}>
             <Text style={styles.text}>
-              The Fit League is fun.
+              10 week exercise competitions
+            </Text>
+            <Text style={styles.text}>
+              for you and your crew.
             </Text>
           </View>
           { !this.state.loading &&
@@ -100,13 +107,17 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'column'
   },
+  badgeHolder: {
+    flex: 4
+  },
+  badge: {
+    width: 100
+  },
   logoHolder: {
-    flex: 1,
-    paddingTop: 200
+    flex: 1
   },
   logo: {
     width: 300
