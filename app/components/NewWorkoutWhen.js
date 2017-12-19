@@ -70,7 +70,7 @@ export default class NewWorkoutWhen extends Component {
   forward() {
     if (this.state.workoutKinds) {
       Actions.newWorkoutWhat({ 
-        workout: { occurred_at: this.state.date },
+        workout: { occurred_at: this.state.date, occurred_at_timezone: this.state.date.getTimezoneOffset() / -60 },
         workoutKinds: this.state.workoutKinds,
         token: this.props.token,
         thisWeek: this.props.thisWeek });

@@ -13,10 +13,11 @@ import {
   TouchableHighlight
 } from 'react-native';
 
+import { DynamicSourceGenerator } from '../services/DynamicSourceGenerator'
+
 const Form = t.form.Form
 const _ = require('lodash')
 
-const workoutIcon = require('../../assets/images/light/spin_class.png');
 const smallAddButton = require('../../assets/images/smallAddButton.png');
 
 const stylesheet = _.cloneDeep(t.form.Form.stylesheet);
@@ -116,8 +117,9 @@ export default class SpecificExercises extends Component {
   }
 
   render() {
-    const schema = this.props.workoutKind.attributes.specific_exercise_schema
-    const pastExercises = this.props.workoutKind.attributes.specific_exercise_labels
+    const workoutKindAttrs = this.props.workoutKind.attributes
+    const schema = workoutKindAttrs.specific_exercise_schema
+    const pastExercises = workoutKindAttrs.specific_exercise_labels
     return (
       <View>
         <Modal
@@ -143,11 +145,11 @@ export default class SpecificExercises extends Component {
         <View style={styles.headerHolder}>
           <View style={styles.workoutIconColumn}>
             <View style={styles.workoutIcon}>
-              <Image source={workoutIcon} style={styles.workoutIconImage} />
+              <Image source={DynamicSourceGenerator.call({ label: workoutKindAttrs.label, shade: 'light', fallback: 'running'})} style={styles.workoutIconImage} />
             </View>
           </View>
-          <Text style={styles.workoutKindTitle}>{this.props.workoutKind.attributes.label}</Text>
-          <Text style={styles.workoutQuantity}>{this.state.totalQuantity} total {this.props.workoutKind.attributes.unit}s</Text>
+          <Text style={styles.workoutKindTitle}>{workoutKindAttrs.label}</Text>
+          <Text style={styles.workoutQuantity}>{this.state.totalQuantity} total {workoutKindAttrs.unit}s</Text>
         </View>
         <View style={styles.labelRow}>
           { Object.keys(schema).map((k) => {

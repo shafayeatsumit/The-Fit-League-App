@@ -41,7 +41,7 @@ export default class Home extends Component {
   }
 
   openBasement() {
-    alert('hello')
+    // open up the basement!
   }
 
   loadProfile() {

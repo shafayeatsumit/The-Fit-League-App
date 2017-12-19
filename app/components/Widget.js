@@ -68,7 +68,7 @@ export default class Widget extends Component {
             }
             { this.props.next_workout_arrow && 
               <View style={styles.widgetImageHolder}>
-                <Image style={styles.nextWorkoutArrowImage} source={DynamicSourceGenerator.call('nextWorkoutArrow')} />
+                <Image style={styles.nextWorkoutArrowImage} source={DynamicSourceGenerator.call({ filename: 'nextWorkoutArrow' })} />
               </View>
             }
           </View>

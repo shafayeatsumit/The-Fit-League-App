@@ -8,7 +8,7 @@ import {
   TouchableHighlight,
 } from 'react-native';
 
-const workoutIcon = require('../../assets/images/light/spin_class.png');
+import { DynamicSourceGenerator } from '../services/DynamicSourceGenerator'
 
 export default class WorkoutKindOptions extends Component {
   render() {
@@ -22,7 +22,7 @@ export default class WorkoutKindOptions extends Component {
             { kindOptions.slice(row.start, row.end).map((kind) => {
               return <View key={kind.id} style={styles.workoutColumn}>
                 <TouchableHighlight style={styles.workoutIcon} onPress={() => this.props.pickWorkout(kind.id)} underlayColor='#AADD9A'>
-                  <Image source={workoutIcon} style={styles.workoutIconImage} />
+                  <Image source={DynamicSourceGenerator.call({ label: kind.attributes.label, shade: 'light', fallback: 'running'})} style={styles.workoutIconImage} />
                 </TouchableHighlight>
                 <Text style={styles.workoutLabel} key={kind.id}>{ kind.attributes.label }</Text>
               </View>

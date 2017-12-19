@@ -26,6 +26,7 @@ const ICONS = {
 
 export const DynamicSourceGenerator = {
   call: (source) => {
+    if (source.label) source.filename = source.label.toLowerCase().replace(/ /g, '_');
     if (source.filename) {
       if (source.shade) {
         return ICONS[source.shade][source.filename] || ICONS[source.shade][source.fallback]

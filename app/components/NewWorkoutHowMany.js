@@ -17,6 +17,7 @@ import {
 
 const Form = t.form.Form;
 
+import { DynamicSourceGenerator } from '../services/DynamicSourceGenerator'
 import { Workout } from '../services/Workout'
 
 import { Actions } from 'react-native-router-flux';
@@ -24,8 +25,6 @@ import LinearGradient from 'react-native-linear-gradient';
 import BottomNavBar from './BottomNavBar'
 import NewWorkoutTitle from './NewWorkoutTitle'
 import SpecificExercises from './SpecificExercises'
-
-const workoutIcon = require('../../assets/images/light/spin_class.png');
 
 export default class NewWorkoutHowMany extends Component {
   constructor(props) {
@@ -143,7 +142,7 @@ export default class NewWorkoutHowMany extends Component {
                   <Text style={styles.howManyUnits}>Enter number of {this.props.workoutKind.attributes.unit}s</Text>
                   <View style={styles.headerHolder}>
                     <View style={styles.workoutIcon}>
-                      <Image source={workoutIcon} style={styles.workoutIconImage} />
+                      <Image source={DynamicSourceGenerator.call({ label: this.props.workoutKind.attributes.label, shade: 'light', fallback: 'running'})} style={styles.workoutIconImage} />
                     </View>
                   </View>
                   <Form

@@ -46,7 +46,7 @@ export default class Welcome extends Component {
           Actions.home({ token });
         }).catch((error) => {
           AlertIOS.alert("Sorry! Login failed.", error.message)
-          this.setState({ loading: false, hideButton: fal });
+          this.setState({ loading: false, hideButton: false });
         }).done();
       }
     )
