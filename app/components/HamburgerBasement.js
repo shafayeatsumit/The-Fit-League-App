@@ -72,20 +72,22 @@ export default class HamburgerBasement extends Component {
         <Image
           style={styles.basementBackgroundImage}
           source={basementBackground} />
-        <View style={styles.basementIconRow}>
-          <View style={styles.basementBadge}>
-            <Image
-              style={styles.basementBadgeIcon}
-              resizeMode='contain'
-              source={badge} />
+        <TouchableHighlight onPress={() => Actions.home({ token, image_url }) } underlayColor='rgba(255, 255, 255, 0.25)'>
+          <View style={styles.basementIconRow}>
+            <View style={styles.basementBadge}>
+              <Image
+                style={styles.basementBadgeIcon}
+                resizeMode='contain'
+                source={badge} />
+            </View>
+            <View style={styles.basementLogo}>
+              <Image
+                style={styles.basementLogoIcon}
+                resizeMode='contain'
+                source={logo} />
+            </View>
           </View>
-          <View style={styles.basementLogo}>
-            <Image
-              style={styles.basementLogoIcon}
-              resizeMode='contain'
-              source={logo} />
-          </View>
-        </View>
+        </TouchableHighlight>
         <View style={styles.basementNavColumn}>
           { links.map((link) => {
             return <TouchableHighlight key={link.action} style={styles.basementNavLink} onPress={() => Actions[link.action]({ token, image_url }) } underlayColor='rgba(255, 255, 255, 0.25)'>

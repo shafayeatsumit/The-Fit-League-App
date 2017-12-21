@@ -22,11 +22,10 @@ export default class HomeHeader extends Component {
         start={{x: 0, y: 1}} end={{x: 1, y: 0}}
         colors={['#2857ED', '#1DD65B']}
         style={styles.container}>
-        { this.props.loading ?
-          <ActivityIndicator size="large" color="rgba(255, 255, 255, 0.8)" />
-          :
-          <View>
-            <View style={styles.topBar}>
+        <View>
+          <View style={styles.topBar}>
+          { !this.props.loading &&           
+            <View style={styles.topBarRow}>
               <TouchableHighlight style={styles.hamburgerButton} onPress={this.props.toggleBasement} underlayColor='transparent'>
                 <Image style={styles.hamburgerButtonIcon} source={hamburger} />
               </TouchableHighlight>
@@ -37,16 +36,21 @@ export default class HomeHeader extends Component {
                 }
               </View>
             </View>
-            <View style={styles.yourWeek}>
-              <Text style={styles.yourWeekText}>Your week</Text>
-            </View>
-            <StatRow
-              daysWorkedOut={parseInt(this.props.days_worked_out)}
-              cardioPoints={parseInt(this.props.cardio_points)}
-              strengthPoints={parseInt(this.props.strength_points)}
-              varietyPoints={parseInt(this.props.diversity_points)} />
+          }
           </View>
-        }
+          <View style={styles.yourWeek}>
+            <Text style={styles.yourWeekText}>Your week</Text>
+          </View>
+          { this.props.loading ?
+            <ActivityIndicator size="large" style={styles.loading} color="rgba(255, 255, 255, 0.8)" />
+          :
+          <StatRow
+            daysWorkedOut={parseInt(this.props.days_worked_out)}
+            cardioPoints={parseInt(this.props.cardio_points)}
+            strengthPoints={parseInt(this.props.strength_points)}
+            varietyPoints={parseInt(this.props.diversity_points)} />
+          }
+        </View>
       </LinearGradient>
     )
   }
@@ -58,11 +62,16 @@ const styles = StyleSheet.create({
     paddingTop: 30,
   },
   topBar: {
-    flexDirection: 'row',
     height: 30
+  },
+  topBarRow: {
+    flexDirection: 'row',
   },
   topBarSpacer: {
     flex: 8,
+  },
+  loading: {
+    paddingTop: 20
   },
   hamburgerButton: {
     flex: 1,
