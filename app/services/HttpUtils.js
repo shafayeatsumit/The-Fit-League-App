@@ -1,5 +1,5 @@
-// const BASE_URL = 'https://fan-fit.herokuapp.com/v1';
-const BASE_URL = 'http://localhost:5100/v1';
+const BASE_URL = 'https://fan-fit.herokuapp.com/v1';
+// const BASE_URL = 'http://localhost:5100/v1';
 
 let headersFor = (token) => {
   let headers = {
@@ -34,5 +34,11 @@ export const HttpUtils = {
     return fetch([BASE_URL, endpoint].join('/'), { 
       method: 'POST', headers, body
     }).then(handleErrors);
-  }
+  },
+  delete: (endpoint, token) => {
+    let headers = headersFor(token);
+    return fetch([BASE_URL, endpoint].join('/'), { 
+      method: 'DELETE', headers
+    }).then(handleErrors);
+  },
 }

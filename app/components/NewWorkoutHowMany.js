@@ -61,28 +61,7 @@ export default class NewWorkoutHowMany extends Component {
     this.onChange = this.onChange.bind(this)
     this.forward = this.forward.bind(this)
     this.addNotes = this.addNotes.bind(this)
-    // Awful hack from https://stackoverflow.com/questions/41616457/keyboardavoidingview-reset-height-when-keyboard-is-hidden
-    this.keyboardHideListener = this.keyboardHideListener.bind(this)
-    this.componentDidMount = this.componentDidMount.bind(this)
-    this.componentWillUnmount = this.componentWillUnmount.bind(this)
   }
-
-  // BEGIN HACKETY HACK HACK
-  keyboardHideListener() {
-    this.setState({
-      keyboardAvoidingViewKey: 'keyboardAvoidingViewKey' + new Date().getTime()
-    });
-  }
-
-  componentDidMount() {
-    this.keyboardHideListener = Keyboard.addListener(Platform.OS === 'android' ? 'keyboardDidHide': 'keyboardWillHide', this.keyboardHideListener);
-  }
-
-  componentWillUnmount() {
-    this.keyboardHideListener.remove()
-  }
-  // END HACKETY HACK HACK
-
 
   onSpecificWorkoutChange(specificWorkouts) {
     this.setState({ specificWorkouts })
@@ -120,7 +99,7 @@ export default class NewWorkoutHowMany extends Component {
     const { hasSpecificExercises } = this.state
     const quantity = hasSpecificExercises ? this.state.specificWorkouts.totalQuantity : this.state.workoutValues.quantity
     return (
-      <KeyboardAvoidingView behavior='height' key={this.state.keyboardAvoidingViewKey} style={styles.container}>
+      <KeyboardAvoidingView behavior='height' style={styles.container}>
         <LinearGradient 
           start={{x: 0, y: 1}} end={{x: 1, y: 0}}
           colors={['#2857ED', '#1DD65B']}

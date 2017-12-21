@@ -52,7 +52,7 @@ export default class Widget extends Component {
             { this.props.stats &&
               <View style={styles.widgetStatsHolder}>
                 <StatRow
-                  mini={true}
+                  kind="mini"
                   daysWorkedOut={parseInt(this.props.stats.days_worked_out)}
                   cardioPoints={parseInt(this.props.stats.cardio_points)}
                   strengthPoints={parseInt(this.props.stats.strength_points)}

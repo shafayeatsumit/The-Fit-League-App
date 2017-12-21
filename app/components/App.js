@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
-import { StatusBar } from 'react-native';
 import { Router, Scene } from 'react-native-router-flux';
 
 import Welcome from './Welcome';
 import Loading from './Loading';
 import Home from './Home';
+import Matchup from './Matchup';
+import League from './League';
+import Workouts from './Workouts';
 import NewWorkoutWhen from './NewWorkoutWhen';
 import NewWorkoutWhat from './NewWorkoutWhat';
 import NewWorkoutHowMany from './NewWorkoutHowMany';
 import NewWorkoutSuccess from './NewWorkoutSuccess';
-
-StatusBar.setBarStyle('light-content', true);
 
 const App = () => {
   return (
@@ -50,6 +50,21 @@ const App = () => {
           key="newWorkoutSuccess"
           component={NewWorkoutSuccess}
           title="Yasss! You did it."
+        />
+        <Scene
+          key="matchup"
+          component={Matchup}
+          title="Your Matchup"
+        />
+        <Scene
+          key="league"
+          component={League}
+          title="Your League"
+        />
+        <Scene
+          key="workouts"
+          component={Workouts}
+          title="Your Workouts"
         />
       </Scene>
     </Router>
