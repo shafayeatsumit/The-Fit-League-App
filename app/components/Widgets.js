@@ -9,6 +9,7 @@ import {
 
 import { HttpUtils } from '../services/HttpUtils'
 import Widget from './Widget'
+import Chatterbox from './Chatterbox'
 
 export default class Widgets extends Component {
   
@@ -34,13 +35,9 @@ export default class Widgets extends Component {
               return <Widget key={index} {...widget.attributes} />
             })
           }
+          <View style={styles.widgetSpacer}></View>
         </View>
-        <View style={styles.rightChatterbox}>
-          <View style={styles.chatterboxTitleHolder}>
-            <Text style={styles.chatterboxTitle}>Chatterbox</Text>
-          </View>
-          <Text style={styles.chatterboxPlaceholder}>The chatterbox is coming soon!</Text>
-        </View>
+        <Chatterbox token={this.props.token} fireChatter={this.props.fireChatter} />
       </View>
     )
   }
@@ -55,32 +52,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column'
   },
-  rightChatterbox: {
-    flex: 1,
-    borderLeftWidth: 1,
-    borderLeftColor: '#B6B7C2'
-  },
-  chatterboxTitleHolder: {
-    borderLeftColor: '#1DD65B',
-    borderLeftWidth: 3,
-    marginTop: 15,
-    marginBottom: 10,
-  },
-  chatterboxTitle: {
-    fontSize: 18,
-    fontFamily: 'Avenir-Black',
-    color: '#0E2442',
-    backgroundColor: 'transparent',
-    textAlign: 'center'
-  },
-  chatterboxPlaceholder: {
-    fontSize: 14,
-    fontFamily: 'Avenir-Black',
-    color: '#B6B7C2',
-    backgroundColor: 'transparent',
-    textAlign: 'center',
-    fontWeight: '400',
-    paddingTop: 130,
-    padding: 20
-  },
+  widgetSpacer: {
+    flex: 1
+  }
 })

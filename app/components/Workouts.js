@@ -93,7 +93,7 @@ export default class Workouts extends Component {
 
   render() {
     return (
-      <HamburgerBasement style={{flex: 1}} {...this.props}>
+      <HamburgerBasement {...this.props}>
         <OtherHeader style={styles.headerContainer} {...this.props} title="Your Workouts" />
         <View style={styles.container}>
           { this.state.loading ?

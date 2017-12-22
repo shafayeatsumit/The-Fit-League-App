@@ -80,12 +80,12 @@ export default class Widget extends Component {
 
 const styles = StyleSheet.create({
   widgetBottom: {
-    flex: 1,
+    flex: 3,
     borderTopWidth: 1,
     borderTopColor: '#B6B7C2'
   },  
   widget: {
-    flex: 1,
+    flex: 3,
   },
   loadingHolder: {
     flex: 1,

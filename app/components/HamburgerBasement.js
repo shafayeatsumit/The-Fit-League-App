@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 
 import {
   StyleSheet,
@@ -9,23 +9,37 @@ import {
   TouchableWithoutFeedback,
   TouchableHighlight,
   Image,
-} from 'react-native';
+} from 'react-native'
 
-import { Actions } from 'react-native-router-flux';
+import { Actions } from 'react-native-router-flux'
 
-const basementBackground = require('../../assets/images/basementBackground.png');
-const badge = require('../../assets/images/badge.png');
-const logo = require('../../assets/images/logo.png');
+import { HttpUtils } from '../services/HttpUtils'
 
-const VERTICAL_MARGIN_ANIMATION = 140;
-const HORIZONTAL_MARGIN_ANIMATION = 180;
+const basementBackground = require('../../assets/images/basementBackground.png')
+const badge = require('../../assets/images/badge.png')
+const logo = require('../../assets/images/logo.png')
+
+const VERTICAL_MARGIN_ANIMATION = 140
+const HORIZONTAL_MARGIN_ANIMATION = 180
+const ANIMATION_DURATION = 250
+
+const HOME_LINK =     { label: 'Home',         action: 'home'     }
+const WORKOUTS_LINK = { label: 'Workouts',     action: 'workouts' }
+const MATCHUP_LINK =  { label: 'Your Matchup', action: 'matchup'  }
+const LEAGUE_LINK =   { label: 'Your League',  action: 'league'   }
+
+const LINKS_BY_FEATURE = {
+  matchup: MATCHUP_LINK
+}
 
 export default class HamburgerBasement extends Component {
   constructor(props) {
     super(props);
-    this.toggleBasement = this.toggleBasement.bind(this);
-    this.renderChildren = this.renderChildren.bind(this);
+    this.toggleBasement = this.toggleBasement.bind(this)
+    this.hideBasement = this.hideBasement.bind(this)
+    this.renderChildren = this.renderChildren.bind(this)
     this.state = { 
+      links: [HOME_LINK, WORKOUTS_LINK],
       basementShowing: false,
       basementSpace: {
         marginTop: new Animated.Value(0),
@@ -36,12 +50,30 @@ export default class HamburgerBasement extends Component {
     }
   }
 
+  componentDidMount() {
+    HttpUtils.get('leagues/current', this.props.token)
+      .then((responseData) => {
+        if (responseData.data) {
+          let links = [HOME_LINK, WORKOUTS_LINK]
+          responseData.data.attributes.features.forEach((feature) => {
+            if (LINKS_BY_FEATURE[feature]) links.push(LINKS_BY_FEATURE[feature])
+          })
+          links.push(LEAGUE_LINK)
+          if (links) this.setState({ links })
+        }
+      }).done();
+  }
+
   renderChildren() {
     return React.Children.map(this.props.children, child => {
       return React.cloneElement(child, {
         toggleBasement: this.toggleBasement
       })
     })
+  }
+
+  hideBasement() {
+    if (this.state.basementShowing) this.toggleBasement()
   }
 
   toggleBasement() {
@@ -52,7 +84,7 @@ export default class HamburgerBasement extends Component {
     }
     Object.keys(margins).forEach((key) => {
       Animated.timing(this.state.basementSpace[key], { 
-        easing: Easing.elastic(), toValue: margins[key], duration: 250 
+        easing: Easing.elastic(), toValue: margins[key], duration: ANIMATION_DURATION 
       }).start();       
     })
     this.setState({ basementShowing: !this.state.basementShowing })
@@ -61,12 +93,6 @@ export default class HamburgerBasement extends Component {
  render() {
     const { basementSpace } = this.state
     const { token, image_url } = this.props
-    const links = [
-      { label: 'Home',         action: 'home'     },
-      { label: 'Workouts',     action: 'workouts' },
-      { label: 'Your Matchup', action: 'matchup'  },
-      { label: 'Your League',  action: 'league'   }
-    ]
     return (
       <View style={styles.basement}>
         <Image
@@ -89,13 +115,13 @@ export default class HamburgerBasement extends Component {
           </View>
         </TouchableHighlight>
         <View style={styles.basementNavColumn}>
-          { links.map((link) => {
+          { this.state.links.map((link) => {
             return <TouchableHighlight key={link.action} style={styles.basementNavLink} onPress={() => Actions[link.action]({ token, image_url }) } underlayColor='rgba(255, 255, 255, 0.25)'>
               <Text style={styles.basementNavLinkText}>{ link.label }</Text>
             </TouchableHighlight>
           })}
         </View>
-        <TouchableWithoutFeedback onPress={this.toggleBasement}>
+        <TouchableWithoutFeedback onPress={this.hideBasement}>
           <Animated.View style={StyleSheet.flatten([styles.container, basementSpace])}>
             { this.renderChildren() }
           </Animated.View>
