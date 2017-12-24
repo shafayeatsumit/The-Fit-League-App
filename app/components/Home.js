@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 
 import { HttpUtils } from '../services/HttpUtils'
+import { Pusher } from '../services/Pusher'
 
 import { Actions } from 'react-native-router-flux';
 
@@ -21,12 +22,14 @@ import HamburgerBasement from './HamburgerBasement'
 
 const addButton = require('../../assets/images/addButton.png')
 
-CHATTER_ANIMATION_DURATION = 800
-CHATTER_ANIMATION_MARGIN_BUFFER = 500
-CHATTER_ANIMATION_START_WIDTH = 150
-CHATTER_ANIMATION_END_WIDTH = 25
-SCREEN_WIDTH = Dimensions.get('window').width;
-CHATTER_ANIMATION_WIDTH_RANGE = SCREEN_WIDTH - (CHATTER_ANIMATION_START_WIDTH / 2)
+const CHATTER_USER_IMAGE_WIDTH = 75
+const CHATTER_ANIMATION_DURATION = 900
+const CHATTER_ANIMATION_MARGIN_BUFFER = 500
+const CHATTER_ANIMATION_START_WIDTH = 150
+const CHATTER_ANIMATION_END_WIDTH = 25
+const SCREEN_WIDTH = Dimensions.get('window').width;
+const SCREEN_HEIGHT = Dimensions.get('window').height;
+const CHATTER_ANIMATION_WIDTH_RANGE = SCREEN_WIDTH - (CHATTER_ANIMATION_START_WIDTH / 2)
 
 export default class Home extends Component {
   constructor(props) {
@@ -34,16 +37,17 @@ export default class Home extends Component {
     this.loadWeeklyStats = this.loadWeeklyStats.bind(this)
     this.newWorkout = this.newWorkout.bind(this)
     this.loadProfile = this.loadProfile.bind(this)
+    this.saveDeviceToken = this.saveDeviceToken.bind(this)
     this.fireChatter = this.fireChatter.bind(this)
+    this.resetChatter = this.resetChatter.bind(this)
+    this.generateChatterIconInitialState = this.generateChatterIconInitialState.bind(this)
+    this.generateChatterUserImageInitialState = this.generateChatterUserImageInitialState.bind(this)
     this.randomOffset = this.randomOffset.bind(this)
+    this.resetChatter = this.resetChatter.bind(this)
     this.state = { 
       loading: true,
-      chatterIcon: {
-        top: new Animated.Value(CHATTER_ANIMATION_MARGIN_BUFFER),
-        left: new Animated.Value(this.randomOffset()),
-        width: new Animated.Value(CHATTER_ANIMATION_START_WIDTH),
-        height: new Animated.Value(CHATTER_ANIMATION_START_WIDTH),
-      }
+      chatterIcon: this.generateChatterIconInitialState(),
+      chatterUserImage: this.generateChatterUserImageInitialState()
     };
   }
 
@@ -62,6 +66,15 @@ export default class Home extends Component {
         let { name, image_url } = responseData.data.attributes;
         this.setState({ name, image_url })
       }).done();
+  }
+
+  saveDeviceToken() {
+    Pusher.setup((device_token ) => {
+      HttpUtils.put('profile', { device_token }, this.props.token)
+        .then((responseData) => {
+          console.log(responseData);
+        }).done();
+    })
   }
 
   randomOffset() {
@@ -86,16 +99,51 @@ export default class Home extends Component {
     StatusBar.setBarStyle('light-content', true);
     this.loadWeeklyStats();
     this.loadProfile();
+    this.saveDeviceToken();
   }
 
-  fireChatter(chatterIconSource) {
-    this.setState({ chatterIconSource })
-    setTimeout(() => {    
+  generateChatterIconInitialState() {
+    return {
+      display: 'none',
+      top: new Animated.Value(CHATTER_ANIMATION_START_WIDTH + SCREEN_HEIGHT), 
+      left: new Animated.Value(this.randomOffset()),
+      width: new Animated.Value(CHATTER_ANIMATION_START_WIDTH),
+      height: new Animated.Value(CHATTER_ANIMATION_START_WIDTH),
+    }
+  }
+
+  generateChatterUserImageInitialState() {
+    return {
+      display: 'none',
+      top: new Animated.Value(-CHATTER_USER_IMAGE_WIDTH),
+      left: 0        
+    }
+  }
+
+  resetChatter() {
+    this.setState({
+      chatterIcon: this.generateChatterIconInitialState(),
+      chatterUserImage: this.generateChatterUserImageInitialState()
+    })
+  }
+
+  fireChatter(chatterIconSource, chatterUserImageSource) {
+    console.log(chatterUserImageSource)
+    let { chatterUserImage, chatterIcon } = this.state
+    chatterUserImage.left = this.randomOffset()
+    chatterUserImage.display = 'flex'
+    chatterIcon.display = 'flex'
+    this.setState({ 
+      chatterIcon, chatterIconSource, chatterUserImage, chatterUserImageSource
+    }, () => {
       Animated.timing(this.state.chatterIcon.top, { 
-        toValue: -CHATTER_ANIMATION_MARGIN_BUFFER, duration: CHATTER_ANIMATION_DURATION 
+        toValue: -1 * (CHATTER_ANIMATION_END_WIDTH + (SCREEN_HEIGHT / 3)), duration: CHATTER_ANIMATION_DURATION 
+      }).start();
+      Animated.timing(this.state.chatterUserImage.top, { 
+        toValue: -0.1 * CHATTER_USER_IMAGE_WIDTH, duration: CHATTER_ANIMATION_DURATION / 2
       }).start();
       Animated.timing(this.state.chatterIcon.left, { 
-        toValue: this.randomOffset(), duration: CHATTER_ANIMATION_DURATION 
+        toValue: chatterUserImage.left + CHATTER_ANIMATION_END_WIDTH, duration: CHATTER_ANIMATION_DURATION 
       }).start();
       Animated.timing(this.state.chatterIcon.width, { 
         toValue: CHATTER_ANIMATION_END_WIDTH, duration: CHATTER_ANIMATION_DURATION 
@@ -104,19 +152,17 @@ export default class Home extends Component {
         toValue: CHATTER_ANIMATION_END_WIDTH, duration: CHATTER_ANIMATION_DURATION 
       }).start();
       setTimeout(() => {
-        this.setState({ chatterIcon: { 
-          top: new Animated.Value(CHATTER_ANIMATION_MARGIN_BUFFER), 
-          left: new Animated.Value(this.randomOffset()),
-          width: new Animated.Value(CHATTER_ANIMATION_START_WIDTH),
-          height: new Animated.Value(CHATTER_ANIMATION_START_WIDTH),
-        }})  
-      }, CHATTER_ANIMATION_DURATION + 10)
-    }, 10)
+        Animated.timing(this.state.chatterUserImage.top, { 
+          toValue: -CHATTER_USER_IMAGE_WIDTH, duration: CHATTER_ANIMATION_DURATION / 2
+        }).start(this.resetChatter);
+      }, CHATTER_ANIMATION_DURATION)
+    })
   }
 
   render() {
     return (
-      <HamburgerBasement token={this.props.token} image_url={this.state.image_url}>      
+      <HamburgerBasement token={this.props.token} image_url={this.state.image_url}>
+        <Animated.Image style={StyleSheet.flatten([styles.chatterUserImage, this.state.chatterUserImage])} source={this.state.chatterUserImageSource} />
         <HomeHeader style={styles.headerContainer} {...this.state} />
         <View style={styles.widgetsDashboard}>
           <Animated.Image style={StyleSheet.flatten([styles.chatterIcon, this.state.chatterIcon])} source={this.state.chatterIconSource} />
@@ -165,5 +211,14 @@ const styles = StyleSheet.create({
   chatterIcon: {
     position: 'absolute',
     zIndex: 100
+  },
+  chatterUserImage: {
+    position: 'absolute',
+    zIndex: 200,
+    height: CHATTER_USER_IMAGE_WIDTH,
+    width: CHATTER_USER_IMAGE_WIDTH,
+    borderColor: 'white',
+    borderWidth: 2,
+    borderRadius: CHATTER_USER_IMAGE_WIDTH / 2,
   }
 });

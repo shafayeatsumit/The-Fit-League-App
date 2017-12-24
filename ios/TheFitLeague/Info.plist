@@ -45,16 +45,7 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
-  <key>NSAppTransportSecurity</key>
-  <dict>
-    <key>NSAllowsArbitraryLoads</key>
-    <true/>
-    <key>NSAllowsArbitraryLoadsInWebContent</key>
-    <true/>
-    <key>NSAllowsLocalNetworking</key>
-    <true/>
-  </dict>
+	<string/>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Avenir-Black.ttf</string>

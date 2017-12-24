@@ -46,16 +46,21 @@ export default class Chatterbox extends Component {
   }
 
   sendChatter(action) {
+    let { id, user_image_url } = this.state.modalData
+    let { label } = action
+    HttpUtils.post('chatters', { label, workout_id: id }, this.props.token).done();
+    this.props.fireChatter(action.icon, { uri: user_image_url })
     this.hideModal()
-    this.props.fireChatter(action.icon)
   }
 
   hideModal() {
     this.setState({ modalVisible: false, modalData: {} })
   }
 
-  showModal(id, user_name, sentiment) {
-    this.setState({ modalVisible: true, modalData: { id, user_name, sentiment } })
+  showModal(user, sentiment) {
+    let { id, attributes } = user
+    let { user_name, user_image_url } = attributes
+    this.setState({ modalVisible: true, modalData: { id, user_image_url, user_name, sentiment } })
   }
 
   componentDidMount() {
@@ -71,12 +76,14 @@ export default class Chatterbox extends Component {
       <View style={styles.container}>
         <Modal
           animationType='slide'
-          transparent={true}
+          presentationStyle='fullScreen'
           visible={this.state.modalVisible}
           onRequestClose={this.hideModal} >
           { this.state.modalVisible &&
             <View style={styles.modal}>
-              <Text style={styles.modalHeader}>How do you want to {modalData.sentiment == 'positive' ? 'root for' : 'boo'} {modalData.user_name.split(' ')[0]}?</Text>
+              <View style={styles.modalHeaderHolder}>
+                <Text style={styles.modalHeader}>How do you want to {modalData.sentiment == 'positive' ? 'root for' : 'boo'} {modalData.user_name.split(' ')[0]}?</Text>
+              </View>
               <View style={styles.actionRow}>
                 { actions[modalData.sentiment].map((action, i) => {
                     return <View key={i} style={styles.action}>
@@ -88,9 +95,11 @@ export default class Chatterbox extends Component {
                   })
                 }
               </View>
-              <TouchableHighlight style={styles.modalNevermind} onPress={this.hideModal} underlayColor='#508CD8'>
-                <Text style={styles.modalNevermindText}>Nevermind</Text>
-              </TouchableHighlight>
+              <View style={styles.modalNevermindHolder}>
+                <TouchableHighlight style={styles[modalData.sentiment + 'ModalNevermind']} onPress={this.hideModal} underlayColor={modalData.sentiment == 'positive' ? '#508CD8' : '#D61D5A' }>
+                  <Text style={styles.modalNevermindText}>Nevermind</Text>
+                </TouchableHighlight>
+              </View>
             </View>
           }
         </Modal>
@@ -104,10 +113,10 @@ export default class Chatterbox extends Component {
           :
           <ScrollView style={styles.chatterColumn}>
             { this.state.chatters.map((c, i) => {
-                return <TouchableOpacity style={styles.chatter} key={i}>
+                return <TouchableOpacity activeOpacity={1} style={styles.chatter} key={i}>
                   <View style={styles.chatterRow}>
                     <View style={styles.chatterAction}>
-                      <TouchableHighlight onPress={() => this.showModal(c.id, c.attributes.user_name, 'negative')} underlayColor='rgba(255, 255, 255, 0.75)'>
+                      <TouchableHighlight style={styles.chatterActionButton} onPress={() => this.showModal(c, 'negative')} underlayColor='rgba(255, 255, 255, 0.75)'>
                         <Image source={thumbsDown} />
                       </TouchableHighlight>
                     </View>
@@ -116,7 +125,7 @@ export default class Chatterbox extends Component {
                       <Image style={styles.workoutIcon} source={DynamicSourceGenerator.call({ label: c.attributes.kind, shade: 'dark', fallback: 'running'})} />
                     </View>
                     <View style={styles.chatterAction}>
-                      <TouchableHighlight onPress={() => this.showModal(c.id, c.attributes.user_name, 'positive')} underlayColor='rgba(255, 255, 255, 0.75)'>
+                      <TouchableHighlight style={styles.chatterActionButton} onPress={() => this.showModal(c, 'positive')} underlayColor='rgba(255, 255, 255, 0.75)'>
                         <Image source={thumbsUp} />
                       </TouchableHighlight>
                     </View>
@@ -180,6 +189,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   },
+  chatterActionButton: {
+    padding: 10
+  },
   chatterRow: {
     flexDirection: 'row',
     flex: 1,
@@ -231,11 +243,12 @@ const styles = StyleSheet.create({
     fontWeight: '400'
   },
   modal: {
-    margin: 20,
-    marginTop: 92,
-    height: 225,
-    borderRadius: 2,
-    backgroundColor: 'rgba(255, 255, 255, 0.98)'
+    flex: 1,
+    flexDirection: 'column',
+  },
+  modalHeaderHolder: {
+    flex: 1,
+    justifyContent: 'flex-end'
   },
   modalHeader: {
     textAlign: 'center',
@@ -245,11 +258,18 @@ const styles = StyleSheet.create({
     color: 'black',
     fontSize: 18,
     padding: 20,
-    paddingBottom: 0
   },
-  modalNevermind: {
+  modalNevermindHolder: {
+    flex: 2,
+    justifyContent: 'flex-start'
+  },
+  negativeModalNevermind: {
     backgroundColor: '#E9005A',
-    padding: 10
+    padding: 10,
+  },
+  positiveModalNevermind: {
+    backgroundColor: '#2857ED',
+    padding: 10,
   },
   modalNevermindText: {
     fontFamily: 'Avenir-Black',
@@ -261,7 +281,8 @@ const styles = StyleSheet.create({
   actionRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    flex: 2
   },
   action: {
     flexDirection: 'column',

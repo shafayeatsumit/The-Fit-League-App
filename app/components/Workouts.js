@@ -119,7 +119,7 @@ export default class Workouts extends Component {
               <View style={styles.workouts}>
                 <ScrollView style={styles.scroll}>
                   { this.state.workouts.map((workout) => {
-                    return <TouchableOpacity style={styles.workout} key={workout.id}>
+                    return <TouchableOpacity activeOpacity={1} style={styles.workout} key={workout.id}>
                       <View style={styles.workoutCol}>
                         <View style={styles.workoutDateRow}>
                           <Text style={styles.workoutDay}>{workout.attributes.occurred_day}</Text>
