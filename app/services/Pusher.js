@@ -5,7 +5,7 @@ const PushNotification = require('react-native-push-notification')
 export const Pusher = {
   setup: (callback) => {
     PushNotification.configure({
-      onRegister: callback,
+      onRegister: (d) => { callback(d.token) },
 
       // (required) Called when a remote or local notification is opened or received
       onNotification: function(notification) {

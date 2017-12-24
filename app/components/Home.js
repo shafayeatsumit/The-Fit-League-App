@@ -69,7 +69,7 @@ export default class Home extends Component {
   }
 
   saveDeviceToken() {
-    Pusher.setup((device_token ) => {
+    Pusher.setup((device_token) => {
       HttpUtils.put('profile', { device_token }, this.props.token)
         .then((responseData) => {
           console.log(responseData);
