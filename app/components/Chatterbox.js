@@ -23,7 +23,7 @@ const thumbsDown = require('../../assets/images/thumbsDown.png');
 
 const actions = {
   positive: [
-    { label: 'Butt Slap', icon: require('../../assets/images/bigButtSlap.png') },
+    { label: 'Attaboy', icon: require('../../assets/images/bigButtSlap.png') },
     { label: 'High Five', icon: require('../../assets/images/highFive.png') },
     { label: 'Thumbs Up', icon: require('../../assets/images/bigThumbsUp.png') },
   ],
