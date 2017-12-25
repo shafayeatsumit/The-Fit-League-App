@@ -128,7 +128,6 @@ export default class Workouts extends Component {
           }
         </View>
       </HamburgerBasement>
-
     );
   }
 }

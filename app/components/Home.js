@@ -100,6 +100,13 @@ export default class Home extends Component {
     this.loadWeeklyStats();
     this.loadProfile();
     this.saveDeviceToken();
+    // setTimeout(() => {
+    //   try {
+    //     AsyncStorage.removeItem('auth_token');
+    //   } catch (error) {
+    //     console.log(error)
+    //   }
+    // }, 1000)
   }
 
   generateChatterIconInitialState() {
