@@ -11,6 +11,8 @@ import {
   StatusBar
 } from 'react-native';
 
+import { AppEventsLogger } from 'react-native-fbsdk';
+
 import { HttpUtils } from '../services/HttpUtils'
 import { Pusher } from '../services/Pusher'
 
@@ -54,6 +56,7 @@ export default class Home extends Component {
   newWorkout() {
     let thisWeek = this.state
     delete thisWeek.loading
+    AppEventsLogger.logEvent('Tapped plus to add a workout')
     Actions.newWorkoutWhen({ 
       thisWeek,
       token: this.props.token
@@ -100,6 +103,7 @@ export default class Home extends Component {
     this.loadWeeklyStats();
     this.loadProfile();
     this.saveDeviceToken();
+    AppEventsLogger.logEvent('Viewed Home');
     // setTimeout(() => {
     //   try {
     //     AsyncStorage.removeItem('auth_token');
@@ -135,7 +139,6 @@ export default class Home extends Component {
   }
 
   fireChatter(chatterIconSource, chatterUserImageSource) {
-    console.log(chatterUserImageSource)
     let { chatterUserImage, chatterIcon } = this.state
     chatterUserImage.left = this.randomOffset()
     chatterUserImage.display = 'flex'

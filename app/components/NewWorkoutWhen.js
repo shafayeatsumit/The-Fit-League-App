@@ -12,6 +12,8 @@ import {
   Platform
 } from 'react-native';
 
+import { AppEventsLogger } from 'react-native-fbsdk'
+
 const Form = t.form.Form;
 
 // TODO: Where should these live? Should they really be global?
@@ -69,11 +71,14 @@ export default class NewWorkoutWhen extends Component {
 
   forward() {
     if (this.state.workoutKinds) {
+      AppEventsLogger.logEvent('Picked a time of workout')
       Actions.newWorkoutWhat({ 
         workout: { occurred_at: this.state.date, occurred_at_timezone: this.state.date.getTimezoneOffset() / -60 },
         workoutKinds: this.state.workoutKinds,
         token: this.props.token,
         thisWeek: this.props.thisWeek });
+    } else {
+      AppEventsLogger.logEvent('Failed to load WorkoutKinds in time')
     }
   }
 

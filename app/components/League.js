@@ -9,6 +9,8 @@ import {
   StatusBar
 } from 'react-native';
 
+import { AppEventsLogger } from 'react-native-fbsdk'
+
 import { HttpUtils } from '../services/HttpUtils'
 
 import HamburgerBasement from './HamburgerBasement'
@@ -24,6 +26,7 @@ export default class Workouts extends Component {
   componentDidMount() {
     StatusBar.setBarStyle('dark-content', true)
     this.getMembers()
+    AppEventsLogger.logEvent('Viewed League')
   }
 
   getMembers() {

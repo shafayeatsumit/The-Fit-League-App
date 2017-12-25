@@ -15,6 +15,8 @@ import {
   StatusBar,
 } from 'react-native';
 
+import { AppEventsLogger } from 'react-native-fbsdk'
+
 import { HttpUtils } from '../services/HttpUtils'
 import { DynamicSourceGenerator } from '../services/DynamicSourceGenerator'
 
@@ -38,18 +40,21 @@ export default class Workouts extends Component {
   }
 
   componentDidMount() {
-    StatusBar.setBarStyle('dark-content', true);
-    this.getWorkouts(0);
+    StatusBar.setBarStyle('dark-content', true)
+    this.getWorkouts(0)
+    AppEventsLogger.logEvent('Viewed Workouts')
   }
 
   toLastWeek() {
     this.setState({ loading: true })
     this.getWorkouts(this.state.weeksAgo + 1)
+    AppEventsLogger.logEvent('Last week of workouts')
   }
 
   toNextWeek() {
     this.setState({ loading: true })
     this.getWorkouts(this.state.weeksAgo - 1)
+    AppEventsLogger.logEvent('Next week of workouts')
   }
 
   actuallyDelete(id) {
@@ -62,10 +67,12 @@ export default class Workouts extends Component {
         let { strength_points, cardio_points, diversity_points, days_worked_out } = responseData.meta.summary;
         this.setState({ workouts, strength_points, cardio_points, diversity_points, days_worked_out })
       }).done();
+    AppEventsLogger.logEvent('Actually deleted workout')
   }
 
   confirmDelete(id) {
-    return () => {    
+    return () => {
+      AppEventsLogger.logEvent('Considered deleting workout') 
       Alert.alert(
         'Are you sure?',
         'Do you really want to delete this workout?',
@@ -101,11 +108,11 @@ export default class Workouts extends Component {
           :
             <View style={styles.listContainer}>
               <View style={styles.dateRow}>
-                <TouchableHighlight onPress={this.toLastWeek} underlayColor='#508CD8'>
+                <TouchableHighlight style={styles.dateButtonHolder} onPress={this.toLastWeek} underlayColor='#508CD8'>
                   <Image source={lastWeek} />
                 </TouchableHighlight>
                 <Text style={styles.dateText}>{ this.state.startDate } - { this.state.endDate }</Text>
-                <TouchableHighlight onPress={this.toNextWeek} underlayColor='#508CD8'>
+                <TouchableHighlight style={styles.dateButtonHolder} onPress={this.toNextWeek} underlayColor='#508CD8'>
                   <Image source={nextWeek} />
                 </TouchableHighlight>
               </View>
@@ -163,6 +170,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     borderBottomColor: '#D5D7DC',
     borderBottomWidth: 1,
+  },
+  dateButtonHolder: {
+    padding: 20
   },
   dateText: {
     fontFamily: 'Avenir-Black',

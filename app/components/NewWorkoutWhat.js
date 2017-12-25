@@ -10,6 +10,8 @@ import {
   AlertIOS
 } from 'react-native';
 
+import { AppEventsLogger } from 'react-native-fbsdk'
+
 const Form = t.form.Form;
 
 Form.stylesheet.controlLabel.normal.fontSize = 24;
@@ -87,6 +89,7 @@ export default class NewWorkoutWhat extends Component {
         if (kind.id === workoutId) workoutKind = kind
         i += 1
       }
+      AppEventsLogger.logEvent('Picked workout kind')
       Actions.newWorkoutHowMany({ 
         workout, workoutKind,
         token: this.props.token, 

@@ -18,10 +18,7 @@ export default class Loading extends Component {
   }
 
   componentWillMount() {
-    Session.check(
-      (token) => Actions.home({ token }), 
-      () => Actions.welcome({ endpoint: 'registrations', label: 'JOIN' })
-    )
+    Session.check((token) => Actions.home({ token }), () => Actions.welcome({}))
   }
 
   render() {

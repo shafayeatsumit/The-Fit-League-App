@@ -9,8 +9,11 @@ import {
   Modal,
   Text,
   Image,
+  RefreshControl,
   ActivityIndicator
 } from 'react-native';
+
+import { AppEventsLogger } from 'react-native-fbsdk'
 
 import { HttpUtils } from '../services/HttpUtils'
 import { DynamicSourceGenerator } from '../services/DynamicSourceGenerator'
@@ -32,16 +35,17 @@ const actions = {
 }
 
 export default class Chatterbox extends Component {
-  
   constructor(props) {
     super(props)
     this.showModal = this.showModal.bind(this)
     this.hideModal = this.hideModal.bind(this)
     this.sendChatter = this.sendChatter.bind(this)
+    this.getChatters = this.getChatters.bind(this)
     this.state = { 
       modalVisible: false,
       modalData: {},
-      loading: true
+      loading: true,
+      refreshing: false
     }
   }
 
@@ -51,10 +55,16 @@ export default class Chatterbox extends Component {
     HttpUtils.post('chatters', { label, workout_id: id }, this.props.token).done();
     this.props.fireChatter(action.icon, { uri: user_image_url })
     this.hideModal()
+    AppEventsLogger.logEvent('Sent Chatter', { label })
   }
 
   hideModal() {
     this.setState({ modalVisible: false, modalData: {} })
+  }
+
+  refresh() {
+    this.setState({ refreshing: true })
+    this.getChatters()
   }
 
   showModal(user, sentiment) {
@@ -63,11 +73,15 @@ export default class Chatterbox extends Component {
     this.setState({ modalVisible: true, modalData: { id, user_image_url, user_name, sentiment } })
   }
 
-  componentDidMount() {
+  getChatters() {
     HttpUtils.get('chatters', this.props.token)
       .then((responseData) => {
-        this.setState({ chatters: responseData.data, loading: false })
+        this.setState({ chatters: responseData.data, loading: false, refreshing: false })
       }).done();
+  }
+
+  componentDidMount() {
+    this.getChatters()
   }
 
   render() {
@@ -111,7 +125,11 @@ export default class Chatterbox extends Component {
             <ActivityIndicator size="large" color="#B6B7C2" />
           </View>
           :
-          <ScrollView style={styles.chatterColumn}>
+          <ScrollView refreshControl={
+            <RefreshControl
+              refreshing={this.state.refreshing}
+              onRefresh={this.refresh.bind(this)} />
+          } style={styles.chatterColumn}>
             { this.state.chatters.map((c, i) => {
                 return <TouchableOpacity activeOpacity={1} style={styles.chatter} key={i}>
                   <View style={styles.chatterRow}>

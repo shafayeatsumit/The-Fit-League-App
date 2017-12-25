@@ -10,6 +10,8 @@ import {
   StatusBar
 } from 'react-native';
 
+import { AppEventsLogger } from 'react-native-fbsdk'
+
 const _ = require('lodash')
 
 import { HttpUtils } from '../services/HttpUtils'
@@ -34,16 +36,19 @@ export default class Workouts extends Component {
   toLastWeek() {
     this.setState({ loading: true })
     this.getContest(this.state.weeksAgo + 1)
+    AppEventsLogger.logEvent('Last week of matchups')
   }
 
   toNextWeek() {
     this.setState({ loading: true })
     this.getContest(this.state.weeksAgo - 1)
+    AppEventsLogger.logEvent('Next week of matchups')
   }
 
   componentDidMount() {
-    StatusBar.setBarStyle('dark-content', true);
-    this.getContest(0);
+    StatusBar.setBarStyle('dark-content', true)
+    this.getContest(0)
+    AppEventsLogger.logEvent('Viewed Matchup')
   }
 
   getContest(weeksAgo) {
@@ -70,7 +75,7 @@ export default class Workouts extends Component {
           :
             <View style={styles.listContainer}>
               <View style={styles.dateRow}>
-                <TouchableHighlight onPress={this.toLastWeek} underlayColor='#508CD8'>
+                <TouchableHighlight style={styles.dateButtonHolder} onPress={this.toLastWeek} underlayColor='#508CD8'>
                   <Image source={lastWeek} />
                 </TouchableHighlight>
                 <View style={styles.contestLabel}>
@@ -79,7 +84,7 @@ export default class Workouts extends Component {
                   }
                   <Text style={styles.dateText}>{ this.state.startDate } - { this.state.endDate }</Text>
                 </View>
-                <TouchableHighlight onPress={this.toNextWeek} underlayColor='#508CD8'>
+                <TouchableHighlight style={styles.dateButtonHolder} onPress={this.toNextWeek} underlayColor='#508CD8'>
                   <Image source={nextWeek} />
                 </TouchableHighlight>
               </View>
@@ -153,6 +158,9 @@ const styles = StyleSheet.create({
     flex: 2,
     justifyContent: 'space-around',
     alignItems: 'center',
+  },
+  dateButtonHolder: {
+    padding: 20
   },
   dateText: {
     fontFamily: 'Avenir-Black',

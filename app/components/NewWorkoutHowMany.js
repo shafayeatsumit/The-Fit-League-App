@@ -15,6 +15,8 @@ import {
   Image
 } from 'react-native';
 
+import { AppEventsLogger } from 'react-native-fbsdk'
+
 const Form = t.form.Form;
 
 import { DynamicSourceGenerator } from '../services/DynamicSourceGenerator'
@@ -80,6 +82,7 @@ export default class NewWorkoutHowMany extends Component {
   forward() {
     let self = this
     let { workout } = self.props
+    AppEventsLogger.logEvent('Entered a workout quantity', { with_specific_exercises: self.state.hasSpecificExercises })
     if (self.state.hasSpecificExercises) {
       let { specificWorkouts } = self.state
       workout.quantity = specificWorkouts.totalQuantity

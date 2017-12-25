@@ -13,6 +13,7 @@ import {
 
 import { Actions } from 'react-native-router-flux';
 import LinearGradient from 'react-native-linear-gradient';
+import { AppEventsLogger } from 'react-native-fbsdk';
 
 import AltAuthLink from '../components/AltAuthLink'
 
@@ -23,6 +24,7 @@ const badge = require('../../assets/images/badge.png');
 const logo = require('../../assets/images/logo.png');
 
 const FBSDK = require('react-native-fbsdk');
+
 const { 
   LoginButton, 
   AccessToken,
@@ -35,6 +37,10 @@ export default class Welcome extends Component {
     this.save = this.save.bind(this);
   }
 
+  componentDidMount() {
+    AppEventsLogger.logEvent('Saw Facebook Login');
+  }
+
   save() {
     this.setState({ loading: true });
     AccessToken.getCurrentAccessToken().then(
@@ -43,10 +49,12 @@ export default class Welcome extends Component {
           access_token: data.accessToken.toString() 
         }).then((responseData) => {
           let { token } = responseData.data.attributes
+          AppEventsLogger.logEvent('Logged in with Facebook');
           Session.save(token);
           Actions.home({ token });
         }).catch((error) => {
           AlertIOS.alert("Sorry! Login failed.", error.message)
+          AppEventsLogger.logEvent('Failed to log in with Facebook', { message: error.message });
           this.setState({ loading: false, hideButton: false });
         }).done();
       }
