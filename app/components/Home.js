@@ -11,12 +11,12 @@ import {
   StatusBar
 } from 'react-native';
 
-import { AppEventsLogger } from 'react-native-fbsdk';
+import { AppEventsLogger } from 'react-native-fbsdk'
 
 import { HttpUtils } from '../services/HttpUtils'
 import { Pusher } from '../services/Pusher'
 
-import { Actions } from 'react-native-router-flux';
+import { Actions } from 'react-native-router-flux'
 
 import Widgets from './Widgets'
 import HomeHeader from './HomeHeader'
@@ -72,7 +72,7 @@ export default class Home extends Component {
   }
 
   saveDeviceToken() {
-    Pusher.setup((device_token) => {
+    Pusher.setup(this.props.token, (device_token) => {
       HttpUtils.put('profile', { device_token }, this.props.token)
         .then((responseData) => {
           console.log(responseData);

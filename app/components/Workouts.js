@@ -167,6 +167,7 @@ const styles = StyleSheet.create({
   dateRow: {
     flexDirection: 'row',
     flex: 1,
+    alignItems: 'center',
     justifyContent: 'space-around',
     borderBottomColor: '#D5D7DC',
     borderBottomWidth: 1,

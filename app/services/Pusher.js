@@ -1,16 +1,19 @@
 import { PushNotificationIOS } from 'react-native'
+import { Actions } from 'react-native-router-flux'
 
 const PushNotification = require('react-native-push-notification')
 
 export const Pusher = {
-  setup: (callback) => {
+  setup: (token, callback) => {
     PushNotification.configure({
       onRegister: (d) => { callback(d.token) },
 
       // (required) Called when a remote or local notification is opened or received
       onNotification: function(notification) {
-        console.log( 'NOTIFICATION:', notification );
-
+        console.log('NOTIFICATION:', notification)
+        if (notification.userInteraction && notification.data.destinationView) {
+          Actions[notification.data.destinationView]({ token })
+        }
         // process the notification
         
         // required on iOS only (see fetchCompletionHandler docs: https://facebook.github.io/react-native/docs/pushnotificationios.html)
