@@ -126,6 +126,9 @@ export default class NewWorkoutHowMany extends Component {
                     <View style={styles.workoutIcon}>
                       <Image source={DynamicSourceGenerator.call({ label: this.props.workoutKind.attributes.label, shade: 'light', fallback: 'running'})} style={styles.workoutIconImage} />
                     </View>
+                    <View style={styles.workoutLabel}>
+                      <Text style={styles.workoutLabelText}>{ this.props.workoutKind.attributes.label }</Text>
+                    </View>
                   </View>
                   <Form
                     ref="form"
@@ -202,5 +205,17 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontFamily: 'Avenir-Black',
     fontWeight: '900'
-  }
+  },
+  workoutLabel: {
+    paddingTop: 10
+  },
+  workoutLabelText: {
+    textAlign: 'center',
+    backgroundColor: 'transparent',
+    color: 'white',
+    fontSize: 12,
+    textAlign: 'center',
+    fontFamily: 'Avenir-Black',
+    fontWeight: '400'
+  },
 });

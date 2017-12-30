@@ -15,8 +15,6 @@ import { Actions } from 'react-native-router-flux';
 import LinearGradient from 'react-native-linear-gradient';
 import { AppEventsLogger } from 'react-native-fbsdk';
 
-import AltAuthLink from '../components/AltAuthLink'
-
 import { HttpUtils } from '../services/HttpUtils'
 import { Session } from '../services/Session'
 

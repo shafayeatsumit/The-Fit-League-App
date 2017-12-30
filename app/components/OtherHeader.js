@@ -51,7 +51,8 @@ const styles = StyleSheet.create({
   hamburgerButton: {
     flex: 1,
     paddingTop: 10,
-    paddingLeft: 20
+    paddingLeft: 20,
+    paddingRight: 20,
   },
   userImageHolder: {
     flex: 1,

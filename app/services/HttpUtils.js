@@ -1,7 +1,7 @@
 const BASE_URL = 'https://fan-fit.herokuapp.com/v1';
 // const BASE_URL = 'http://localhost:5100/v1';
 
-let headersFor = (token) => {
+const headersFor = (token) => {
   let headers = {
     'Accept': 'application/json',
     'Content-Type': 'application/json'
@@ -19,34 +19,21 @@ const handleErrors = (response) => {
   });
 }
 
+const hitEndpoint = (method, endpoint, token, body) => {
+  let headers = headersFor(token)
+  let url = [BASE_URL, endpoint].join('/')
+  return fetch(url, { method, headers, body }).then(handleErrors);
+}
+
 export const HttpUtils = {
-  handleErrors,
-  get: (endpoint, token) => {
-    let headers = headersFor(token);
-    return fetch([BASE_URL, endpoint].join('/'), { 
-      method: 'GET', headers
-    }).then(handleErrors);
-  },
+  get: (endpoint, token) => hitEndpoint('GET', endpoint, token),
+  delete: (endpoint, token) => hitEndpoint('DELETE', endpoint, token),
   post: (endpoint, data, token) => {
-    let headers = headersFor(token);
-    if (token) headers['Authorization'] = 'Bearer ' + token;
-    let body = JSON.stringify(data);
-    return fetch([BASE_URL, endpoint].join('/'), { 
-      method: 'POST', headers, body
-    }).then(handleErrors);
+    let body = JSON.stringify(data)
+    return hitEndpoint('POST', endpoint, token, body)
   },
   put: (endpoint, data, token) => {
-    let headers = headersFor(token);
-    if (token) headers['Authorization'] = 'Bearer ' + token;
-    let body = JSON.stringify(data);
-    return fetch([BASE_URL, endpoint].join('/'), { 
-      method: 'PUT', headers, body
-    }).then(handleErrors);
-  },
-  delete: (endpoint, token) => {
-    let headers = headersFor(token);
-    return fetch([BASE_URL, endpoint].join('/'), { 
-      method: 'DELETE', headers
-    }).then(handleErrors);
-  },
+    let body = JSON.stringify(data)
+    return hitEndpoint('PUT', endpoint, token, body)
+  }
 }

@@ -24,7 +24,7 @@ const HORIZONTAL_MARGIN_ANIMATION = 180
 const ANIMATION_DURATION = 250
 
 const HOME_LINK =     { label: 'Home',         action: 'home'     }
-const WORKOUTS_LINK = { label: 'Workouts',     action: 'workouts' }
+const WORKOUTS_LINK = { label: 'Your Workouts',     action: 'workouts' }
 const MATCHUP_LINK =  { label: 'Your Matchup', action: 'matchup'  }
 const LEAGUE_LINK =   { label: 'Your League',  action: 'league'   }
 
@@ -181,7 +181,7 @@ const styles = StyleSheet.create({
     top: 140
   },
   basementNavLink: {
-    padding: 20,
+    padding: 15,
     marginBottom: 30,
     borderRadius: 10,
   },

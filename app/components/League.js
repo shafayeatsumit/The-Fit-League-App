@@ -2,9 +2,12 @@ import React, { Component } from 'react';
 
 import {
   StyleSheet,
+  ScrollView,
   View,
   Text,
   Image,
+  TouchableOpacity,
+  TouchableHighlight,
   ActivityIndicator,
   StatusBar
 } from 'react-native';
@@ -20,13 +23,20 @@ export default class Workouts extends Component {
   constructor(props) {
     super(props);
     this.getMembers = this.getMembers.bind(this)
-    this.state = { loading: true };
+    this.toggleDetails = this.toggleDetails.bind(this)
+    this.state = { loading: true, viewingDetails: false, columns: {} };
   }
 
   componentDidMount() {
     StatusBar.setBarStyle('dark-content', true)
     this.getMembers()
     AppEventsLogger.logEvent('Viewed League')
+  }
+
+  toggleDetails() {
+    this.setState({ viewingDetails: !this.state.viewingDetails }, () => {
+      if (this.state.viewingDetails) AppEventsLogger.logEvent('Viewed League Details')
+    })
   }
 
   getMembers() {
@@ -41,6 +51,7 @@ export default class Workouts extends Component {
   }
 
   render() {
+    const columns = this.state.viewingDetails ? this.state.columns.details : this.state.columns.basic
     return (
       <HamburgerBasement {...this.props}>
         <OtherHeader style={styles.headerContainer} {...this.props} title="Your League" />
@@ -51,34 +62,41 @@ export default class Workouts extends Component {
             <View style={styles.listContainer}>
               <View style={styles.headerRow}>
                 <View style={styles.rankHeaderColumn}>
-                  <Text style={styles.rankHeaderLabel}>Rank</Text>
+                  <Text style={styles.rankHeaderLabel}>Standings</Text>
                 </View>
-                { this.state.columns.map((column) => {
+                { columns.map((column) => {
                     return <View key={['header', column.key].join('-')} style={styles.headerColumn}>
                       <Text style={styles.headerLabel}>{ column.label }</Text>
                     </View>
                   })
                 }
               </View>
-              {
-                this.state.users.map((user, index) => {
-                  return <View key={index} style={index % 2 == 0 ? styles.evenRow : styles.oddRow}>
-                    <View style={styles.rankColumn}>
-                      <Text style={styles.dataLabel}>{ index + 1 }</Text>
-                    </View>
-                    <View style={styles.nameColumn}>
-                      <Image style={styles.userImage} source={{ uri: user.attributes.image_url }} />
-                      <Text style={styles.dataLabel}>{ user.attributes.name.split(' ').map((s) => s[0]).join('') }</Text>
-                    </View>
-                    { this.state.columns.map((column) => {
-                      return <View key={['user', index, column.key].join('-')} style={styles.dataColumn}>
-                        <Text style={styles.dataLabel}>{ user.attributes[column.key] }</Text>
+              <View style={styles.viewDetailsRow}>
+                <TouchableHighlight style={styles.viewDetailsButton} onPress={this.toggleDetails} underlayColor='transparent'>
+                  <Text style={styles.viewDetailsText}>{ this.state.viewingDetails ? 'Hide Details' : 'View Details' }</Text>
+                </TouchableHighlight>
+              </View>
+              <ScrollView>
+                {
+                  this.state.users.map((user, index) => {
+                    return <TouchableOpacity activeOpacity={1} style={index % 2 == 0 ? styles.evenRow : styles.oddRow} key={index}>
+                      <View style={styles.rankColumn}>
+                        <Text style={styles.dataLabel}>{ index + 1 }</Text>
                       </View>
-                      })
-                    }
-                  </View>
-                })
-              }
+                      <View style={styles.nameColumn}>
+                        <Image style={styles.userImage} source={{ uri: user.attributes.image_url }} />
+                        <Text style={styles.dataLabel}>{ user.attributes.name.split(' ').map((s) => s[0]).join('') }</Text>
+                      </View>
+                      { columns.map((column) => {
+                        return <View key={['user', index, column.key].join('-')} style={styles.dataColumn}>
+                          <Text style={styles.dataLabel}>{ user.attributes[column.key] }</Text>
+                        </View>
+                        })
+                      }
+                    </TouchableOpacity>
+                  })
+                }
+              </ScrollView>
             </View>
           }
         </View>
@@ -103,6 +121,21 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     flex: 1,
     backgroundColor: 'white',
+  },
+  viewDetailsRow: {
+    alignItems: 'flex-end',
+    borderBottomColor: '#D5D7DC',
+    borderBottomWidth: 1,
+  },
+  viewDetailsButton: {
+    padding: 5
+  }, 
+  viewDetailsText: {
+    fontFamily: 'Avenir-Black',
+    backgroundColor: 'transparent',
+    fontWeight: '400',
+    color: '#508CD8',
+    fontSize: 12
   },
   headerRow: {
     height: 65,

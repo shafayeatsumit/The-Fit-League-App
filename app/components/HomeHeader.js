@@ -23,23 +23,24 @@ export default class HomeHeader extends Component {
         colors={['#2857ED', '#1DD65B']}
         style={styles.container}>
         <View>
-          <View style={styles.topBar}>
-          { !this.props.loading &&           
+          <View style={styles.topBar}>         
             <View style={styles.topBarRow}>
-              <TouchableHighlight style={styles.hamburgerButton} onPress={this.props.toggleBasement} underlayColor='transparent'>
-                <Image style={styles.hamburgerButtonIcon} source={hamburger} />
-              </TouchableHighlight>
-              <View style={styles.topBarSpacer}></View>
-              <View style={styles.userImageHolder}>
-                { this.props.image_url && 
-                  <Image style={styles.userImage} source={{uri: this.props.image_url}} />
-                }
+              { !this.props.loading &&  
+                <TouchableHighlight style={styles.hamburgerButton} onPress={this.props.toggleBasement} underlayColor='transparent'>
+                  <Image style={styles.hamburgerButtonIcon} source={hamburger} />
+                </TouchableHighlight>
+              }
+              <View style={styles.yourWeekContainer}>
+                <Text style={styles.yourWeekText}>Your week</Text>
               </View>
+              { !this.props.loading &&  
+                <View style={styles.userImageHolder}>
+                  { this.props.image_url && 
+                    <Image style={styles.userImage} source={{uri: this.props.image_url}} />
+                  }
+                </View>
+              }
             </View>
-          }
-          </View>
-          <View style={styles.yourWeek}>
-            <Text style={styles.yourWeekText}>Your week</Text>
           </View>
           { this.props.loading ?
             <ActivityIndicator size="large" style={styles.loading} color="rgba(255, 255, 255, 0.8)" />
@@ -62,25 +63,28 @@ const styles = StyleSheet.create({
     paddingTop: 30,
   },
   topBar: {
-    height: 30
+    height: 60,
+    paddingLeft: 20,
+    paddingRight: 20
   },
   topBarRow: {
     flexDirection: 'row',
   },
-  topBarSpacer: {
+  yourWeekContainer: {
     flex: 8,
+    paddingTop: 20,
+    alignItems: 'center',
   },
   loading: {
     paddingTop: 20
   },
   hamburgerButton: {
-    flex: 1,
-    paddingTop: 10,
-    paddingLeft: 20
+    flex: 2,
+    paddingTop: 10
   },
   userImageHolder: {
-    flex: 1,
-    paddingRight: 20
+    flex: 2,
+    alignItems: 'flex-end'
   },
   userImage: {
     borderColor: 'white',
@@ -88,10 +92,6 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     height: 36,
     width: 36,
-  },
-  yourWeek: {
-    alignItems: 'center',
-    height: 30
   },
   yourWeekText: {
     fontFamily: 'Avenir-Black',

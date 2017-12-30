@@ -12,11 +12,10 @@ import {
 } from 'react-native';
 
 import { AppEventsLogger } from 'react-native-fbsdk'
+import { Actions } from 'react-native-router-flux'
 
 import { HttpUtils } from '../services/HttpUtils'
 import { Pusher } from '../services/Pusher'
-
-import { Actions } from 'react-native-router-flux'
 
 import Widgets from './Widgets'
 import HomeHeader from './HomeHeader'
@@ -45,7 +44,6 @@ export default class Home extends Component {
     this.generateChatterIconInitialState = this.generateChatterIconInitialState.bind(this)
     this.generateChatterUserImageInitialState = this.generateChatterUserImageInitialState.bind(this)
     this.randomOffset = this.randomOffset.bind(this)
-    this.resetChatter = this.resetChatter.bind(this)
     this.state = { 
       loading: true,
       chatterIcon: this.generateChatterIconInitialState(),
@@ -201,8 +199,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'gray'
   },
   newWorkoutButtonPlus: {
-    height: 39,
-    width: 39
+    height: 37,
+    width: 37
   },
   newWorkoutButton: {
     height: 70,
