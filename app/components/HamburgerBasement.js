@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, PropTypes } from 'react'
 
 import {
   StyleSheet,
@@ -34,10 +34,10 @@ const LINKS_BY_FEATURE = {
 
 export default class HamburgerBasement extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.toggleBasement = this.toggleBasement.bind(this)
     this.hideBasement = this.hideBasement.bind(this)
-    this.renderChildren = this.renderChildren.bind(this)
+    this.getChildContext = this.getChildContext.bind(this)
     this.state = { 
       links: [HOME_LINK, WORKOUTS_LINK],
       basementShowing: false,
@@ -48,6 +48,10 @@ export default class HamburgerBasement extends Component {
         marginBottom: new Animated.Value(0)
       }
     }
+  }
+
+  getChildContext() {
+    return { toggleBasement: this.toggleBasement }
   }
 
   componentDidMount() {
@@ -62,14 +66,6 @@ export default class HamburgerBasement extends Component {
           if (links) this.setState({ links })
         }
       }).done();
-  }
-
-  renderChildren() {
-    return React.Children.map(this.props.children, child => {
-      return React.cloneElement(child, {
-        toggleBasement: this.toggleBasement
-      })
-    })
   }
 
   hideBasement() {
@@ -117,19 +113,25 @@ export default class HamburgerBasement extends Component {
         <View style={styles.basementNavColumn}>
           { this.state.links.map((link) => {
             return <TouchableHighlight key={link.action} style={styles.basementNavLink} onPress={() => Actions[link.action]({ token, image_url }) } underlayColor='rgba(255, 255, 255, 0.25)'>
-              <Text style={styles.basementNavLinkText}>{ link.label }</Text>
+              <View>
+                <Text style={styles.basementNavLinkText}>{ link.label }</Text>
+              </View>
             </TouchableHighlight>
           })}
         </View>
         <TouchableWithoutFeedback onPress={this.hideBasement}>
           <Animated.View style={StyleSheet.flatten([styles.container, basementSpace])}>
-            { this.renderChildren() }
+            { this.props.children }
           </Animated.View>
         </TouchableWithoutFeedback>
       </View>
     );
   }
 }
+
+HamburgerBasement.childContextTypes = {
+  toggleBasement: PropTypes.func
+};
 
 const styles = StyleSheet.create({
   container: {

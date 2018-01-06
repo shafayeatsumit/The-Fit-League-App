@@ -74,7 +74,7 @@ export default class Welcome extends Component {
           </View>
           <View style={styles.textHolder}>
             <Text style={styles.text}>
-              10 week exercise competitions
+              10-week exercise competitions
             </Text>
             <Text style={styles.text}>
               for you and your crew.

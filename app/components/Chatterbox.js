@@ -111,7 +111,9 @@ export default class Chatterbox extends Component {
               </View>
               <View style={styles.modalNevermindHolder}>
                 <TouchableHighlight style={styles[modalData.sentiment + 'ModalNevermind']} onPress={this.hideModal} underlayColor={modalData.sentiment == 'positive' ? '#508CD8' : '#D61D5A' }>
-                  <Text style={styles.modalNevermindText}>Nevermind</Text>
+                  <View>
+                    <Text style={styles.modalNevermindText}>Nevermind</Text>
+                  </View>
                 </TouchableHighlight>
               </View>
             </View>
@@ -140,7 +142,9 @@ export default class Chatterbox extends Component {
                     </View>
                     <View style={styles.chatterDetails}>
                       <Image style={styles.userImage} source={{ uri: c.attributes.user_image_url }} />
-                      <Image style={styles.workoutIcon} source={DynamicSourceGenerator.call({ label: c.attributes.kind, shade: 'dark', fallback: 'running'})} />
+                      <View style={styles.workoutIconContainer}>
+                        <Image style={styles.workoutIcon} source={DynamicSourceGenerator.call({ label: c.attributes.kind, shade: 'dark', fallback: 'running'})} />
+                      </View>
                     </View>
                     <View style={styles.chatterAction}>
                       <TouchableHighlight style={styles.chatterActionButton} onPress={() => this.showModal(c, 'positive')} underlayColor='rgba(255, 255, 255, 0.75)'>
@@ -227,13 +231,18 @@ const styles = StyleSheet.create({
     width: 60,
     borderRadius: 30
   },
-  workoutIcon: {
+  workoutIconContainer: {
     marginTop: -20,
+    height: 30,
+    width: 30,
+    backgroundColor: 'white',
+    borderRadius: 15
+  },
+  workoutIcon: {
     height: 30,
     width: 30,
     borderWidth: 1,
     borderColor: '#7A8DA0',
-    backgroundColor: 'white',
     borderRadius: 15
   },
   chatterName: {

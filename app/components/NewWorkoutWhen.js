@@ -8,7 +8,9 @@ import {
   Text,
   AlertIOS,
   DatePickerIOS,
+  TimePickerAndroid,
   DatePickerAndroid,
+  TouchableHighlight,
   Platform
 } from 'react-native';
 
@@ -47,6 +49,8 @@ export default class NewWorkoutWhen extends Component {
     super(props)
     this.state = { date: new Date() }
     this.onDateChange = this.onDateChange.bind(this)
+    this.pickTimeAndroid = this.pickTimeAndroid.bind(this)
+    this.pickDateAndroid = this.pickDateAndroid.bind(this)
     this.getWorkoutKinds = this.getWorkoutKinds.bind(this)
     this.forward = this.forward.bind(this)
   }
@@ -67,6 +71,42 @@ export default class NewWorkoutWhen extends Component {
 
   componentDidMount() {
     this.getWorkoutKinds()
+    if (Platform.OS === 'android') this.pickDateAndroid()
+  }
+
+  async pickTimeAndroid(date) {
+    try {
+      const currentDate = new Date()
+      const {action, hour, minute} = await TimePickerAndroid.open({
+        hour: currentDate.getHours(),
+        minute: currentDate.getMinutes(),
+        is24Hour: false,
+      });
+      if (action !== TimePickerAndroid.dismissedAction) {
+        date.setHours(hour)
+        date.setMinutes(minute)
+        Actions.newWorkoutWhat({ 
+          workout: { occurred_at: date, occurred_at_timezone: date.getTimezoneOffset() / -60 },
+          workoutKinds: this.state.workoutKinds,
+          token: this.props.token,
+          thisWeek: this.props.thisWeek })
+      }
+    } catch ({code, message}) {
+      console.warn('Cannot open time picker', message);
+    }
+  }
+
+  async pickDateAndroid() {
+    try {
+      const { action, year, month, day } = await DatePickerAndroid.open({ 
+        date: new Date() 
+      }); 
+      if (action !== DatePickerAndroid.dismissedAction) {
+        this.pickTimeAndroid(new Date(year, month, day))
+      }
+    } catch ({code, message}) {
+      console.warn('Cannot open date picker', message);
+    }
   }
 
   forward() {
@@ -93,11 +133,9 @@ export default class NewWorkoutWhen extends Component {
           <View style={styles.formContainer}>
             <Text style={styles.dateHeader}>Select a date and time</Text>
             { Platform.OS === 'android' ?
-              <DatePickerAndroid
-                date={this.state.date}
-                style={styles.datePicker}
-                mode="spinner"
-                onDateChange={this.onDateChange} />
+                <TouchableHighlight style={styles.pickDateButton} onPress={this.pickDateAndroid} underlayColor='transparent'>
+                  <Text style={styles.pickDateText}>Pick a Date</Text>
+                </TouchableHighlight>
               :
               <DatePickerIOS
                 style={styles.datePicker}
@@ -147,5 +185,12 @@ const styles = StyleSheet.create({
   formContainer: {
     paddingTop: 20,
     flex: 10
+  },
+  pickDateText: {
+    backgroundColor: 'transparent',
+    textAlign: 'center',
+    color: 'white',
+    fontFamily: 'Avenir-Black',
+    fontSize: 24,
   }
 });

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 
 import {
   StyleSheet,
@@ -26,7 +26,7 @@ export default class HomeHeader extends Component {
           <View style={styles.topBar}>         
             <View style={styles.topBarRow}>
               { !this.props.loading &&  
-                <TouchableHighlight style={styles.hamburgerButton} onPress={this.props.toggleBasement} underlayColor='transparent'>
+                <TouchableHighlight style={styles.hamburgerButton} onPress={this.context.toggleBasement} underlayColor='transparent'>
                   <Image style={styles.hamburgerButtonIcon} source={hamburger} />
                 </TouchableHighlight>
               }
@@ -56,6 +56,10 @@ export default class HomeHeader extends Component {
     )
   }
 }
+
+HomeHeader.contextTypes = {
+  toggleBasement: PropTypes.func
+};
 
 const styles = StyleSheet.create({
   container: {

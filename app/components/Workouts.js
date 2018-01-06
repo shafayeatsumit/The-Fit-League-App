@@ -131,7 +131,7 @@ export default class Workouts extends Component {
                         <View style={styles.workoutDateRow}>
                           <Text style={styles.workoutDay}>{workout.attributes.occurred_day}</Text>
                           <Text style={styles.workoutDate}>{workout.attributes.occurred_date}</Text>
-                          <TouchableHighlight style={styles.workoutTrash} onPress={this.confirmDelete(workout.id)} underlayColor='#508CD8'>
+                          <TouchableHighlight style={styles.workoutTrash} onPress={this.confirmDelete(workout.id)} underlayColor='transparent'>
                             <Image source={trash} />
                           </TouchableHighlight>
                         </View>
