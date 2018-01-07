@@ -171,7 +171,7 @@ export default class Home extends Component {
     return (
       <HamburgerBasement token={this.props.token} image_url={this.state.image_url}>
         <Animated.Image style={StyleSheet.flatten([styles.chatterUserImage, this.state.chatterUserImage])} source={this.state.chatterUserImageSource} />
-        <HomeHeader style={styles.headerContainer} {...this.state} />
+        <HomeHeader {...this.state} />
         <View style={styles.widgetsDashboard}>
           <Animated.Image style={StyleSheet.flatten([styles.chatterIcon, this.state.chatterIcon])} source={this.state.chatterIconSource} />
           <Widgets token={this.props.token} fireChatter={this.fireChatter} />

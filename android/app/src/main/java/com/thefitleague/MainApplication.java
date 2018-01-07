@@ -18,6 +18,10 @@ import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
 import java.util.Arrays;
 import java.util.List;
 
+// import Branch and RNBranch
+import io.branch.rnbranch.RNBranchPackage;
+import io.branch.referral.Branch;
+
 public class MainApplication extends Application implements ReactApplication {
   private static CallbackManager mCallbackManager = CallbackManager.Factory.create();
 
@@ -38,6 +42,7 @@ public class MainApplication extends Application implements ReactApplication {
             new RNBranchPackage(),
               new FBSDKPackage(mCallbackManager),
               new LinearGradientPackage(),
+              new RNBranchPackage(),
               new ReactNativePushNotificationPackage(),
       };
       return Arrays.<ReactPackage>asList(packages);
@@ -53,6 +58,7 @@ public class MainApplication extends Application implements ReactApplication {
   public void onCreate() {
     super.onCreate();
     FacebookSdk.sdkInitialize(getApplicationContext());
+    Branch.getAutoInstance(this);
     // If you want to use AppEventsLogger to log events.
     AppEventsLogger.activateApp(this);
   }

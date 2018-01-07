@@ -22,36 +22,33 @@ export default class HomeHeader extends Component {
         start={{x: 0, y: 1}} end={{x: 1, y: 0}}
         colors={['#2857ED', '#1DD65B']}
         style={styles.container}>
-        <View>
-          <View style={styles.topBar}>         
-            <View style={styles.topBarRow}>
-              { !this.props.loading &&  
-                <TouchableHighlight style={styles.hamburgerButton} onPress={this.context.toggleBasement} underlayColor='transparent'>
-                  <Image style={styles.hamburgerButtonIcon} source={hamburger} />
-                </TouchableHighlight>
-              }
-              <View style={styles.yourWeekContainer}>
-                <Text style={styles.yourWeekText}>Your week</Text>
-              </View>
-              { !this.props.loading &&  
-                <View style={styles.userImageHolder}>
-                  { this.props.image_url && 
-                    <Image style={styles.userImage} source={{uri: this.props.image_url}} />
-                  }
-                </View>
+        <View style={styles.topBar}>     
+          { !this.props.loading &&  
+            <TouchableHighlight style={styles.hamburgerButton} onPress={this.context.toggleBasement} underlayColor='transparent'>
+              <Image style={styles.hamburgerButtonIcon} source={hamburger} />
+            </TouchableHighlight>
+          }
+          <View style={styles.yourWeekContainer}>
+            <Text style={styles.yourWeekText}>Your week</Text>
+          </View>
+          { !this.props.loading &&  
+            <View style={styles.userImageHolder}>
+              { this.props.image_url && 
+                <Image style={styles.userImage} source={{uri: this.props.image_url}} />
               }
             </View>
-          </View>
-          { this.props.loading ?
-            <ActivityIndicator size="large" style={styles.loading} color="rgba(255, 255, 255, 0.8)" />
-          :
-          <StatRow
-            daysWorkedOut={parseInt(this.props.days_worked_out)}
-            cardioPoints={parseInt(this.props.cardio_points)}
-            strengthPoints={parseInt(this.props.strength_points)}
-            varietyPoints={parseInt(this.props.diversity_points)} />
           }
         </View>
+        { this.props.loading ?
+          <ActivityIndicator size="large" style={styles.loading} color="rgba(255, 255, 255, 0.8)" />
+        :
+        <StatRow
+          style={styles.statRow}
+          daysWorkedOut={parseInt(this.props.days_worked_out)}
+          cardioPoints={parseInt(this.props.cardio_points)}
+          strengthPoints={parseInt(this.props.strength_points)}
+          varietyPoints={parseInt(this.props.diversity_points)} />
+        }
       </LinearGradient>
     )
   }
@@ -64,15 +61,17 @@ HomeHeader.contextTypes = {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 30,
+    paddingTop: 25,
+    flexDirection: 'column'
   },
   topBar: {
-    height: 60,
+    flex: 0.75,
     paddingLeft: 20,
-    paddingRight: 20
-  },
-  topBarRow: {
+    paddingRight: 20,
     flexDirection: 'row',
+  },
+  statRow: {
+    flex: 1
   },
   yourWeekContainer: {
     flex: 8,
@@ -80,7 +79,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   loading: {
-    paddingTop: 20
+    flex: 1
   },
   hamburgerButton: {
     flex: 2,

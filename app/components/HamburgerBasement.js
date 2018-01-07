@@ -184,7 +184,7 @@ const styles = StyleSheet.create({
   },
   basementNavLink: {
     padding: 15,
-    marginBottom: 30,
+    marginBottom: 15,
     borderRadius: 10,
   },
   basementNavLinkText: {

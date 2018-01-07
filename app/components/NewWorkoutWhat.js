@@ -7,7 +7,6 @@ import {
   View,
   Text,
   TouchableHighlight,
-  AlertIOS
 } from 'react-native';
 
 import { AppEventsLogger } from 'react-native-fbsdk'
@@ -72,7 +71,7 @@ export default class NewWorkoutWhat extends Component {
     super(props)
     this.state = { 
       search: '',
-      topEight: topSixify(this.props.workoutKinds),
+      topSix: topSixify(this.props.workoutKinds),
     }
     this.forward = this.forward.bind(this)
     this.onChange = this.onChange.bind(this)
@@ -96,16 +95,16 @@ export default class NewWorkoutWhat extends Component {
         thisWeek: this.props.thisWeek });
     }
   }
-
+  
   onChange(search) {
-    let topEight = topSixify(this.props.workoutKinds.filter((kind) => {
+    let topSix = topSixify(this.props.workoutKinds.filter((kind) => {
       let kindLabel = kind.attributes.label.toLowerCase()
       if (kind.attributes.specific_exercise_labels && kind.attributes.specific_exercise_labels.length) {
         kindLabel += kind.attributes.specific_exercise_labels.join(' ').toLowerCase()
       }
       return kindLabel.indexOf(search.text.toLowerCase()) !== -1
     }))
-    this.setState({ search, topEight })
+    this.setState({ search, topSix })
   }
 
   render() {
@@ -123,7 +122,7 @@ export default class NewWorkoutWhat extends Component {
               value={this.state.search}
               onChange={this.onChange}
               options={options} />
-            <WorkoutKindOptions kindOptions={this.state.topEight} pickWorkout={this.forward} />
+            <WorkoutKindOptions kindOptions={this.state.topSix} pickWorkout={this.forward} />
           </View>
         </LinearGradient>
         <BottomNavBar hideForward={true} />

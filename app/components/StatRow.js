@@ -80,7 +80,7 @@ const miniStyles = StyleSheet.create({
 
 const defaultStyles = StyleSheet.create({
   statRow: {
-    paddingTop: 55
+    paddingTop: 0
   },
   statLabelText: {
     fontSize: 9,
