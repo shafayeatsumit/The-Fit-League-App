@@ -3,13 +3,14 @@ import React, { Component } from 'react';
 import {
   StyleSheet,
   View,
-  ActivityIndicator
+  ActivityIndicator,
 } from 'react-native';
 
 import { Actions } from 'react-native-router-flux';
 import LinearGradient from 'react-native-linear-gradient';
 
 import { Session } from '../services/Session'
+import { LeagueJoiner } from '../services/LeagueJoiner'
 
 export default class Loading extends Component {
   constructor(props) {
@@ -18,7 +19,12 @@ export default class Loading extends Component {
   }
 
   componentWillMount() {
-    Session.check((token) => Actions.home({ token }), () => Actions.welcome({}))
+    Session.check((token) => {
+      Actions.home({ token })
+    }, () => {
+      Actions.welcome({})
+      LeagueJoiner.listen(LeagueJoiner.saveSlug)
+    })
   }
 
   render() {

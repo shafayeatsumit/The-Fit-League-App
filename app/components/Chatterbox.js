@@ -16,6 +16,7 @@ import {
 import { AppEventsLogger } from 'react-native-fbsdk'
 
 import { HttpUtils } from '../services/HttpUtils'
+import { LeagueSharer } from '../services/LeagueSharer'
 import { DynamicSourceGenerator } from '../services/DynamicSourceGenerator'
 
 const thumbsUp = require('../../assets/images/thumbsUp.png');
@@ -41,6 +42,7 @@ export default class Chatterbox extends Component {
     this.hideModal = this.hideModal.bind(this)
     this.sendChatter = this.sendChatter.bind(this)
     this.getChatters = this.getChatters.bind(this)
+    this.copyInviteUrl = this.copyInviteUrl.bind(this)
     this.state = { 
       modalVisible: false,
       modalData: {},
@@ -76,13 +78,23 @@ export default class Chatterbox extends Component {
   getChatters() {
     HttpUtils.get('chatters', this.props.token)
       .then((responseData) => {
-        this.setState({ chatters: responseData.data, loading: false, refreshing: false })
+        this.setState({ 
+          chatters: responseData.data, 
+          inviteUrl: responseData.meta.invite_url, 
+          leagueName: responseData.meta.league_name,
+          loading: false, refreshing: false 
+        })
       }).done();
   }
 
   componentDidMount() {
     this.getChatters()
   }
+
+  copyInviteUrl() {
+    LeagueSharer.call(this.state.inviteUrl, this.state.leagueName)
+  }
+
 
   render() {
     let { modalData } = this.state
@@ -161,6 +173,24 @@ export default class Chatterbox extends Component {
                   </View>
                 </TouchableOpacity>
               })
+            }
+            { this.state.chatters.length == 0 && 
+              <View style={styles.chatterRow}>
+                <View style={styles.chatterDetails}>
+                  <View style={styles.inviteUrlWrapper}>
+                    <Text style={styles.chatterLabel}>There's no chatter</Text>
+                    <Text style={styles.chatterLabel}>in your league yet.</Text>
+                  </View>
+                  { this.state.inviteUrl &&
+                    <TouchableHighlight onPress={this.copyInviteUrl} underlayColor='transparent'>
+                      <View style={styles.inviteUrlWrapper}>
+                        <Text style={styles.chatterLabel}>Invite your crew!</Text>
+                        <Text style={styles.inviteUrl}>{this.state.inviteUrl}</Text>
+                      </View>
+                    </TouchableHighlight>
+                  }
+                </View>
+              </View>
             }
           </ScrollView>
         }
@@ -330,5 +360,16 @@ const styles = StyleSheet.create({
     color: '#8691A0',
     textAlign: 'center',
     fontSize: 12
+  },
+  inviteUrlWrapper: {
+    paddingTop: 80
+  },
+  inviteUrl: {
+    fontSize: 16,
+    fontFamily: 'Avenir-Black',
+    color: '#508CD8',
+    backgroundColor: 'transparent',
+    textAlign: 'center',
+    fontWeight: '900'
   }
 })

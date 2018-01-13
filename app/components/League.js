@@ -15,6 +15,7 @@ import {
 import { AppEventsLogger } from 'react-native-fbsdk'
 
 import { HttpUtils } from '../services/HttpUtils'
+import { LeagueSharer } from '../services/LeagueSharer'
 
 import HamburgerBasement from './HamburgerBasement'
 import OtherHeader from './OtherHeader'
@@ -24,7 +25,8 @@ export default class Workouts extends Component {
     super(props);
     this.getMembers = this.getMembers.bind(this)
     this.toggleDetails = this.toggleDetails.bind(this)
-    this.state = { loading: true, viewingDetails: false, columns: {} };
+    this.copyInviteUrl = this.copyInviteUrl.bind(this)
+    this.state = { loading: true, viewingDetails: false, columns: {}, inviteUrl: null };
   }
 
   componentDidMount() {
@@ -39,11 +41,17 @@ export default class Workouts extends Component {
     })
   }
 
+  copyInviteUrl() {
+    LeagueSharer.call(this.state.inviteUrl, this.state.leagueName)
+  }
+
   getMembers() {
     HttpUtils.get('standings', this.props.token)
       .then((responseData) => {
         this.setState({
           columns: responseData.meta.columns,
+          inviteUrl: responseData.meta.invite_url,
+          leagueName: responseData.meta.league_name,
           users: responseData.data,
           loading: false
         })
@@ -54,7 +62,7 @@ export default class Workouts extends Component {
     const columns = this.state.viewingDetails ? this.state.columns.details : this.state.columns.basic
     return (
       <HamburgerBasement {...this.props}>
-        <OtherHeader style={styles.headerContainer} {...this.props} title="Your League" />
+        <OtherHeader style={styles.headerContainer} {...this.props} />
         <View style={styles.container}>
           { this.state.loading ?
             <ActivityIndicator size="large" style={styles.loading} color="#818D9C" />
@@ -95,6 +103,14 @@ export default class Workouts extends Component {
                       }
                     </TouchableOpacity>
                   })
+                }
+                { this.state.inviteUrl &&
+                  <TouchableHighlight onPress={this.copyInviteUrl} underlayColor='transparent'>
+                    <View style={styles.inviteUrlButton}>
+                      <Text style={styles.inviteUrlText}>Invite your crew with this link!</Text>
+                      <Text style={styles.inviteUrlLink}>{this.state.inviteUrl}</Text>
+                    </View>
+                  </TouchableHighlight>
                 }
               </ScrollView>
             </View>
@@ -217,4 +233,25 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: '#F7F7F8'
   },
+  inviteUrlButton: {
+    borderTopColor: '#D5D7DC',
+    borderTopWidth: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20
+  },
+  inviteUrlText: {
+    fontFamily: 'Avenir-Black',
+    backgroundColor: 'transparent',
+    fontWeight: '400',
+    color: '#0E2442',
+    fontSize: 12
+  },
+  inviteUrlLink: {
+    fontFamily: 'Avenir-Black',
+    backgroundColor: 'transparent',
+    fontWeight: '900',
+    color: '#508CD8',
+    fontSize: 14
+  }
 });

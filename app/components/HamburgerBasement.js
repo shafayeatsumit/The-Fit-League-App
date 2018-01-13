@@ -9,11 +9,14 @@ import {
   TouchableWithoutFeedback,
   TouchableHighlight,
   Image,
+  Alert
 } from 'react-native'
 
 import { Actions } from 'react-native-router-flux'
 
 import { HttpUtils } from '../services/HttpUtils'
+
+import NoLeagueModal from './NoLeagueModal'
 
 const basementBackground = require('../../assets/images/basementBackground.png')
 const badge = require('../../assets/images/badge.png')
@@ -23,10 +26,11 @@ const VERTICAL_MARGIN_ANIMATION = 140
 const HORIZONTAL_MARGIN_ANIMATION = 180
 const ANIMATION_DURATION = 250
 
-const HOME_LINK =     { label: 'Home',         action: 'home'     }
-const WORKOUTS_LINK = { label: 'Your Workouts',     action: 'workouts' }
-const MATCHUP_LINK =  { label: 'Your Matchup', action: 'matchup'  }
-const LEAGUE_LINK =   { label: 'Your League',  action: 'league'   }
+const HOME_LINK =     { label: 'Home', action: 'home', props: {} }
+const WORKOUTS_LINK = { label: 'Your Workouts', action: 'workouts', props: {} }
+const MATCHUP_LINK =  { label: 'Your Matchup', action: 'matchup', props: {} }
+const LEAGUE_LINK =   { label: 'Your League',  action: 'league' }
+const RULES_LINK =    { label: 'Game Rules',  action: 'rules' }
 
 const LINKS_BY_FEATURE = {
   matchup: MATCHUP_LINK
@@ -37,10 +41,14 @@ export default class HamburgerBasement extends Component {
     super(props)
     this.toggleBasement = this.toggleBasement.bind(this)
     this.hideBasement = this.hideBasement.bind(this)
+    this.setLeagueLinks = this.setLeagueLinks.bind(this)
     this.getChildContext = this.getChildContext.bind(this)
+    this.viewRules = this.viewRules.bind(this)
     this.state = { 
-      links: [HOME_LINK, WORKOUTS_LINK],
+      leagueRequired: !props.ignoreLeagueRequirement,
+      links: [HOME_LINK, WORKOUTS_LINK, RULES_LINK],
       basementShowing: false,
+      noLeague: false,
       basementSpace: {
         marginTop: new Animated.Value(0),
         marginLeft: new Animated.Value(0),
@@ -54,18 +62,34 @@ export default class HamburgerBasement extends Component {
     return { toggleBasement: this.toggleBasement }
   }
 
+  setLeagueLinks(league) {
+    let links = [HOME_LINK, WORKOUTS_LINK]
+    league.attributes.features.forEach((feature) => {
+      if (LINKS_BY_FEATURE[feature]) links.push(LINKS_BY_FEATURE[feature])
+    })
+    let leagueLink =  Object.assign({ props: { title: league.attributes.name } }, LEAGUE_LINK);
+    links.push(leagueLink)
+    // May want this to depend on league type?
+    links.push(RULES_LINK)
+    this.setState({ links, noLeague: false })
+  }
+
   componentDidMount() {
-    HttpUtils.get('leagues/current', this.props.token)
-      .then((responseData) => {
-        if (responseData.data) {
-          let links = [HOME_LINK, WORKOUTS_LINK]
-          responseData.data.attributes.features.forEach((feature) => {
-            if (LINKS_BY_FEATURE[feature]) links.push(LINKS_BY_FEATURE[feature])
-          })
-          links.push(LEAGUE_LINK)
-          if (links) this.setState({ links })
-        }
-      }).done();
+    let { token } = this.props
+    HttpUtils.get('leagues/current', token).then((responseData) => {
+      if (responseData.data) {
+        this.setLeagueLinks(responseData.data)
+      } else {
+        this.setState({ noLeague: true })
+      }
+    }).done();
+  }
+
+  viewRules() {
+    let { token, image_url } = this.props
+    this.setState({ leagueRequired: false }, () => {    
+      Actions.rules({ token, image_url })
+    })
   }
 
   hideBasement() {
@@ -86,11 +110,12 @@ export default class HamburgerBasement extends Component {
     this.setState({ basementShowing: !this.state.basementShowing })
   }
 
- render() {
+  render() {
     const { basementSpace } = this.state
     const { token, image_url } = this.props
     return (
       <View style={styles.basement}>
+        <NoLeagueModal show={this.state.leagueRequired && this.state.noLeague} viewRules={this.viewRules} callback={this.setLeagueLinks} token={this.props.token} />
         <Image
           style={styles.basementBackgroundImage}
           source={basementBackground} />
@@ -112,7 +137,7 @@ export default class HamburgerBasement extends Component {
         </TouchableHighlight>
         <View style={styles.basementNavColumn}>
           { this.state.links.map((link) => {
-            return <TouchableHighlight key={link.action} style={styles.basementNavLink} onPress={() => Actions[link.action]({ token, image_url }) } underlayColor='rgba(255, 255, 255, 0.25)'>
+            return <TouchableHighlight key={link.action} style={styles.basementNavLink} onPress={() => Actions[link.action]({ token, image_url, ...link.props }) } underlayColor='rgba(255, 255, 255, 0.25)'>
               <View>
                 <Text style={styles.basementNavLinkText}>{ link.label }</Text>
               </View>
@@ -184,7 +209,7 @@ const styles = StyleSheet.create({
   },
   basementNavLink: {
     padding: 15,
-    marginBottom: 15,
+    marginBottom: 30,
     borderRadius: 10,
   },
   basementNavLinkText: {

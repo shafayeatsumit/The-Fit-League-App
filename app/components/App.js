@@ -3,6 +3,7 @@ import { Router, Scene } from 'react-native-router-flux';
 
 import Welcome from './Welcome';
 import Loading from './Loading';
+import GameRules from './GameRules';
 import Home from './Home';
 import Matchup from './Matchup';
 import League from './League';
@@ -65,6 +66,11 @@ const App = () => {
           key="workouts"
           component={Workouts}
           title="Your Workouts"
+        />
+        <Scene
+          key="rules"
+          component={GameRules}
+          title="Game Rules"
         />
       </Scene>
     </Router>

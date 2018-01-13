@@ -17,6 +17,7 @@ import { AppEventsLogger } from 'react-native-fbsdk';
 
 import { HttpUtils } from '../services/HttpUtils'
 import { Session } from '../services/Session'
+import { LeagueJoiner } from '../services/LeagueJoiner'
 
 const badge = require('../../assets/images/badge.png');
 const logo = require('../../assets/images/logo.png');
@@ -43,18 +44,20 @@ export default class Welcome extends Component {
     this.setState({ loading: true });
     AccessToken.getCurrentAccessToken().then(
       (data) => {
-        HttpUtils.post('login', {
-          access_token: data.accessToken.toString() 
-        }).then((responseData) => {
-          let { token } = responseData.data.attributes
-          AppEventsLogger.logEvent('Logged in with Facebook');
-          Session.save(token);
-          Actions.home({ token });
-        }).catch((error) => {
-          AlertIOS.alert("Sorry! Login failed.", error.message)
-          AppEventsLogger.logEvent('Failed to log in with Facebook', { message: error.message });
-          this.setState({ loading: false, hideButton: false });
-        }).done();
+        LeagueJoiner.getSlug((slug) => {
+          let params = { access_token: data.accessToken.toString() }
+          if (slug) params.league_slug = slug
+          HttpUtils.post('login', params).then((responseData) => {
+            let { token } = responseData.data.attributes
+            AppEventsLogger.logEvent('Logged in with Facebook');
+            Session.save(token);
+            Actions.home({ token });
+          }).catch((error) => {
+            AlertIOS.alert("Sorry! Login failed.", error.message)
+            AppEventsLogger.logEvent('Failed to log in with Facebook', { message: error.message });
+            this.setState({ loading: false, hideButton: false });
+          }).done();          
+        })
       }
     )
   }

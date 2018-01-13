@@ -43,7 +43,6 @@ export default class HomeHeader extends Component {
           <ActivityIndicator size="large" style={styles.loading} color="rgba(255, 255, 255, 0.8)" />
         :
         <StatRow
-          style={styles.statRow}
           daysWorkedOut={parseInt(this.props.days_worked_out)}
           cardioPoints={parseInt(this.props.cardio_points)}
           strengthPoints={parseInt(this.props.strength_points)}
@@ -61,17 +60,14 @@ HomeHeader.contextTypes = {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 25,
+    paddingTop: 30,
     flexDirection: 'column'
   },
   topBar: {
-    flex: 0.75,
+    flex: 1,
     paddingLeft: 20,
     paddingRight: 20,
     flexDirection: 'row',
-  },
-  statRow: {
-    flex: 1
   },
   yourWeekContainer: {
     flex: 8,
