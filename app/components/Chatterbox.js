@@ -17,7 +17,7 @@ import { AppEventsLogger } from 'react-native-fbsdk'
 
 import { HttpUtils } from '../services/HttpUtils'
 import { LeagueSharer } from '../services/LeagueSharer'
-import { DynamicSourceGenerator } from '../services/DynamicSourceGenerator'
+import DynamicIcon from './DynamicIcon'
 
 const thumbsUp = require('../../assets/images/thumbsUp.png');
 const thumbsDown = require('../../assets/images/thumbsDown.png');
@@ -92,9 +92,8 @@ export default class Chatterbox extends Component {
   }
 
   copyInviteUrl() {
-    LeagueSharer.call(this.state.inviteUrl, this.state.leagueName)
+    LeagueSharer.call(this.state.inviteUrl, this.state.leagueName, 'Chatterbox')
   }
-
 
   render() {
     let { modalData } = this.state
@@ -155,7 +154,10 @@ export default class Chatterbox extends Component {
                     <View style={styles.chatterDetails}>
                       <Image style={styles.userImage} source={{ uri: c.attributes.user_image_url }} />
                       <View style={styles.workoutIconContainer}>
-                        <Image style={styles.workoutIcon} source={DynamicSourceGenerator.call({ label: c.attributes.kind, shade: 'dark', fallback: 'running'})} />
+                        <DynamicIcon 
+                          label={c.attributes.kind} 
+                          shade={'dark'}
+                          {...StyleSheet.flatten(styles.workoutIcon)} />
                       </View>
                     </View>
                     <View style={styles.chatterAction}>

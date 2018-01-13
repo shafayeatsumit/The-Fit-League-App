@@ -4,6 +4,8 @@ import { Actions } from 'react-native-router-flux'
 
 import branch, { BranchEvent } from 'react-native-branch'
 
+import { AppEventsLogger } from 'react-native-fbsdk'
+
 import {
   StyleSheet,
   View,
@@ -25,6 +27,7 @@ const logo = require('../../assets/images/badge.png')
 const forwardButton = require('../../assets/images/forwardButton.png');
 
 const MIN_NAME_LENGTH = 3
+const MAX_NAME_LENGTH = 20
 const NO_NAME_ERROR = 'Enter a name for your league.'
 const lengthError = (name) => 'Come up with a league name longer than "' + name + '".'
 
@@ -40,12 +43,14 @@ export default class NoLeagueModal extends Component {
   }
 
   newLeague() {
+    AppEventsLogger.logEvent('Tapped New League')
     this.setState({ creatingLeague: true }, () => this.refs.leagueName.focus())
   }
 
   getStarted() {
     if (this.state.leagueName.length < MIN_NAME_LENGTH) {
       let errorMessage = this.state.leagueName.length == 0 ? NO_NAME_ERROR : lengthError(this.state.leagueName)
+      AppEventsLogger.logEvent('Entered Too Short of a League Name')
       Alert.alert('Oops!', errorMessage, [{ text: 'OK' } ], { cancelable: true })
     } else {
       let { token } = this.props
@@ -63,12 +68,13 @@ export default class NoLeagueModal extends Component {
         this.setState({ savedLeague, shareableLink: url, loading: false })
         Clipboard.setString(url)
         HttpUtils.put('leagues/' + savedLeague.id.toString(), { invite_url: url }, token).done();
+        AppEventsLogger.logEvent('Created a League')
       })
     }
   }
 
   copyShareableLink() {
-    LeagueSharer.call(this.state.shareableLink, this.state.leagueName)
+    LeagueSharer.call(this.state.shareableLink, this.state.leagueName, 'League Creation')
     this.setState({ allowedToProceed: true })
   }
 
@@ -76,6 +82,7 @@ export default class NoLeagueModal extends Component {
     const { token, callback } = this.props
     LeagueJoiner.listen((slug) => {
       LeagueJoiner.call(slug, token).then((responseData) => {
+        AppEventsLogger.logEvent('Invited to League After Registration')
         callback(responseData.data)
       }).done();
     })
@@ -126,7 +133,7 @@ export default class NoLeagueModal extends Component {
           <TextInput
             ref='leagueName'
             style={styles.leagueNameInput}
-            maxLength={20}
+            maxLength={MAX_NAME_LENGTH}
             onChangeText={(leagueName) => this.setState({ leagueName })}
             value={this.state.leagueName}
           />

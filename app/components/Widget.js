@@ -1,17 +1,31 @@
 import React, { Component } from 'react';
+import { Actions } from 'react-native-router-flux'
 
 import {
   StyleSheet,
   View,
   Text,
   Image,
+  TouchableHighlight,
   ActivityIndicator
 } from 'react-native';
 
-import { DynamicSourceGenerator } from '../services/DynamicSourceGenerator'
+const nextWorkoutArrow = require('../../assets/images/nextWorkoutArrow.png')
+
+import DynamicIcon from './DynamicIcon'
 import StatRow from './StatRow'
 
 export default class Widget extends Component {
+    constructor(props) {
+    super(props)
+    this.takeAction = this.takeAction.bind(this)
+  }
+
+  takeAction() {
+    let { action_key, userAttributes } = this.props
+    if (action_key) Actions[action_key](userAttributes)
+  }
+
   render() {
     return (
       <View style={this.props.bottom ? styles.widgetBottom : styles.widget}>
@@ -20,58 +34,64 @@ export default class Widget extends Component {
             <ActivityIndicator size="large" color="#B6B7C2" />
           </View>
         :
-          <View>
-            <View style={styles.widgetTitleHolder}>
-              <Text style={styles.widgetTitle}>{this.props.title}</Text>
-            </View>
-            { this.props.image && 
-              <View style={styles.widgetImageHolder}>
-                <Image style={styles.widgetImage} source={DynamicSourceGenerator.call(this.props.image)} />
+          <TouchableHighlight onPress={this.takeAction} underlayColor='transparent'>
+            <View>
+              <View style={styles.widgetTitleHolder}>
+                <Text style={styles.widgetTitle}>{this.props.title}</Text>
               </View>
-            }
-            { this.props.bordered_image && 
-              <View style={styles.widgetImageHolder}>
-                <Image style={styles.widgetPartnerImage} source={DynamicSourceGenerator.call(this.props.bordered_image)} />
-              </View>
-            }
-            { this.props.number != undefined && 
-              <View style={styles.widgetNumberHolder}>
-                <View style={styles.widgetNumberCircle}>
-                  <Text style={styles.widgetNumber}>{this.props.number}</Text>
+              { this.props.image && 
+                <View style={styles.widgetImageHolder}>
+                  <DynamicIcon
+                    {...this.props.image} 
+                    {...StyleSheet.flatten(styles.widgetImage)} />
                 </View>
-              </View>
-            }
-            <View style={styles.widgetSubtitleHolder}>
-              <Text style={styles.widgetSubtitle}>{this.props.subtitle}</Text>
-            </View>
-            { this.props.text &&
-              <View style={styles.widgetTextHolder}>
-                <Text style={styles.widgetText}>{this.props.text}</Text>
-              </View>
-            }
-            { this.props.stats &&
-              <View style={styles.widgetStatsHolder}>
-                <StatRow
-                  kind="mini"
-                  daysWorkedOut={parseInt(this.props.stats.days_worked_out)}
-                  cardioPoints={parseInt(this.props.stats.cardio_points)}
-                  strengthPoints={parseInt(this.props.stats.strength_points)}
-                  varietyPoints={parseInt(this.props.stats.diversity_points)} />
-              </View>
-            }
-            { (this.props.banner) &&
-              <View style={styles.bannerRow}>
-                <View style={[styles.banner, { backgroundColor: this.props.banner.color }]}>
-                  <Text style={styles.bannerLabel}>{this.props.banner.text}</Text>
+              }
+              { this.props.bordered_image && 
+                <View style={styles.widgetImageHolder}>
+                  <DynamicIcon 
+                    {...this.props.bordered_image} 
+                    {...StyleSheet.flatten(styles.widgetPartnerImage)} />
                 </View>
+              }
+              { this.props.number != undefined && 
+                <View style={styles.widgetNumberHolder}>
+                  <View style={styles.widgetNumberCircle}>
+                    <Text style={styles.widgetNumber}>{this.props.number}</Text>
+                  </View>
+                </View>
+              }
+              <View style={styles.widgetSubtitleHolder}>
+                <Text style={styles.widgetSubtitle}>{this.props.subtitle}</Text>
               </View>
-            }
-            { this.props.next_workout_arrow && 
-              <View style={styles.widgetImageHolder}>
-                <Image style={styles.nextWorkoutArrowImage} source={DynamicSourceGenerator.call({ filename: 'nextWorkoutArrow' })} />
-              </View>
-            }
-          </View>
+              { this.props.text &&
+                <View style={styles.widgetTextHolder}>
+                  <Text style={styles.widgetText}>{this.props.text}</Text>
+                </View>
+              }
+              { this.props.stats &&
+                <View style={styles.widgetStatsHolder}>
+                  <StatRow
+                    kind="mini"
+                    daysWorkedOut={parseInt(this.props.stats.days_worked_out)}
+                    cardioPoints={parseInt(this.props.stats.cardio_points)}
+                    strengthPoints={parseInt(this.props.stats.strength_points)}
+                    varietyPoints={parseInt(this.props.stats.diversity_points)} />
+                </View>
+              }
+              { (this.props.banner) &&
+                <View style={styles.bannerRow}>
+                  <View style={[styles.banner, { backgroundColor: this.props.banner.color }]}>
+                    <Text style={styles.bannerLabel}>{this.props.banner.text}</Text>
+                  </View>
+                </View>
+              }
+              { this.props.next_workout_arrow && 
+                <View style={styles.widgetImageHolder}>
+                  <Image source={nextWorkoutArrow} style={styles.nextWorkoutArrowImage} />
+                </View>
+              }
+            </View>
+          </TouchableHighlight>
         }
       </View>
     )
@@ -132,7 +152,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   widgetImage: {
-    maxWidth: '100%',
+    width: 80,
+    height: 80  
   },
   widgetPartnerImage: {
     borderColor: '#8092A2',

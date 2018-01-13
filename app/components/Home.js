@@ -174,7 +174,7 @@ export default class Home extends Component {
         <HomeHeader {...this.state} />
         <View style={styles.widgetsDashboard}>
           <Animated.Image style={StyleSheet.flatten([styles.chatterIcon, this.state.chatterIcon])} source={this.state.chatterIconSource} />
-          <Widgets token={this.props.token} fireChatter={this.fireChatter} />
+          <Widgets token={this.props.token} image_url={this.props.image_url} fireChatter={this.fireChatter} />
           { !this.state.loading &&
             <TouchableHighlight style={styles.newWorkoutButton} onPress={this.newWorkout} underlayColor='#1DD65B'>
               <Image style={styles.newWorkoutButtonPlus} source={addButton} />

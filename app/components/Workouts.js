@@ -18,7 +18,7 @@ import {
 import { AppEventsLogger } from 'react-native-fbsdk'
 
 import { HttpUtils } from '../services/HttpUtils'
-import { DynamicSourceGenerator } from '../services/DynamicSourceGenerator'
+import DynamicIcon from './DynamicIcon'
 
 import HamburgerBasement from './HamburgerBasement'
 import OtherHeader from './OtherHeader'
@@ -136,7 +136,10 @@ export default class Workouts extends Component {
                           </TouchableHighlight>
                         </View>
                         <View style={styles.workoutKindRow}>
-                          <Image style={styles.workoutIconImage} source={DynamicSourceGenerator.call({ label: workout.attributes.kind, shade: 'dark', fallback: 'running'})} />
+                          <DynamicIcon 
+                            label={workout.attributes.kind} 
+                            shade={'dark'}
+                            {...StyleSheet.flatten(styles.workoutIconImage)} />
                           <Text style={styles.workoutKindLabel}>{ workout.attributes.kind }</Text>
                           <Text style={styles.workoutUnit}>{workout.attributes.quantity} {workout.attributes.unit}s</Text>
                         </View>

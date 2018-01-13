@@ -13,7 +13,7 @@ import {
   TouchableHighlight
 } from 'react-native';
 
-import { DynamicSourceGenerator } from '../services/DynamicSourceGenerator'
+import DynamicIcon from './DynamicIcon'
 
 const Form = t.form.Form
 const _ = require('lodash')
@@ -145,7 +145,10 @@ export default class SpecificExercises extends Component {
         <View style={styles.headerHolder}>
           <View style={styles.workoutIconColumn}>
             <View style={styles.workoutIcon}>
-              <Image source={DynamicSourceGenerator.call({ label: workoutKindAttrs.label, shade: 'light', fallback: 'running'})} style={styles.workoutIconImage} />
+              <DynamicIcon 
+                label={workoutKindAttrs.label} 
+                shade={'light'} 
+                {...StyleSheet.flatten(styles.workoutIconImage)} />
             </View>
           </View>
           <Text style={styles.workoutKindTitle}>{workoutKindAttrs.label}</Text>

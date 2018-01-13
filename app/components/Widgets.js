@@ -26,13 +26,15 @@ export default class Widgets extends Component {
   }
 
   render() {
+    const { token, image_url } = this.props
     return (
       <View style={styles.widgetsHolder}>
         <View style={styles.leftWidgets}>
           {
             this.state.widgets.map((widget, index) => {
-              widget.attributes.bottom = index > 0;
-              return <Widget key={index} {...widget.attributes} />
+              widget.attributes.bottom = index > 0
+              widget.attributes.userAttributes = { token, image_url }
+              return <Widget key={index} {...widget.attributes}  />
             })
           }
           <View style={styles.widgetSpacer}></View>

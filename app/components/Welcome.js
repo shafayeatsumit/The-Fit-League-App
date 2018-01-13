@@ -46,7 +46,10 @@ export default class Welcome extends Component {
       (data) => {
         LeagueJoiner.getSlug((slug) => {
           let params = { access_token: data.accessToken.toString() }
-          if (slug) params.league_slug = slug
+          if (slug) {
+            params.league_slug = slug
+            AppEventsLogger.logEvent('Joined League On Registration')
+          }
           HttpUtils.post('login', params).then((responseData) => {
             let { token } = responseData.data.attributes
             AppEventsLogger.logEvent('Logged in with Facebook');

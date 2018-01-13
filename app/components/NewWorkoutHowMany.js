@@ -19,7 +19,7 @@ import { AppEventsLogger } from 'react-native-fbsdk'
 
 const Form = t.form.Form;
 
-import { DynamicSourceGenerator } from '../services/DynamicSourceGenerator'
+import DynamicIcon from './DynamicIcon'
 import { Workout } from '../services/Workout'
 
 import { Actions } from 'react-native-router-flux';
@@ -124,7 +124,10 @@ export default class NewWorkoutHowMany extends Component {
                   <Text style={styles.howManyUnits}>Enter number of {this.props.workoutKind.attributes.unit}s</Text>
                   <View style={styles.headerHolder}>
                     <View style={styles.workoutIcon}>
-                      <Image source={DynamicSourceGenerator.call({ label: this.props.workoutKind.attributes.label, shade: 'light', fallback: 'running'})} style={styles.workoutIconImage} />
+                      <DynamicIcon 
+                        label={this.props.workoutKind.attributes.label} 
+                        shade={'light'} 
+                        {...StyleSheet.flatten(styles.workoutIconImage)} />
                     </View>
                     <View style={styles.workoutLabel}>
                       <Text style={styles.workoutLabelText}>{ this.props.workoutKind.attributes.label }</Text>

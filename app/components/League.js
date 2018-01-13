@@ -42,7 +42,7 @@ export default class Workouts extends Component {
   }
 
   copyInviteUrl() {
-    LeagueSharer.call(this.state.inviteUrl, this.state.leagueName)
+    LeagueSharer.call(this.state.inviteUrl, this.state.leagueName, 'League Details')
   }
 
   getMembers() {
