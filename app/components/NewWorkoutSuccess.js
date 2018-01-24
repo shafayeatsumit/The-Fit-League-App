@@ -158,7 +158,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   successIconImage: {
-    height: 122,
+    height: 114,
     width: 112
   },
   headerHolder: {
