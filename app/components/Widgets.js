@@ -39,7 +39,7 @@ export default class Widgets extends Component {
           }
           <View style={styles.widgetSpacer}></View>
         </View>
-        <Chatterbox token={this.props.token} fireChatter={this.props.fireChatter} />
+        <Chatterbox token={this.props.token} image_url={this.props.image_url} fireChatter={this.props.fireChatter} />
       </View>
     )
   }

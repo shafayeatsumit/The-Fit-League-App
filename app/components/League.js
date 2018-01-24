@@ -14,6 +14,8 @@ import {
 
 import { AppEventsLogger } from 'react-native-fbsdk'
 
+import { Actions } from 'react-native-router-flux'
+
 import { HttpUtils } from '../services/HttpUtils'
 import { LeagueSharer } from '../services/LeagueSharer'
 
@@ -26,6 +28,7 @@ export default class Workouts extends Component {
     this.getMembers = this.getMembers.bind(this)
     this.toggleDetails = this.toggleDetails.bind(this)
     this.copyInviteUrl = this.copyInviteUrl.bind(this)
+    this.viewPlayer = this.viewPlayer.bind(this)
     this.state = { loading: true, viewingDetails: false, columns: {}, inviteUrl: null };
   }
 
@@ -33,6 +36,10 @@ export default class Workouts extends Component {
     StatusBar.setBarStyle('dark-content', true)
     this.getMembers()
     AppEventsLogger.logEvent('Viewed League')
+  }
+
+  viewPlayer(user) {
+    Actions.playerCard({ player: user.attributes, image_url: this.props.image_url, token: this.props.token })
   }
 
   toggleDetails() {
@@ -92,7 +99,9 @@ export default class Workouts extends Component {
                         <Text style={styles.dataLabel}>{ index + 1 }</Text>
                       </View>
                       <View style={styles.nameColumn}>
-                        <Image style={styles.userImage} source={{ uri: user.attributes.image_url }} />
+                        <TouchableHighlight onPress={() => this.viewPlayer(user)} underlayColor='transparent'>
+                          <Image style={styles.userImage} source={{ uri: user.attributes.image_url }} />
+                        </TouchableHighlight>
                         <Text style={styles.dataLabel}>{ user.attributes.name.split(' ').map((s) => s[0]).join('') }</Text>
                       </View>
                       { columns.map((column) => {

@@ -7,7 +7,6 @@ import {
   Image,
   Animated,
   Dimensions,
-  AsyncStorage,
   StatusBar
 } from 'react-native';
 
@@ -97,18 +96,11 @@ export default class Home extends Component {
   }
 
   componentDidMount() {
-    StatusBar.setBarStyle('light-content', true);
-    this.loadWeeklyStats();
-    this.loadProfile();
-    this.saveDeviceToken();
-    AppEventsLogger.logEvent('Viewed Home');
-    // setTimeout(() => {
-    //   try {
-    //     AsyncStorage.removeItem('auth_token');
-    //   } catch (error) {
-    //     console.log(error)
-    //   }
-    // }, 1000)
+    StatusBar.setBarStyle('light-content', true)
+    this.loadWeeklyStats()
+    this.loadProfile()
+    this.saveDeviceToken()
+    AppEventsLogger.logEvent('Viewed Home')
   }
 
   generateChatterIconInitialState() {

@@ -4,11 +4,12 @@ import {
   StyleSheet,
   View,
   Image,
-  ScrollView,
   TouchableHighlight,
-  TouchableOpacity,
   Text,
+  TextInput,
   StatusBar,
+  Alert,
+  AsyncStorage,
   ActivityIndicator
 } from 'react-native'
 
@@ -16,27 +17,91 @@ import LinearGradient from 'react-native-linear-gradient'
 
 import { AppEventsLogger } from 'react-native-fbsdk'
 
+import { Actions } from 'react-native-router-flux'
+
 import { HttpUtils } from '../services/HttpUtils'
 
 import HamburgerBasement from './HamburgerBasement'
 import PlayerHeader from './PlayerHeader'
 
-const hamburger = require('../../assets/images/hamburger.png')
+const MAX_BIO_LENGTH = 90
 
 export default class PlayerCard extends Component {
   constructor(props) {
     super(props)
-    this.state = { loading: true }
+    this.updateBio = this.updateBio.bind(this)
+    this.confirmInjuredReserve = this.confirmInjuredReserve.bind(this)
+    this.confirmLeagueQuit = this.confirmLeagueQuit.bind(this)
+    this.logOut = this.logOut.bind(this)
+    this.state = { loading: true, player: props.player, saveLabel: 'Save' }  
+  }
+
+  updateBio() {
+    let { player } = this.state
+    player.bio = this.state.bio
+    this.setState({ player, saveLabel: 'Saving...' })
+    HttpUtils.put('profile', { bio: this.state.bio }, this.props.token)
+      .then((responseData) => {
+        this.setState({ saveLabel: 'Saved!' })
+      }).done();
+  }
+
+  confirmInjuredReserve() {
+    AppEventsLogger.logEvent('Considered Injured Reserve')
+    Alert.alert(
+      'Are you sure?',
+      'Do you really want to go on Injured Reserve?',
+      [ { text: 'Nevermind', style: 'cancel' },
+        { text: 'Yep!', 
+          onPress: () => {
+            AppEventsLogger.logEvent('Actually requested Injured Reserve')
+            HttpUtils.post('profile/injured_reserve', {}, this.props.token)
+              .then((responseData) => {
+                Alert.alert('Injured Reserve', 'We will be in touch shortly!')
+              }).done()
+          } 
+        } ]
+    )
+  }
+
+  confirmLeagueQuit() {
+    AppEventsLogger.logEvent('Considered Quitting League')
+    Alert.alert(
+      'Are you sure?',
+      'Do you really want to quit the league?',
+      [ { text: 'Nevermind', style: 'cancel' },
+        { text: 'Yep!', 
+          onPress: () => {
+            AppEventsLogger.logEvent('Actually Quit League')
+            HttpUtils.post('profile/quit_league', {}, this.props.token)
+              .then((responseData) => {
+                Alert.alert('League Exited', 'We will be in touch shortly!')
+              }).done()
+          } 
+        } ]
+    )
+  }
+
+  logOut() {
+    AppEventsLogger.logEvent('Logged Out')
+    AsyncStorage.removeItem('auth_token').then(() => {
+      Actions.welcome({})
+    })
   }
 
   componentDidMount() {
     StatusBar.setBarStyle('dark-content', true)
-    // Get the user data
-    HttpUtils.get('rules', this.props.token)
-      .then((responseData) => {
-        this.setState({ rules: responseData.data, loading: false })
-      }).done()
-    AppEventsLogger.logEvent(this.props.mine ? 'Viewed My Card' : 'Viewed Player Card')
+    // Nasty hack to sniff out whether this is my card
+    let mine = !this.state.player || (this.state.player.image_url === this.props.image_url)
+    if (mine) {
+      HttpUtils.get('profile', this.props.token)
+        .then((responseData) => {
+          this.setState({ mine: true, bio: responseData.data.attributes.bio, player: responseData.data.attributes, loading: false })
+        }).done();
+    } else {
+      this.setState({ loading: false })
+    }
+    AppEventsLogger.logEvent(mine ? 'Viewed My Card' : 'Viewed Player Card')
   }
 
   render() {
@@ -49,8 +114,57 @@ export default class PlayerCard extends Component {
               <ActivityIndicator size="large" color="#818D9C" />
             </View>
             :
-            <View>
-              <Text>Player details here</Text>
+            <View style={styles.playerColumn}>
+              <Image style={styles.playerImage} source={{ uri: this.state.player.image_url  }} />
+              <Text style={styles.playerName}>{ this.state.player.name }</Text>
+              { this.state.mine ? 
+                <View style={styles.myProfileHolder}>
+                  <View style={styles.updateBioRow}>
+                    <View style={styles.updateBioColumn}>
+                      <TextInput 
+                        style={styles.bioInput} multiline={true} 
+                        ref='bio'
+                        placeholder='Enter your Fit League bio...'
+                        maxLength={MAX_BIO_LENGTH}
+                        onChangeText={(bio) => this.setState({ bio, saveLabel: 'Save' })}
+                        value={this.state.bio} />
+                      <TouchableHighlight style={StyleSheet.flatten([styles.updateBioButton, (this.state.bio === this.state.player.bio ? styles.updateBioButtonWaiting : styles.updateBioButtonReady)])} onPress={this.updateBio} underlayColor='#508CD8'>
+                        <Text style={styles.updateBioText}>{this.state.saveLabel}</Text>
+                      </TouchableHighlight>
+                    </View>
+                  </View>
+                  <View style={styles.dangerRow}>
+                    <View style={styles.dangerColumn}>
+                      <View style={styles.dangerZoneHeader}>
+                        <Text style={styles.dangerZoneHeaderText}>Danger Zone</Text>
+                      </View>
+                      <View style={styles.dangerActionsRow}>
+                        <View style={styles.dangerAction}>
+                          <Text style={styles.dangerActionText}>Injured?</Text>
+                          <TouchableHighlight style={styles.dangerButton} onPress={this.confirmInjuredReserve} underlayColor='#D61D5A'>
+                            <Text style={styles.dangerButtonText}>Go on Injured Reserve</Text>
+                          </TouchableHighlight>
+                        </View>
+                        <View style={styles.dangerAction}>
+                          <Text style={styles.dangerActionText}>Giving up?</Text>
+                          <TouchableHighlight style={styles.dangerButton} onPress={this.confirmLeagueQuit} underlayColor='#E9005A'>
+                            <Text style={styles.dangerButtonText}>Quit the League</Text>
+                          </TouchableHighlight>
+                        </View>
+                      </View>
+                    </View>
+                  </View>
+                  <View style={styles.logOutRow}>
+                    <TouchableHighlight onPress={this.logOut} underlayColor='transparent'>
+                      <Text style={styles.logOutText}>Log Out</Text>
+                    </TouchableHighlight>
+                  </View>
+                </View>
+                :
+                <View>
+                  <Text style={styles.bio}>{this.state.player.bio}</Text>
+                </View>
+              }
             </View>
           }
         </View>
@@ -63,19 +177,157 @@ const styles = StyleSheet.create({
   headerContainer: {
     flex: 1,
   },
-  topBar: {
-    flex: 1,
-    padding: 20,
-    flexDirection: 'row',
-  },
-  hamburgerButton: {
-    flex: 2,
-    paddingTop: 10
-  },
   container: {
-    flex: 8,
+    flex: 4,
     borderTopColor: '#D5D7DC',
     borderTopWidth: 1,
-    padding: 10
-  }
+    backgroundColor: 'white'
+  },
+  playerColumn: {
+    flex: 1,
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  playerImage: {
+    marginTop: -60,
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    borderWidth: 1,
+    borderColor: 'white'
+  },
+  playerName: {
+    fontFamily: 'Avenir-Black',
+    color: '#0E2442',
+    fontSize: 20,
+    backgroundColor: 'transparent',
+    fontWeight: '900',
+    padding: 20
+  },
+  myProfileHolder: {
+    flexDirection: 'column',
+    width: '100%',
+    alignItems: 'center',
+    flex: 1
+  },
+  updateBioRow: {
+    flex: 4,
+    flexDirection: 'row'
+  },
+  updateBioColumn: {
+    flexDirection: 'column'
+  },
+  dangerRow: {
+    backgroundColor: '#F7F8F9',
+    flex: 3,
+    flexDirection: 'row',
+    width: '100%',
+    justifyContent: 'center'
+  },
+  logOutRow: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  bioInput: {
+    backgroundColor: '#EAEBEB',
+    borderWidth: 1,
+    height: 60,
+    width: 300,
+    borderColor: '#CECFCF',
+    fontSize: 15,
+    padding: 10,
+    paddingTop: 10,
+    fontFamily: 'Avenir',
+    fontWeight: '300',
+    color: '#0E2442',
+    textAlign: 'center'
+  },
+  updateBioButton: {
+    marginTop: 20,
+    padding: 10,
+  },
+  updateBioButtonReady: {
+    backgroundColor: '#2857ED',
+  },
+  updateBioButtonWaiting: {
+    backgroundColor: '#CECFCF',
+  },
+  updateBioText: {
+    fontFamily: 'Avenir-Black',
+    fontWeight: '900',
+    color: 'white',
+    textAlign: 'center',
+    fontSize: 18
+  },
+  bio: {
+    width: 300,
+    fontFamily: 'Avenir',
+    fontWeight: '300',
+    color: '#0E2442',
+    textAlign: 'center',
+    fontSize: 15  
+  },
+  logOutText: {
+    fontFamily: 'Avenir-Black',
+    backgroundColor: 'transparent',
+    textDecorationLine: 'underline',
+    textDecorationColor: '#508CD8',
+    fontWeight: '900',
+    color: '#508CD8',
+    fontSize: 14
+  },
+  dangerColumn: {
+    flexDirection: 'column',
+    flex: 1,
+  },
+  dangerZoneHeader: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  dangerZoneHeaderText: {
+    fontFamily: 'Avenir-Black',
+    backgroundColor: 'transparent',
+    fontWeight: '900',
+    color: '#0E2442',
+    fontSize: 14,
+    paddingTop: 30
+  },
+  dangerActionsRow: {
+    flexDirection: 'row',
+    flex: 5,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  dangerAction: {
+    flexDirection: 'column',
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  dangerActionText: {
+    fontFamily: 'Avenir-Black',
+    backgroundColor: 'transparent',
+    fontWeight: '400',
+    color: '#0E2442',
+    fontSize: 14,
+    padding: 5
+  },
+  dangerButton: {
+    borderWidth: 1,
+    width: '80%',
+    borderRadius: 5,
+    borderColor: '#E9005A',
+  },
+  dangerButtonText: {
+    fontFamily: 'Avenir-Black',
+    backgroundColor: 'transparent',
+    fontWeight: '400',
+    color: '#E9005A',
+    fontSize: 10,
+    textAlign: 'center',
+    padding: 5
+  },
 });

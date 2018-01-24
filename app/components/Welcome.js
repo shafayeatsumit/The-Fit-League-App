@@ -93,7 +93,7 @@ export default class Welcome extends Component {
                   }
                 }
               }
-              onLogoutFinished={() => alert("User logged out")}/>
+              onLogoutFinished={() => alert("Now you're completely logged out!")}/>
           </View>
         }
         <View style={styles.textHolder}>

@@ -15,6 +15,8 @@ import {
 
 import { AppEventsLogger } from 'react-native-fbsdk'
 
+import { Actions } from 'react-native-router-flux'
+
 import { HttpUtils } from '../services/HttpUtils'
 import { LeagueSharer } from '../services/LeagueSharer'
 import DynamicIcon from './DynamicIcon'
@@ -73,6 +75,14 @@ export default class Chatterbox extends Component {
     let { id, attributes } = user
     let { user_name, user_image_url } = attributes
     this.setState({ modalVisible: true, modalData: { id, user_image_url, user_name, sentiment } })
+  }
+
+  viewPlayer(chatter) {
+    Actions.playerCard({ player: {
+      name: chatter.attributes.user_name,
+      image_url: chatter.attributes.user_image_url,
+      bio: chatter.attributes.user_bio
+    }, image_url: this.props.image_url, token: this.props.token })
   }
 
   getChatters() {
@@ -152,7 +162,9 @@ export default class Chatterbox extends Component {
                       </TouchableHighlight>
                     </View>
                     <View style={styles.chatterDetails}>
-                      <Image style={styles.userImage} source={{ uri: c.attributes.user_image_url }} />
+                      <TouchableHighlight onPress={() => this.viewPlayer(c)} underlayColor='transparent'>
+                        <Image style={styles.userImage} source={{ uri: c.attributes.user_image_url }} />
+                      </TouchableHighlight>
                       <View style={styles.workoutIconContainer}>
                         <DynamicIcon 
                           label={c.attributes.kind} 
