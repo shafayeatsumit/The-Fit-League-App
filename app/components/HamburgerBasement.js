@@ -9,7 +9,8 @@ import {
   TouchableWithoutFeedback,
   TouchableHighlight,
   Image,
-  Alert
+  Alert,
+  Linking
 } from 'react-native'
 
 import { Actions } from 'react-native-router-flux'
@@ -25,6 +26,8 @@ const logo = require('../../assets/images/logo.png')
 const VERTICAL_MARGIN_ANIMATION = 140
 const HORIZONTAL_MARGIN_ANIMATION = 180
 const ANIMATION_DURATION = 250
+
+const FAQ_URL = 'https://thefitleague.freshdesk.com'
 
 const HOME_LINK =     { label: 'Home', action: 'home', props: {} }
 const WORKOUTS_LINK = { label: 'Your Workouts', action: 'workouts', props: {} }
@@ -67,7 +70,7 @@ export default class HamburgerBasement extends Component {
     league.attributes.features.forEach((feature) => {
       if (LINKS_BY_FEATURE[feature]) links.push(LINKS_BY_FEATURE[feature])
     })
-    let leagueLink =  Object.assign({ props: { title: league.attributes.name } }, LEAGUE_LINK);
+    let leagueLink = Object.assign({ props: { title: league.attributes.name } }, LEAGUE_LINK);
     links.push(leagueLink)
     // May want this to depend on league type?
     links.push(RULES_LINK)
@@ -143,6 +146,11 @@ export default class HamburgerBasement extends Component {
               </View>
             </TouchableHighlight>
           })}
+          <TouchableHighlight style={styles.basementNavLink} onPress={() => Linking.openURL(FAQ_URL) } underlayColor='rgba(255, 255, 255, 0.25)'>
+            <View>
+              <Text style={styles.basementNavLinkText}>FAQ</Text>
+            </View>
+          </TouchableHighlight>
         </View>
         <TouchableWithoutFeedback onPress={this.hideBasement}>
           <Animated.View style={StyleSheet.flatten([styles.container, basementSpace])}>
@@ -156,7 +164,7 @@ export default class HamburgerBasement extends Component {
 
 HamburgerBasement.childContextTypes = {
   toggleBasement: PropTypes.func
-};
+}
 
 const styles = StyleSheet.create({
   container: {

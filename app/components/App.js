@@ -8,6 +8,7 @@ import Home from './Home';
 import Matchup from './Matchup';
 import League from './League';
 import Workouts from './Workouts';
+import PlayerCard from './PlayerCard';
 import NewWorkoutWhen from './NewWorkoutWhen';
 import NewWorkoutWhat from './NewWorkoutWhat';
 import NewWorkoutHowMany from './NewWorkoutHowMany';
@@ -71,6 +72,11 @@ const App = () => {
           key="rules"
           component={GameRules}
           title="Game Rules"
+        />
+        <Scene
+          key="playerCard"
+          component={PlayerCard}
+          title="Player Card"
         />
       </Scene>
     </Router>

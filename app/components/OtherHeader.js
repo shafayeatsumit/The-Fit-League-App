@@ -8,9 +8,20 @@ import {
   Image
 } from 'react-native';
 
+import { Actions } from 'react-native-router-flux'
+
 const hamburger = require('../../assets/images/hamburgerDark.png');
 
 export default class OtherHeader extends Component {
+  constructor(props) {
+    super(props)
+    this.myPlayerCard = this.myPlayerCard.bind(this)
+  }
+
+  myPlayerCard() {
+    // Actions.playerCard({ mine: true, image_url: this.props.image_url, token: this.props.token })
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -22,7 +33,9 @@ export default class OtherHeader extends Component {
             <View style={styles.topBarSpacer}></View>
             <View style={styles.userImageHolder}>
               { this.props.image_url && 
-                <Image style={styles.userImage} source={{uri: this.props.image_url}} />
+                <TouchableHighlight onPress={this.myPlayerCard} underlayColor='transparent'>
+                  <Image style={styles.userImage} source={{uri: this.props.image_url}} />
+                </TouchableHighlight>
               }
             </View>
           </View>

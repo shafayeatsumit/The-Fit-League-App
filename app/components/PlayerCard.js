@@ -3,21 +3,27 @@ import React, { Component } from 'react';
 import {
   StyleSheet,
   View,
+  Image,
   ScrollView,
+  TouchableHighlight,
   TouchableOpacity,
   Text,
   StatusBar,
   ActivityIndicator
 } from 'react-native'
 
+import LinearGradient from 'react-native-linear-gradient'
+
 import { AppEventsLogger } from 'react-native-fbsdk'
 
 import { HttpUtils } from '../services/HttpUtils'
 
 import HamburgerBasement from './HamburgerBasement'
-import OtherHeader from './OtherHeader'
+import PlayerHeader from './PlayerHeader'
 
-export default class GameRules extends Component {
+const hamburger = require('../../assets/images/hamburger.png')
+
+export default class PlayerCard extends Component {
   constructor(props) {
     super(props)
     this.state = { loading: true }
@@ -25,28 +31,27 @@ export default class GameRules extends Component {
 
   componentDidMount() {
     StatusBar.setBarStyle('dark-content', true)
+    // Get the user data
     HttpUtils.get('rules', this.props.token)
       .then((responseData) => {
         this.setState({ rules: responseData.data, loading: false })
       }).done()
-    AppEventsLogger.logEvent('Viewed Game Rules')
+    AppEventsLogger.logEvent(this.props.mine ? 'Viewed My Card' : 'Viewed Player Card')
   }
 
   render() {
     return (
-      <HamburgerBasement ignoreLeagueRequirement={true} {...this.props}>
-        <OtherHeader style={styles.headerContainer} title="Game Rules" {...this.props} />
+      <HamburgerBasement token={this.props.token} image_url={this.props.image_url}>
+        <PlayerHeader style={styles.headerContainer} {...this.props} />
         <View style={styles.container}>
           { this.state.loading ? 
             <View>
               <ActivityIndicator size="large" color="#818D9C" />
             </View>
             :
-            <ScrollView>
-              <TouchableOpacity activeOpacity={1}>
-                { this.state.rules.map((rule, i) => <Text key={i} style={styles[rule.kind]}>{ rule.text }</Text>) }
-              </TouchableOpacity>
-            </ScrollView>
+            <View>
+              <Text>Player details here</Text>
+            </View>
           }
         </View>
       </HamburgerBasement>
@@ -58,26 +63,19 @@ const styles = StyleSheet.create({
   headerContainer: {
     flex: 1,
   },
+  topBar: {
+    flex: 1,
+    padding: 20,
+    flexDirection: 'row',
+  },
+  hamburgerButton: {
+    flex: 2,
+    paddingTop: 10
+  },
   container: {
     flex: 8,
     borderTopColor: '#D5D7DC',
     borderTopWidth: 1,
     padding: 10
-  },
-  header: {
-    fontFamily: 'Avenir-Black',
-    backgroundColor: 'transparent',
-    fontWeight: '900',
-    color: '#1DD65B',
-    fontSize: 26,
-    margin: 10
-  },
-  paragraph: {
-    fontFamily: 'Avenir-Black',
-    backgroundColor: 'transparent',
-    fontWeight: '400',
-    color: '#0E2442',
-    fontSize: 16,
-    margin: 10
   }
 });

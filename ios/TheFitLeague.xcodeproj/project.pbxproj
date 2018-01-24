@@ -741,6 +741,7 @@
 					};
 					13B07F861A680F5B00A75B9A = {
 						DevelopmentTeam = B7E4N9S37Z;
+						ProvisioningStyle = Manual;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
@@ -1279,6 +1280,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = TheFitLeague/TheFitLeague.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = B7E4N9S37Z;
@@ -1297,6 +1300,8 @@
 					"-lc++",
 				);
 				PRODUCT_NAME = TheFitLeague;
+				PROVISIONING_PROFILE = "e3f34f42-0e55-4087-9c3a-5b615b26ff8f";
+				PROVISIONING_PROFILE_SPECIFIER = "The Fit League";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -1307,6 +1312,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = TheFitLeague/TheFitLeague.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = B7E4N9S37Z;
 				ENABLE_BITCODE = NO;
@@ -1324,6 +1331,8 @@
 					"-lc++",
 				);
 				PRODUCT_NAME = TheFitLeague;
+				PROVISIONING_PROFILE = "64ab5094-c650-4916-af0c-02a365a0379c";
+				PROVISIONING_PROFILE_SPECIFIER = "The Fit League";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 			};

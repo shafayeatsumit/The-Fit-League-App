@@ -14,10 +14,10 @@ const Form = t.form.Form;
 
 import { HttpUtils } from '../services/HttpUtils'
 
-import { Actions } from 'react-native-router-flux';
-import LinearGradient from 'react-native-linear-gradient';
+import { Actions } from 'react-native-router-flux'
+import LinearGradient from 'react-native-linear-gradient'
 
-const buttSlapIcon = require('../../assets/images/buttSlap.png');
+const highFiveIcon = require('../../assets/images/highFiveWhite.png')
 
 const contributionLabels = {
   days_worked_out: 'DAYS',
@@ -60,7 +60,7 @@ export default class NewWorkoutSuccess extends Component {
             <View style={styles.successContainer}>
               <View style={styles.headerHolder}>
                 <View style={styles.successIcon}>
-                  <Image source={buttSlapIcon} style={styles.successIconImage} />
+                  <Image source={highFiveIcon} style={styles.successIconImage} />
                 </View>
               </View>
               <Text style={styles.successTitle}>{this.props.successMessage}</Text>

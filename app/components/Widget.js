@@ -60,6 +60,11 @@ export default class Widget extends Component {
                   </View>
                 </View>
               }
+              { this.props.header != undefined && 
+                <View style={styles.widgetNumberHolder}>
+                  <Text style={styles.widgetHeader}>{this.props.header}</Text>
+                </View>
+              }
               <View style={styles.widgetSubtitleHolder}>
                 <Text style={styles.widgetSubtitle}>{this.props.subtitle}</Text>
               </View>
@@ -173,6 +178,16 @@ const styles = StyleSheet.create({
     width: 80,
     padding: 6,
     height: 80
+  },
+  widgetHeader: {
+    fontSize: 36,
+    fontFamily: 'Avenir-Black',
+    color: '#0A2645',
+    backgroundColor: 'transparent',
+    textAlign: 'center',
+    fontWeight: '900',
+    paddingTop: 10,
+    paddingBottom: 10
   },
   widgetNumber: {
     fontSize: 48,
