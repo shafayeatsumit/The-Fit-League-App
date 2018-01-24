@@ -3,7 +3,6 @@ package com.thefitleague;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
-import io.branch.rnbranch.RNBranchPackage;
 import com.facebook.reactnative.androidsdk.FBSDKPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
@@ -39,7 +38,6 @@ public class MainApplication extends Application implements ReactApplication {
       mCallbackManager = new CallbackManager.Factory().create();
       ReactPackage packages[] = new ReactPackage[]{
               new MainReactPackage(),
-            new RNBranchPackage(),
               new FBSDKPackage(mCallbackManager),
               new LinearGradientPackage(),
               new RNBranchPackage(),

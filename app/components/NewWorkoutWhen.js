@@ -189,7 +189,7 @@ const styles = StyleSheet.create({
   pickDateText: {
     backgroundColor: 'transparent',
     textAlign: 'center',
-    color: 'white',
+    color: '#2857ED',
     fontFamily: 'Avenir-Black',
     fontSize: 24,
   }

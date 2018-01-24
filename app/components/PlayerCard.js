@@ -10,6 +10,7 @@ import {
   StatusBar,
   Alert,
   AsyncStorage,
+  Dimensions,
   ActivityIndicator
 } from 'react-native'
 
@@ -25,6 +26,9 @@ import HamburgerBasement from './HamburgerBasement'
 import PlayerHeader from './PlayerHeader'
 
 const MAX_BIO_LENGTH = 90
+
+const SCREEN_WIDTH = Dimensions.get('window').width;
+const SCREEN_HEIGHT = Dimensions.get('window').height;
 
 export default class PlayerCard extends Component {
   constructor(props) {
@@ -90,7 +94,7 @@ export default class PlayerCard extends Component {
   }
 
   componentDidMount() {
-    StatusBar.setBarStyle('dark-content', true)
+    StatusBar.setBarStyle('light-content', true)
     // Nasty hack to sniff out whether this is my card
     let mine = !this.state.player || (this.state.player.image_url === this.props.image_url)
     if (mine) {
@@ -107,15 +111,17 @@ export default class PlayerCard extends Component {
   render() {
     return (
       <HamburgerBasement token={this.props.token} image_url={this.props.image_url}>
+        { this.state.player &&
+          <Image style={styles.playerImage} source={{ uri: this.state.player.image_url  }} />
+        }
         <PlayerHeader style={styles.headerContainer} {...this.props} />
         <View style={styles.container}>
           { this.state.loading ? 
-            <View>
+            <View style={styles.loading}>
               <ActivityIndicator size="large" color="#818D9C" />
             </View>
             :
             <View style={styles.playerColumn}>
-              <Image style={styles.playerImage} source={{ uri: this.state.player.image_url  }} />
               <Text style={styles.playerName}>{ this.state.player.name }</Text>
               { this.state.mine ? 
                 <View style={styles.myProfileHolder}>
@@ -183,18 +189,24 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     backgroundColor: 'white'
   },
+  loading: {
+    padding: 20
+  },
   playerColumn: {
     flex: 1,
     flexDirection: 'column',
     alignItems: 'center',
   },
   playerImage: {
-    marginTop: -60,
+    top: (SCREEN_HEIGHT / 5) - 60,
+    left: (SCREEN_WIDTH / 2) - 60,
     width: 120,
     height: 120,
     borderRadius: 60,
     borderWidth: 1,
-    borderColor: 'white'
+    borderColor: 'white',
+    position: 'absolute',
+    zIndex: 100
   },
   playerName: {
     fontFamily: 'Avenir-Black',
@@ -202,7 +214,8 @@ const styles = StyleSheet.create({
     fontSize: 20,
     backgroundColor: 'transparent',
     fontWeight: '900',
-    padding: 20
+    padding: 20,
+    marginTop: 55
   },
   myProfileHolder: {
     flexDirection: 'column',

@@ -8,6 +8,7 @@ import {
   View,
   Image,
   ActivityIndicator,
+  StatusBar,
   AlertIOS
 } from 'react-native';
 
@@ -37,6 +38,7 @@ export default class Welcome extends Component {
   }
 
   componentDidMount() {
+    StatusBar.setBarStyle('light-content', true)
     AppEventsLogger.logEvent('Saw Facebook Login');
   }
 

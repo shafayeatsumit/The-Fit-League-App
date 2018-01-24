@@ -6,7 +6,7 @@ export const LeagueSharer = {
   call: (url, leagueName, currentView) => {
     Clipboard.setString(url)
     Share.share({
-      message: 'Come join ' + leagueName + ' and compete to get in shape!',
+      message: 'Join my league on TFL!',
       url: url,
       title: leagueName
     }, {

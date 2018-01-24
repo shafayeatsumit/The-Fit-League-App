@@ -31,6 +31,12 @@ from `ios/TheFitLeague/Info.plist`, but be sure to add it back next time you wan
 
     react-native run-android
 
+If you get an error about no connected devices, and `adb devices` returns nothing, you'll need either:
+
+**An Emulator** Open up Android Studio, go Tools -> Android -> AVD Manager and pick a device you want to install. Click the Play icon on the device to start it.
+
+**A Device** Simply plug the device in and turn it on. If `adb devices` returns unauthorized, go into the phone's settings and toggle USB Debugging on and off.
+
 ### Building Android
 
 Some instructions here: https://facebook.github.io/react-native/docs/signed-apk-android.html

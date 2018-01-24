@@ -92,14 +92,15 @@ export default class NoLeagueModal extends Component {
     if (!this.state.creatingLeague) {
       return (
         <View style={styles.actionHolder}>
+          <Text style={styles.biggerExplanationText}>TFL is for competing with your friends.</Text>
           <Text style={styles.biggerExplanationText}>If your crew already has a league,</Text>
-          <Text style={styles.biggerExplanationText}>get an invite link from one of them.</Text>
-          <Text style={styles.biggerExplanationText}>If not, g'head and:</Text>
+          <Text style={styles.biggerExplanationText}>get them to send you an invite link.</Text>
+          <Text style={styles.biggerExplanationText}>If not, start your own league.</Text>
           <TouchableHighlight style={styles.newLeagueButton} onPress={this.newLeague} underlayColor='#1DD65B'>
             <Text style={styles.buttonText}>Start a League</Text>
           </TouchableHighlight>
           <TouchableHighlight  onPress={this.props.viewRules} underlayColor='transparent'>
-            <Text style={styles.explanationText}>Read Game Overview</Text>
+            <Text style={styles.explanationLink}>Read Game Overview</Text>
           </TouchableHighlight>
         </View>
       )
@@ -132,7 +133,7 @@ export default class NoLeagueModal extends Component {
     } else {
       return(
         <View style={styles.actionHolder}>
-          <Text style={styles.biggerExplanationText}>Pick a name for your league:</Text>
+          <Text style={styles.explanationText}>Pick a name for your league:</Text>
           <TextInput
             ref='leagueName'
             style={styles.leagueNameInput}
@@ -219,6 +220,14 @@ const styles = StyleSheet.create({
     fontSize: 14,
     paddingRight: 10,
     paddingLeft: 10
+  },
+  explanationLink: {
+    textAlign: 'center',
+    backgroundColor: 'transparent',
+    fontFamily: 'Avenir-Black',
+    fontWeight: '900',
+    color: '#2857ED',
+    fontSize: 14
   },
   finalStepText: {
     textAlign: 'center',
