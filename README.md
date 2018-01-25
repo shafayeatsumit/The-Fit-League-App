@@ -53,6 +53,8 @@ If you get an error like
 
 You may have to uninstall the app from your phone and try again.
 
+Once you have built, upload `android/app/build/outputs/apk/app-release.apk` to the app store!
+
 ### Propagating icons
 
     yo rn-toolbox:assets --icon icon.png
