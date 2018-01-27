@@ -1,3 +1,5 @@
+import { AsyncStorage } from 'react-native'
+
 const BASE_URL = 'https://fan-fit.herokuapp.com/v1';
 // const BASE_URL = 'http://localhost:5100/v1';
 
@@ -13,9 +15,15 @@ const headersFor = (token) => {
 const handleErrors = (response) => {
   return response.json().then(responseData => {
     if (responseData.errors) {
-      throw Error(responseData.errors.join('. ') + '.');
+      if (responseData.errors.indexOf('Invalid token') != -1) {
+        return AsyncStorage.removeItem('auth_token').then(() => {
+          throw Error('Invalid auth token')
+        })
+      } else {
+        throw Error(responseData.errors.join('. ') + '.')
+      }
     }
-    return responseData;
+    return responseData
   });
 }
 
