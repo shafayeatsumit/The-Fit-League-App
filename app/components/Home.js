@@ -89,9 +89,6 @@ export default class Home extends Component {
           strength_points, cardio_points, days_worked_out, diversity_points,
           loading: false
         })
-      }).catch((error) => {
-        AsyncStorage.removeItem('auth_token');
-        this.setState({ loading: false })
       }).done();
   }
 
