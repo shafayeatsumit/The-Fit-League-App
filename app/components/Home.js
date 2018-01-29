@@ -92,7 +92,10 @@ export default class Home extends Component {
           loading: false
         })
       }).catch(() => {
-        this.setState({ loading: false })
+        this.setState({ 
+          loading: false, 
+          strength_points: 0, cardio_points: 0, days_worked_out: 0, diversity_points: 0 
+        })
       }).done()
   }
 

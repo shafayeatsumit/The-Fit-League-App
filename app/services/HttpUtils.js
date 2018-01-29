@@ -52,7 +52,7 @@ const hitEndpoint = (method, endpoint, token, body) => {
     return handleErrors(response)
   }).catch((err) => {
     clearTimeout(timeout)
-    if (err.message == 'Network request failed') sadConnection(token)
+    if (err.message == 'Network request failed') sadConnection(token)()
     Sentry.captureException(err)
     throw err
   });
