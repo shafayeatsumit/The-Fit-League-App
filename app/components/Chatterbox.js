@@ -94,7 +94,9 @@ export default class Chatterbox extends Component {
           leagueName: responseData.meta.league_name,
           loading: false, refreshing: false 
         })
-      }).done();
+      }).catch(() => {
+        this.setState({ loading: false, refreshing: false, chatters: [] })
+      }).done()
   }
 
   componentDidMount() {

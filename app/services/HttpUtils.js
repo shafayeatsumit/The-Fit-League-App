@@ -1,5 +1,8 @@
 import { AsyncStorage } from 'react-native'
 
+import { Sentry } from 'react-native-sentry'
+import { Actions } from 'react-native-router-flux'
+
 const BASE_URL = 'https://fan-fit.herokuapp.com/v1';
 // const BASE_URL = 'http://localhost:5100/v1';
 
@@ -17,20 +20,42 @@ const handleErrors = (response) => {
     if (responseData.errors) {
       if (responseData.errors.indexOf('Invalid token') != -1) {
         return AsyncStorage.removeItem('auth_token').then(() => {
-          throw Error('Invalid auth token')
+          let err = Error('Invalid auth token')
+          Sentry.captureException(err)
+          throw err
         })
       } else {
-        throw Error(responseData.errors.join('. ') + '.')
+        let err = Error(responseData.errors.join('. ') + '.')
+        Sentry.captureException(err)
+        throw err
       }
     }
     return responseData
   });
 }
 
+const sadConnection = (token) => {
+  return () => {
+    if (Actions.currentScene != 'sadConnection') Actions.sadConnection({ token })
+  }
+}
+
+const TIMEOUT = 15000
+
 const hitEndpoint = (method, endpoint, token, body) => {
   let headers = headersFor(token)
   let url = [BASE_URL, endpoint].join('/')
-  return fetch(url, { method, headers, body }).then(handleErrors);
+  let timeout = setTimeout(sadConnection(token), TIMEOUT)
+
+  return fetch(url, { method, headers, body }).then((response) => {
+    clearTimeout(timeout)
+    return handleErrors(response)
+  }).catch((err) => {
+    clearTimeout(timeout)
+    if (err.message == 'Network request failed') sadConnection(token)
+    Sentry.captureException(err)
+    throw err
+  });
 }
 
 export const HttpUtils = {

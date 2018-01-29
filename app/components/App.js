@@ -13,6 +13,7 @@ import NewWorkoutWhen from './NewWorkoutWhen';
 import NewWorkoutWhat from './NewWorkoutWhat';
 import NewWorkoutHowMany from './NewWorkoutHowMany';
 import NewWorkoutSuccess from './NewWorkoutSuccess';
+import SadConnection from './SadConnection'
 
 const App = () => {
   return (
@@ -77,6 +78,11 @@ const App = () => {
           key="playerCard"
           component={PlayerCard}
           title="Player Card"
+        />
+        <Scene
+          key="sadConnection"
+          component={SadConnection}
+          title="Slow Interwebz"
         />
       </Scene>
     </Router>

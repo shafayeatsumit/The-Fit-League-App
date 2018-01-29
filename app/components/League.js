@@ -62,7 +62,9 @@ export default class Workouts extends Component {
           users: responseData.data,
           loading: false
         })
-      }).done();
+      }).catch(() => {
+        this.setState({ loading: false, columns: [], users: [] })
+      }).done()
   }
 
   render() {

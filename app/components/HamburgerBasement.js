@@ -85,7 +85,9 @@ export default class HamburgerBasement extends Component {
       } else {
         this.setState({ noLeague: true })
       }
-    }).done();
+    }).catch(() => {
+      // nothin'
+    }).done()
   }
 
   viewRules() {

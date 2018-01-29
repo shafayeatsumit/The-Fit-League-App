@@ -12,6 +12,7 @@ import {
   Image,
   Text,
   Modal,
+  Alert,
   TextInput,
   TouchableHighlight,
   ActivityIndicator,
@@ -24,7 +25,7 @@ import { HttpUtils } from '../services/HttpUtils'
 
 const background = require('../../assets/images/basementBackground.png')
 const logo = require('../../assets/images/badge.png')
-const forwardButton = require('../../assets/images/forwardButton.png');
+const forwardButton = require('../../assets/images/forwardButton.png')
 
 const MIN_NAME_LENGTH = 3
 const MAX_NAME_LENGTH = 20

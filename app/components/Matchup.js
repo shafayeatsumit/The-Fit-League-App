@@ -61,7 +61,9 @@ export default class Workouts extends Component {
           endDate: responseData.meta.dates.ends_at,
           loading: false
         })
-      }).done();
+      }).catch(() => {
+        this.setState({ loading: false })
+      }).done()
   }
 
   render() {

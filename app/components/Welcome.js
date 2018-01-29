@@ -12,6 +12,7 @@ import {
   AlertIOS
 } from 'react-native';
 
+import { Sentry } from 'react-native-sentry'
 import { Actions } from 'react-native-router-flux';
 import LinearGradient from 'react-native-linear-gradient';
 import { AppEventsLogger } from 'react-native-fbsdk';
@@ -20,10 +21,10 @@ import { HttpUtils } from '../services/HttpUtils'
 import { Session } from '../services/Session'
 import { LeagueJoiner } from '../services/LeagueJoiner'
 
-const badge = require('../../assets/images/badge.png');
-const logo = require('../../assets/images/logo.png');
+const badge = require('../../assets/images/badge.png')
+const logo = require('../../assets/images/logo.png')
 
-const FBSDK = require('react-native-fbsdk');
+const FBSDK = require('react-native-fbsdk')
 
 const { 
   LoginButton, 
@@ -54,13 +55,13 @@ export default class Welcome extends Component {
           }
           HttpUtils.post('login', params).then((responseData) => {
             let { token } = responseData.data.attributes
-            AppEventsLogger.logEvent('Logged in with Facebook');
+            AppEventsLogger.logEvent('Logged in with Facebook')
             Session.save(token);
             Actions.home({ token });
           }).catch((error) => {
             AlertIOS.alert("Sorry! Login failed.", error.message)
-            AppEventsLogger.logEvent('Failed to log in with Facebook', { message: error.message });
-            this.setState({ loading: false, hideButton: false });
+            AppEventsLogger.logEvent('Failed to log in with Facebook', { message: error.message })
+            this.setState({ loading: false, hideButton: false })
           }).done();          
         })
       }
@@ -87,11 +88,12 @@ export default class Welcome extends Component {
               onLoginFinished={
                 (error, result) => {
                   if (error) {
-                    alert('Login failed with error: ' + result.error);
+                    Sentry.captureException(error)
+                    alert('Sorry! Login failed.')
                   } else if (result.isCancelled) {
-                    alert('Login was cancelled');
+                    alert('Login was cancelled')
                   } else {
-                    this.save();
+                    this.save()
                   }
                 }
               }

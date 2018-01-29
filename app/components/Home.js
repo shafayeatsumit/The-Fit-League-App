@@ -65,7 +65,9 @@ export default class Home extends Component {
       .then((responseData) => {
         let { name, image_url } = responseData.data.attributes;
         this.setState({ name, image_url })
-      }).done();
+      }).catch(() => {
+        // nuthin'
+      }).done()
   }
 
   saveDeviceToken() {
@@ -89,7 +91,9 @@ export default class Home extends Component {
           strength_points, cardio_points, days_worked_out, diversity_points,
           loading: false
         })
-      }).done();
+      }).catch(() => {
+        this.setState({ loading: false })
+      }).done()
   }
 
   componentDidMount() {
