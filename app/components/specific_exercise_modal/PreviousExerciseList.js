@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import {
   StyleSheet,
   View,
+  ScrollView,
   Text,
   TouchableHighlight,
 } from 'react-native'
@@ -12,14 +13,14 @@ export default class PreviousExerciseList extends Component {
     return (
       <View style={styles.container}>
         { this.props.exercises.length > 0 &&
-          <View style={styles.box}>
+          <ScrollView style={styles.box}>
             <Text style={styles.header}>Or, choose from your {this.props.label}:</Text>
             { this.props.exercises.slice(0, this.props.numExercises).map((exercise) => {
               return <TouchableHighlight key={exercise.label} style={styles.label} onPress={ () => { this.props.cb(exercise) }} underlayColor='transparent'>
                 <Text style={styles.text}>{ exercise.label }</Text>
               </TouchableHighlight>
             })}
-          </View>
+          </ScrollView>
         }
       </View>
     )

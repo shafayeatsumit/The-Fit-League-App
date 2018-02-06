@@ -6,6 +6,7 @@ import {
   Text,
   TextInput,
   TouchableHighlight,
+  Keyboard
 } from 'react-native';
 
 import PreviousExerciseList from './PreviousExerciseList'
@@ -20,7 +21,27 @@ export default class DetailStep extends Component {
     this.labelForExercise = this.labelForExercise.bind(this)
     this.getPreviousEntries = this.getPreviousEntries.bind(this)
     this.updateValue = this.updateValue.bind(this)
-    this.state = { pastExercises: [], schemaAttributes: { label: this.props.label } }
+    this.keyboardDidShow = this.keyboardDidShow.bind(this)
+    this.keyboardDidHide = this.keyboardDidHide.bind(this)
+    this.state = { showingKeyboard: false, pastExercises: [], schemaAttributes: { label: this.props.label } }
+  }
+
+  componentWillMount () {
+    this.keyboardDidShowListener = Keyboard.addListener('keyboardWillShow', this.keyboardDidShow);
+    this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this.keyboardDidHide);
+  }
+
+  componentWillUnmount () {
+    this.keyboardDidShowListener.remove();
+    this.keyboardDidHideListener.remove();
+  }
+
+  keyboardDidShow () {
+    this.setState({ showingKeyboard: true })
+  }
+
+  keyboardDidHide () {
+    this.setState({ showingKeyboard: false })
   }
 
   componentDidMount() {
@@ -79,12 +100,13 @@ export default class DetailStep extends Component {
             </View>
           })}
         </View>
-        <PreviousExerciseList
-          exercises={this.getPreviousEntries()}
-          numExercises={3}
-          cb={this.applyPreviousEntry}
-          label="previous entries"
-        />
+        { !this.state.showingKeyboard && <PreviousExerciseList
+            exercises={this.getPreviousEntries()}
+            numExercises={3}
+            cb={this.applyPreviousEntry}
+            label="previous entries"
+          />
+        }
         <TouchableHighlight style={styles.saveButton} onPress={() => this.props.save(this.state.schemaAttributes)} underlayColor='#508CD8'>
           <Text style={styles.saveButtonText}>Save</Text>
         </TouchableHighlight>
@@ -95,7 +117,7 @@ export default class DetailStep extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 15,
+    flex: 12,
     flexDirection: 'column'
   },
   schemaColumn: {
@@ -123,6 +145,8 @@ const styles = StyleSheet.create({
     fontFamily: 'Avenir',
     fontWeight: '300',
     color: 'black',
+    alignSelf: 'center',
+    justifyContent: 'center'
   },
   labelText: {
     backgroundColor: 'transparent',
@@ -131,7 +155,6 @@ const styles = StyleSheet.create({
     color: 'black',
     width: 100,
     fontSize: 18,
-    marginTop: 20,
     marginLeft: 10,
     justifyContent: 'center',
     alignItems: 'center',

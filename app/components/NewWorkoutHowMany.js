@@ -8,11 +8,8 @@ import {
   Text,
   ActivityIndicator,
   TouchableHighlight,
-  KeyboardAvoidingView,
-  Keyboard, 
-  Platform,
-  AlertIOS,
-  Image
+  Image,
+  KeyboardAvoidingView
 } from 'react-native';
 
 import { AppEventsLogger } from 'react-native-fbsdk'
@@ -118,7 +115,7 @@ export default class NewWorkoutHowMany extends Component {
     const detailed = kind == 'detailed'
     const quantity = detailed ? this.state.specificWorkouts.totalQuantity : this.state.workoutValues.quantity
     return (
-      <KeyboardAvoidingView behavior='height' style={styles.container}>
+      <KeyboardAvoidingView behavior="padding" style={styles.container}>
         <LinearGradient 
           start={{x: 0, y: 1}} end={{x: 1, y: 0}}
           colors={['#2857ED', '#1DD65B']}

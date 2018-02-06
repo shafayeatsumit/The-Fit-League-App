@@ -47,6 +47,7 @@ export default class SpecificExercises extends Component {
     }
     // Should probably store this state on the parent... (NewWorkoutHowMany)
     if (props.specificWorkouts.specificExercises) {
+      this.state.totalQuantity = props.specificWorkouts.totalQuantity
       this.state.specificExercises = props.specificWorkouts.specificExercises
       this.state.specificExerciseValues = props.specificWorkouts.specificExerciseValues
     } else {

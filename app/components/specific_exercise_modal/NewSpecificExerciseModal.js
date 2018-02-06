@@ -6,7 +6,10 @@ import {
   Text,
   Image,
   Modal,
-  TouchableHighlight
+  TouchableHighlight,
+  Keyboard,
+  Dimensions,
+  KeyboardAvoidingView
 } from 'react-native';
 
 import Header from './Header'
@@ -51,7 +54,7 @@ export default class NewSpecificExerciseModal extends Component {
         transparent={true}
         visible={this.props.visible}
         onRequestClose={this.hide}>
-        <View style={styles.background}>
+        <KeyboardAvoidingView behavior="padding" style={styles.background}>
           <View style={styles.container}>
             <Header
               header={label ? label : "Add a specific exercise"}
@@ -78,7 +81,7 @@ export default class NewSpecificExerciseModal extends Component {
               />
             }
           </View>
-        </View>
+        </KeyboardAvoidingView>
       </Modal>
     );
   }
