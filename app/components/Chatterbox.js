@@ -24,9 +24,10 @@ import DynamicIcon from './DynamicIcon'
 const thumbsUp = require('../../assets/images/thumbsUp.png');
 const thumbsDown = require('../../assets/images/thumbsDown.png');
 
+// Dependency in app/models/chatter.rb in the Rails API.
 const actions = {
   positive: [
-    { label: 'Attaboy', icon: require('../../assets/images/bigButtSlap.png') },
+    { label: 'Fist Bump', icon: require('../../assets/images/fistBump.png') },
     { label: 'High Five', icon: require('../../assets/images/highFive.png') },
     { label: 'Thumbs Up', icon: require('../../assets/images/bigThumbsUp.png') },
   ],

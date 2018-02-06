@@ -55,7 +55,7 @@ export default class NewSpecificExerciseLabelPicker extends Component {
             <TouchableHighlight style={styles.newExerciseLabel} onPress={this.props.defineNewLabel} underlayColor='transparent'>
               <Text style={styles.newExerciseLabelText}>(+) Add new</Text>
             </TouchableHighlight>
-            { this.props.pastExercises.map((exercise) => {
+            { this.props.pastExercises.sort().map((exercise) => {
               return <TouchableHighlight key={exercise} style={styles.exerciseLabel} onPress={ () => { this.props.pickNewLabel(exercise) }} underlayColor='transparent'>
                 <Text style={styles.exerciseLabelText}>{ exercise }</Text>
               </TouchableHighlight>

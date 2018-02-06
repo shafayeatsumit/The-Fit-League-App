@@ -39,7 +39,7 @@ export default class NewWorkoutHowMany extends Component {
         fields: {
           quantity: {
             auto: 'none',
-            placeholder: this.props.workoutKind.attributes.quantity_question,
+            placeholder: '# of ' + this.props.workoutKind.attributes.unit + 's',
             placeholderTextColor: 'white',
             selectionColor: 'white'
           },
@@ -84,9 +84,10 @@ export default class NewWorkoutHowMany extends Component {
 
   goDetailed() {
     if (this.state.canGoDetailed) {
+      AppEventsLogger.logEvent('Tapped Detailed')
       this.setState({ kind: 'detailed' })
     } else {
-      // Tried to go detailed
+      AppEventsLogger.logEvent('Tapped Detailed (Coming soon)')
     }
   }
 
@@ -160,13 +161,14 @@ export default class NewWorkoutHowMany extends Component {
                       <Text style={styles.workoutLabelText}>{ this.props.workoutKind.attributes.label }</Text>
                     </View>
                   </View>
-                  <Form
-                    ref="form"
-                    value={this.state.workoutValues}
-                    type={t.struct(this.state.workoutSchema)}
-                    onChange={this.onChange}
-                    options={this.state.options} />
-                  <Text style={styles.workoutLabelText}>total {this.props.workoutKind.attributes.unit}s</Text>
+                  <View style={styles.quantityForm}>
+                    <Form
+                      ref="form"
+                      value={this.state.workoutValues}
+                      type={t.struct(this.state.workoutSchema)}
+                      onChange={this.onChange}
+                      options={this.state.options} />
+                  </View>
                 </View>
               }
             </View>
@@ -271,6 +273,10 @@ const styles = StyleSheet.create({
   },
   workoutLabel: {
     paddingTop: 10
+  },
+  quantityForm: {
+    paddingLeft: 75,
+    paddingRight: 75
   },
   workoutLabelText: {
     textAlign: 'center',

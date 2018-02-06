@@ -17,8 +17,7 @@ export const Workout = {
       Actions.newWorkoutSuccess({
         contribution, token,
         workoutInTheFuture: (occurredAt > rightNow),
-        successMessage: attributes.success_message,
-        wellDoneMessage: attributes.well_done_message
+        successMessage: attributes.success_message
       });
     }).catch((error) => {
       requestFinished()

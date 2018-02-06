@@ -78,7 +78,6 @@ export default class NewWorkoutSuccess extends Component {
                   })
                 }
               </View>
-              <Text style={styles.wellDone}>{this.props.wellDoneMessage}</Text>
               <Text style={styles.howDoIEdit}>Go to Your Workouts to view or edit this workout.</Text>
             </View>
           }
@@ -179,15 +178,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     backgroundColor: 'transparent',
     color: 'white',
-    padding: 10,
-    textAlign: 'center',
-    fontFamily: 'Avenir-Black',
-    fontWeight: '900'
-  },
-  wellDone: {
-    backgroundColor: 'transparent',
-    color: 'white',
-    fontSize: 20,
     padding: 10,
     textAlign: 'center',
     fontFamily: 'Avenir-Black',
