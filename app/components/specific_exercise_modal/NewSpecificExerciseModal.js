@@ -78,6 +78,7 @@ export default class NewSpecificExerciseModal extends Component {
                 workoutKindId={this.props.workoutKindId}
                 schema={this.props.schema}
                 token={this.props.token}
+                totalField={this.props.totalField}
               />
             }
           </View>

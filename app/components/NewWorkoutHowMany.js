@@ -42,12 +42,6 @@ export default class NewWorkoutHowMany extends Component {
             placeholder: '# of ' + this.props.workoutKind.attributes.unit + 's',
             placeholderTextColor: 'white',
             selectionColor: 'white'
-          },
-          notes: {
-            auto: 'none',
-            placeholder: 'Add notes',
-            placeholderTextColor: 'white',
-            selectionColor: 'white'
           }
         }
       }
@@ -99,7 +93,7 @@ export default class NewWorkoutHowMany extends Component {
     if (detailed) {
       let { specificWorkouts } = self.state
       workout.quantity = specificWorkouts.totalQuantity
-      workout.specific_exercises = specificWorkouts.specificExerciseValues.filter((v) => parseInt(v[self.state.totalField]))
+      workout.specific_exercises = specificWorkouts.specificExercises.filter((v) => parseInt(v[self.state.totalField]))
       self.setState({ loading: true })
       Workout.save(workout, self.props.token, self.props.thisWeek, () => self.setState({ loading: false }))
     } else {

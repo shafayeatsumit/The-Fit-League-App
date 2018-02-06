@@ -23,7 +23,7 @@ export default class DetailStep extends Component {
     this.updateValue = this.updateValue.bind(this)
     this.keyboardDidShow = this.keyboardDidShow.bind(this)
     this.keyboardDidHide = this.keyboardDidHide.bind(this)
-    this.anyValues = this.anyValues.bind(this)
+    this.hasRequiredValue = this.hasRequiredValue.bind(this)
     this.state = { showingKeyboard: false, pastExercises: [], schemaAttributes: { label: this.props.label } }
   }
 
@@ -88,14 +88,14 @@ export default class DetailStep extends Component {
     }
   }
 
-  anyValues() {
-    return this.getSchemaKeys().map((k) => this.state.schemaAttributes[k]).filter((x) => x).length > 0
+  hasRequiredValue() {
+    return !!this.state.schemaAttributes[this.props.totalField]
   }
 
   render() {
     const { schema } = this.props
     const schemaKeys = this.getSchemaKeys()
-    const saveStyle = this.anyValues() ? styles.saveButtonReady : styles.saveButtonGray
+    const saveStyle = this.hasRequiredValue() ? styles.saveButtonReady : styles.saveButtonGray
     return (
       <View style={styles.container}>
         <View style={styles.schemaColumn}>
@@ -113,7 +113,7 @@ export default class DetailStep extends Component {
             label="previous entries"
           />
         }
-        <TouchableHighlight style={StyleSheet.flatten([styles.saveButton, saveStyle])} onPress={() => this.anyValues() && this.props.save(this.state.schemaAttributes)} underlayColor='#508CD8'>
+        <TouchableHighlight style={StyleSheet.flatten([styles.saveButton, saveStyle])} onPress={() => this.hasRequiredValue() && this.props.save(this.state.schemaAttributes)} underlayColor='#508CD8'>
           <Text style={styles.saveButtonText}>Save</Text>
         </TouchableHighlight>
       </View>

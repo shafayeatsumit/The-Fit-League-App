@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 
-import t from 'tcomb-form-native';
-
 import {
   StyleSheet,
   View,
   ScrollView,
   Text,
+  TextInput,
   AlertIOS,
   Image,
   TouchableHighlight
@@ -15,23 +14,16 @@ import {
 import DynamicIcon from './DynamicIcon'
 import NewSpecificExerciseModal from './specific_exercise_modal/NewSpecificExerciseModal'
 
-const Form = t.form.Form
-const _ = require('lodash')
-
 const smallAddButton = require('../../assets/images/smallAddButton.png')
 const addButton = require('../../assets/images/addButton.png')
-
-const stylesheet = _.cloneDeep(t.form.Form.stylesheet);
-
-stylesheet.fieldset = { flexDirection: 'row' };
+const smallTrash = require('../../assets/images/smallTrash.png')
 
 export default class SpecificExercises extends Component {
   constructor(props) {
     super(props)
     this.newExercise = this.newExercise.bind(this)
-    this.newExerciseValue = this.newExerciseValue.bind(this)
     this.addNewExercise = this.addNewExercise.bind(this)
-    this.buildFieldsHash = this.buildFieldsHash.bind(this)
+    this.removeExerciseAtIndex = this.removeExerciseAtIndex.bind(this)
     this.onChange = this.onChange.bind(this)
     this.newExercisesModal = this.newExercisesModal.bind(this)
     this.hideModal = this.hideModal.bind(this)
@@ -39,44 +31,18 @@ export default class SpecificExercises extends Component {
     this.state = { 
       loading: false, 
       totalQuantity: 0,
-      newExercisesModalVisible: false,
-      options: {
-        stylesheet,
-        fields: this.buildFieldsHash()
-      }
+      newExercisesModalVisible: false
     }
     // Should probably store this state on the parent... (NewWorkoutHowMany)
     if (props.specificWorkouts.specificExercises) {
       this.state.totalQuantity = props.specificWorkouts.totalQuantity
       this.state.specificExercises = props.specificWorkouts.specificExercises
-      this.state.specificExerciseValues = props.specificWorkouts.specificExerciseValues
     } else {
       this.state.specificExercises = []
-      this.state.specificExerciseValues = []
     }
   }
 
-  buildFieldsHash() {
-    let schema = this.props.workoutKind.attributes.specific_exercise_schema
-    let hash = {}
-    let fields = Object.keys(schema)
-    fields.forEach((k, index) => {
-      let stylesheet = _.cloneDeep(t.form.Form.stylesheet)
-      stylesheet.formGroup.normal.flex = schema[k].width
-      stylesheet.formGroup.error.flex = schema[k].width
-      hash[k] = { auto: 'none', selectionColor: 'white', stylesheet }
-    })
-    return hash
-  }
-
-  newExercise() {
-    let schema = this.props.workoutKind.attributes.specific_exercise_schema
-    let exercise = {}
-    Object.keys(schema).forEach((k) => exercise[k] = t[schema[k].kind])
-    return exercise
-  }
-
-  newExerciseValue(schemaAttributes) {
+  newExercise(schemaAttributes) {
     let schema = this.props.workoutKind.attributes.specific_exercise_schema
     let exerciseValue = {}
     Object.keys(schema).forEach((k) => {
@@ -95,7 +61,7 @@ export default class SpecificExercises extends Component {
 
   applyNewState(newState) {
     let self = this
-    newState.totalQuantity = newState.specificExerciseValues.map(
+    newState.totalQuantity = newState.specificExercises.map(
       (v) => v[self.props.totalField] ? parseInt(v[self.props.totalField]) : 0
     ).reduce((sum, value) => sum + value, 0)
     self.props.specificWorkoutChange(newState)
@@ -103,24 +69,25 @@ export default class SpecificExercises extends Component {
   }
 
   addNewExercise(schemaAttributes) {
-    let self = this
-    let { specificExerciseValues, specificExercises } = this.state
-    let newState = { specificExerciseValues, specificExercises }
-    newState.specificExerciseValues.push(this.newExerciseValue(schemaAttributes))
-    newState.specificExercises.push(this.newExercise())
+    let {  specificExercises } = this.state
+    let newState = { specificExercises }
+    newState.specificExercises.push(this.newExercise(schemaAttributes))
     this.applyNewState(newState)
   }
 
-  onChange(index) {
+  removeExerciseAtIndex(index) {
+    return () => {
+      let { specificExercises } = this.state
+      specificExercises.splice(index, 1)
+      this.applyNewState({ specificExercises })
+    }
+  }
+
+  onChange(index, key) {
     return (value) => {
-      let self = this
-      let { specificExerciseValues, specificExercises } = self.state
-      specificExerciseValues[index] = value
-      let newState = { specificExerciseValues, specificExercises }
-      if (index == specificExerciseValues.length - 1) {
-        newState.specificExerciseValues.push(self.newExerciseValue())
-        newState.specificExercises.push(self.newExercise())
-      }
+      let { specificExercises } = this.state
+      specificExercises[index][key] = value
+      let newState = { specificExercises }
       this.applyNewState(newState)
     }
   }
@@ -138,6 +105,7 @@ export default class SpecificExercises extends Component {
           token={this.props.token}
           hide={this.hideModal}
           pastExercises={pastExercises}
+          totalField={this.props.totalField}
           visible={this.state.newExercisesModalVisible}
         />
         <View style={styles.headerHolder}>
@@ -157,18 +125,29 @@ export default class SpecificExercises extends Component {
             { Object.keys(schema).map((k) => {
               return <View key={k} style={{ flex: schema[k].width }}>
                 <Text style={styles.labelText}>{ schema[k].label }</Text>
-              </View>                  
+              </View>                
             })}
+            <View style={{ flex: 1 }}></View>  
           </View>
         }
         <ScrollView style={styles.scrollView}> 
           { this.state.specificExercises.map((exercise, index) => {
-            return <Form
-              key={index}
-              value={this.state.specificExerciseValues[index]}
-              onChange={this.onChange(index)}
-              type={t.struct(exercise)}
-              options={this.state.options} />
+            return <View style={styles.exerciseRow} key={index}>
+              { Object.keys(schema).map((key) => {
+                return <TextInput
+                  key={key + index.toString()}
+                  keyboardType={schema[key].kind == 'Integer' ? 'numeric' : 'default'}
+                  style={StyleSheet.flatten([styles.input, { flex: schema[key].width }])}
+                  value={this.state.specificExercises[index][key]}
+                  onChangeText={this.onChange(index, key)}
+                />
+              }) }
+                <View style={styles.trashBin}>
+                  <TouchableHighlight onPress={this.removeExerciseAtIndex(index)} underlayColor='transparent'>
+                    <Image source={smallTrash} />
+                  </TouchableHighlight>
+                </View>
+              </View>
             })
           }
           <View>
@@ -193,6 +172,11 @@ export default class SpecificExercises extends Component {
 const styles = StyleSheet.create({
   labelRow: {
     flexDirection: 'row'
+  },
+  exerciseRow: {
+    flexDirection: 'row',
+    height: 50,
+    marginBottom: 10
   },
   labelText: {
     textAlign: 'left',
@@ -251,6 +235,23 @@ const styles = StyleSheet.create({
     textAlign: 'right',
     fontFamily: 'Avenir-Black',
     fontWeight: '400'
+  },
+  input: {
+    fontSize: 14,
+    fontFamily: 'Avenir',
+    fontWeight: '300',
+    borderWidth: 1,
+    borderRadius: 0,
+    height: 50,
+    paddingLeft: 15,
+    backgroundColor: 'rgba(255, 255, 255, 0.10)',
+    borderColor: 'rgba(255, 255, 255, 0.25)',
+    color: 'white',
+  },
+  trashBin: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'flex-end'
   },
   specificExerciseTitle: {
     backgroundColor: 'transparent',
