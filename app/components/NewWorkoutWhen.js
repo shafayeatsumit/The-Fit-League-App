@@ -141,6 +141,7 @@ export default class NewWorkoutWhen extends Component {
                 style={styles.datePicker}
                 date={this.state.date}
                 mode="datetime"
+                minuteInterval={10}
                 onDateChange={this.onDateChange} />
             }
           </View>

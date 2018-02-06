@@ -9,16 +9,17 @@ import {
   Text,
   AlertIOS,
   Image,
-  Modal,
   TouchableHighlight
 } from 'react-native';
 
 import DynamicIcon from './DynamicIcon'
+import NewSpecificExerciseModal from './specific_exercise_modal/NewSpecificExerciseModal'
 
 const Form = t.form.Form
 const _ = require('lodash')
 
-const smallAddButton = require('../../assets/images/smallAddButton.png');
+const smallAddButton = require('../../assets/images/smallAddButton.png')
+const addButton = require('../../assets/images/addButton.png')
 
 const stylesheet = _.cloneDeep(t.form.Form.stylesheet);
 
@@ -29,15 +30,16 @@ export default class SpecificExercises extends Component {
     super(props)
     this.newExercise = this.newExercise.bind(this)
     this.newExerciseValue = this.newExerciseValue.bind(this)
+    this.addNewExercise = this.addNewExercise.bind(this)
     this.buildFieldsHash = this.buildFieldsHash.bind(this)
     this.onChange = this.onChange.bind(this)
-    this.pastExercisesModal = this.pastExercisesModal.bind(this)
+    this.newExercisesModal = this.newExercisesModal.bind(this)
     this.hideModal = this.hideModal.bind(this)
-    this.applyLabel = this.applyLabel.bind(this)
+    this.applyNewState = this.applyNewState.bind(this)
     this.state = { 
       loading: false, 
       totalQuantity: 0,
-      exerciseLabelModalVisible: false,
+      newExercisesModalVisible: false,
       options: {
         stylesheet,
         fields: this.buildFieldsHash()
@@ -48,8 +50,8 @@ export default class SpecificExercises extends Component {
       this.state.specificExercises = props.specificWorkouts.specificExercises
       this.state.specificExerciseValues = props.specificWorkouts.specificExerciseValues
     } else {
-      this.state.specificExercises = [this.newExercise(), this.newExercise(), this.newExercise()]
-      this.state.specificExerciseValues = [this.newExerciseValue(), this.newExerciseValue(), this.newExerciseValue()]
+      this.state.specificExercises = []
+      this.state.specificExerciseValues = []
     }
   }
 
@@ -73,29 +75,39 @@ export default class SpecificExercises extends Component {
     return exercise
   }
 
-  newExerciseValue() {
+  newExerciseValue(schemaAttributes) {
     let schema = this.props.workoutKind.attributes.specific_exercise_schema
     let exerciseValue = {}
-    Object.keys(schema).forEach((k) => exerciseValue[k] = undefined)
+    Object.keys(schema).forEach((k) => {
+      exerciseValue[k] = schemaAttributes ? schemaAttributes[k] : undefined
+    })
     return exerciseValue
   }
 
   hideModal() {
-    this.setState({ exerciseLabelModalVisible: false })
+    this.setState({ newExercisesModalVisible: false })
   }
 
-  pastExercisesModal() {
-    this.setState({ exerciseLabelModalVisible: true })
+  newExercisesModal() {
+    this.setState({ newExercisesModalVisible: true })
   }
 
-  applyLabel(label) {
-    let { specificExerciseValues } = this.state
-    let noLabelIndex = specificExerciseValues.findIndex((v) => !v.label)
-    let update = this.onChange(noLabelIndex)
-    let newValue = specificExerciseValues[noLabelIndex]
-    newValue.label = label
-    update(newValue)
-    this.hideModal()
+  applyNewState(newState) {
+    let self = this
+    newState.totalQuantity = newState.specificExerciseValues.map(
+      (v) => v[self.props.totalField] ? parseInt(v[self.props.totalField]) : 0
+    ).reduce((sum, value) => sum + value, 0)
+    self.props.specificWorkoutChange(newState)
+    self.setState(newState)
+  }
+
+  addNewExercise(schemaAttributes) {
+    let self = this
+    let { specificExerciseValues, specificExercises } = this.state
+    let newState = { specificExerciseValues, specificExercises }
+    newState.specificExerciseValues.push(this.newExerciseValue(schemaAttributes))
+    newState.specificExercises.push(this.newExercise())
+    this.applyNewState(newState)
   }
 
   onChange(index) {
@@ -108,11 +120,7 @@ export default class SpecificExercises extends Component {
         newState.specificExerciseValues.push(self.newExerciseValue())
         newState.specificExercises.push(self.newExercise())
       }
-      newState.totalQuantity = newState.specificExerciseValues.map(
-        (v) => v[self.props.totalField] ? parseInt(v[self.props.totalField]) : 0
-      ).reduce((sum, value) => sum + value, 0)
-      self.props.specificWorkoutChange(newState)
-      self.setState(newState)
+      this.applyNewState(newState)
     }
   }
 
@@ -122,26 +130,15 @@ export default class SpecificExercises extends Component {
     const pastExercises = workoutKindAttrs.specific_exercise_labels
     return (
       <View>
-        <Modal
-          animationType='slide'
-          transparent={true}
-          visible={this.state.exerciseLabelModalVisible}
-          onRequestClose={this.hideModal} >
-          <View style={styles.pastExercisesModal}>
-            <Text style={styles.modalHeader}>Choose a Past Exercise</Text>
-            <ScrollView style={styles.modalScrollView}> 
-            { pastExercises.map((exercise) => {
-              return <TouchableHighlight key={exercise} style={styles.exerciseLabel} onPress={ () => { this.applyLabel(exercise) }} underlayColor='transparent'>
-                <Text style={styles.exerciseLabelText}>{ exercise }</Text>
-              </TouchableHighlight>
-            })}
-            </ScrollView>
-            <TouchableHighlight style={styles.modalNevermind} onPress={this.hideModal} underlayColor='#508CD8'>
-              <Text style={styles.modalNevermindText}>Nevermind</Text>
-            </TouchableHighlight>
-          </View>
-        </Modal>
-        <Text style={styles.specificExerciseTitle}>Add sets and exercises</Text>
+        <NewSpecificExerciseModal
+          cb={this.addNewExercise}
+          workoutKindId={this.props.workoutKind.id}
+          schema={schema}
+          token={this.props.token}
+          hide={this.hideModal}
+          pastExercises={pastExercises}
+          visible={this.state.newExercisesModalVisible}
+        />
         <View style={styles.headerHolder}>
           <View style={styles.workoutIconColumn}>
             <View style={styles.workoutIcon}>
@@ -154,13 +151,15 @@ export default class SpecificExercises extends Component {
           <Text style={styles.workoutKindTitle}>{workoutKindAttrs.label}</Text>
           <Text style={styles.workoutQuantity}>{this.state.totalQuantity} total {workoutKindAttrs.unit}s</Text>
         </View>
-        <View style={styles.labelRow}>
-          { Object.keys(schema).map((k) => {
-            return <View key={k} style={{ flex: schema[k].width }}>
-              <Text style={styles.labelText}>{ schema[k].label }</Text>
-            </View>                  
-          })}
-        </View>
+        { this.state.specificExercises.length > 0 &&
+          <View style={styles.labelRow}>
+            { Object.keys(schema).map((k) => {
+              return <View key={k} style={{ flex: schema[k].width }}>
+                <Text style={styles.labelText}>{ schema[k].label }</Text>
+              </View>                  
+            })}
+          </View>
+        }
         <ScrollView style={styles.scrollView}> 
           { this.state.specificExercises.map((exercise, index) => {
             return <Form
@@ -173,8 +172,13 @@ export default class SpecificExercises extends Component {
           }
           <View>
           { pastExercises.length > 0 &&
-            <TouchableHighlight style={styles.pastExercisesLinkHolder} onPress={this.pastExercisesModal} underlayColor='transparent'>
-              <Text style={styles.pastExercisesLink}>Choose from past exercises</Text>
+            <TouchableHighlight onPress={this.newExercisesModal} underlayColor='transparent'>
+              <View style={styles.newExerciseRow}>
+                <View style={styles.newExerciseButton}>
+                  <Image style={styles.newExerciseButtonPlus} source={addButton} />
+                </View>
+                <Text style={styles.newExerciseLink}>Add a specific exercise</Text>
+              </View>
             </TouchableHighlight>
           }
           </View>
@@ -207,8 +211,9 @@ const styles = StyleSheet.create({
   workoutIcon: {
     height: 30,
     width: 30,
+    borderWidth: 1,
+    borderColor: 'white',
     borderRadius: 15,
-    backgroundColor: '#2857ED',
     alignItems: 'center',
     justifyContent: 'center'
   },
@@ -217,25 +222,24 @@ const styles = StyleSheet.create({
     width: 30
   },
   headerHolder: {
-    borderRadius: 2,
-    borderWidth: 2,
-    borderColor: 'white',
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(255, 255, 255, 0.25)',
     flexDirection: 'row',
     alignItems: 'center',
     paddingTop: 5,
-    paddingBottom: 5,
-    marginTop: 20,
-    marginBottom: 20
+    paddingBottom: 15,
+    marginTop: 10,
+    marginBottom: 10
   },
   workoutKindTitle: {
     backgroundColor: 'transparent',
     flex: 4,
     color: 'white',
-    fontSize: 14,
+    fontSize: 18,
     padding: 10,
     textAlign: 'left',
     fontFamily: 'Avenir-Black',
-    fontWeight: '900'
+    fontWeight: '400'
   },
   workoutQuantity: {
     backgroundColor: 'transparent',
@@ -255,65 +259,35 @@ const styles = StyleSheet.create({
     fontFamily: 'Avenir-Black',
     fontWeight: '900'
   },
-  pastExercisesLinkHolder: {
-    padding: 20
+  newExerciseRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 20,
+    marginBottom: 80
   },
-  pastExercisesLink: {
-    textAlign: 'center',
-    color: 'white',
-    fontSize: 14,
-    backgroundColor: 'transparent',
-    fontFamily: 'Avenir-Black',
-    fontWeight: '900'
-  },
-  scrollView: {
-    // paddingBottom: 100,
-    // marginBottom: 100,
-    // height: 400
-  },
-  modalHeader: {
+  newExerciseLink: {
     textAlign: 'center',
     backgroundColor: 'transparent',
     fontFamily: 'Avenir-Black',
     fontWeight: '900',
-    color: 'black',
+    color: 'white',
     fontSize: 18,
-    padding: 20,
-    paddingBottom: 0
   },
-  modalScrollView: {
-    padding: 20,
-    marginBottom: 20
+  newExerciseButton: {
+    height: 30,
+    width: 30,
+    backgroundColor: 'rgba(40, 87, 237, 0.89)',
+    borderColor: 'rgba(40, 87, 237, 0.89)',
+    borderRadius: 15,
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: 'rgba(40, 87, 237, 0.37)',
+    shadowOffset: { width: 0, height: 7 },
+    marginRight: 10
   },
-  modalNevermind: {
-    backgroundColor: '#508CD8',
-    padding: 10
+  newExerciseButtonPlus: {
+    height: 15,
+    width: 15
   },
-  modalNevermindText: {
-    fontFamily: 'Avenir-Black',
-    fontWeight: '900',
-    color: 'white',
-    textAlign: 'center',
-    fontSize: 18
-  },
-  exerciseLabel: {
-    padding: 15,
-    paddingLeft: 0,
-    borderBottomColor: 'rgba(0, 0, 0, 0.25)',
-    borderBottomWidth: 1,
-  },
-  exerciseLabelText: {
-    fontSize: 16,
-    backgroundColor: 'transparent',
-    fontFamily: 'Avenir',
-    fontWeight: '300',
-    color: '#2857ED'
-  },
-  pastExercisesModal: {
-    margin: 20,
-    marginTop: 92,
-    height: 450,
-    borderRadius: 2,
-    backgroundColor: 'rgba(255, 255, 255, 0.98)'
-  }
 });

@@ -94,7 +94,7 @@ export default class Workouts extends Component {
           workouts: responseData.data,
           loading: false
         })
-      }).catch(() => {
+      }).catch((err) => {
         this.setState({ loading: false })
       })
   }

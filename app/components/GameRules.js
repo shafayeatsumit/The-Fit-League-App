@@ -28,7 +28,7 @@ export default class GameRules extends Component {
     HttpUtils.get('rules', this.props.token)
       .then((responseData) => {
         this.setState({ rules: responseData.data, loading: false })
-      }).catch(() => {
+      }).catch((err) => {
         this.setState({ loading: false, rules: [] })
       }).done()
     AppEventsLogger.logEvent('Viewed Game Rules')

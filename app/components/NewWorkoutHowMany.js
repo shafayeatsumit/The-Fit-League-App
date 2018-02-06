@@ -33,11 +33,11 @@ export default class NewWorkoutHowMany extends Component {
     super(props)
     this.state = {
       loading: false,
-      hasSpecificExercises: props.workoutKind.attributes.has_specific_exercises,
+      kind: 'basic',
+      canGoDetailed: props.workoutKind.attributes.has_specific_exercises,
       workoutSchema: { quantity: t.Number },
       workoutValues: {},
       specificWorkouts: { totalQuantity: 0 },
-      keyboardAvoidingViewKey: 'keyboardAvoidingViewKey',
       options: {
         fields: {
           quantity: {
@@ -55,7 +55,7 @@ export default class NewWorkoutHowMany extends Component {
         }
       }
     }
-    if (this.state.hasSpecificExercises) {
+    if (this.state.canGoDetailed) {
       let schema = props.workoutKind.attributes.specific_exercise_schema
       this.state.totalField = Object.keys(schema).find((k) => schema[k].total_quantity)
     }
@@ -63,6 +63,8 @@ export default class NewWorkoutHowMany extends Component {
     this.onChange = this.onChange.bind(this)
     this.forward = this.forward.bind(this)
     this.addNotes = this.addNotes.bind(this)
+    this.goBasic = this.goBasic.bind(this)
+    this.goDetailed = this.goDetailed.bind(this)
   }
 
   onSpecificWorkoutChange(specificWorkouts) {
@@ -79,11 +81,24 @@ export default class NewWorkoutHowMany extends Component {
     this.setState({ workoutValues })
   }
 
+  goBasic() {
+    this.setState({ kind: 'basic' })
+  }
+
+  goDetailed() {
+    if (this.state.canGoDetailed) {
+      this.setState({ kind: 'detailed' })
+    } else {
+      // Tried to go detailed
+    }
+  }
+
   forward() {
     let self = this
     let { workout } = self.props
-    AppEventsLogger.logEvent('Entered a workout quantity', { with_specific_exercises: self.state.hasSpecificExercises })
-    if (self.state.hasSpecificExercises) {
+    let detailed = this.state.kind == 'detailed'
+    AppEventsLogger.logEvent('Entered a workout quantity', { with_specific_exercises: detailed })
+    if (detailed) {
       let { specificWorkouts } = self.state
       workout.quantity = specificWorkouts.totalQuantity
       workout.specific_exercises = specificWorkouts.specificExerciseValues.filter((v) => parseInt(v[self.state.totalField]))
@@ -99,8 +114,9 @@ export default class NewWorkoutHowMany extends Component {
   }
 
   render() {
-    const { hasSpecificExercises } = this.state
-    const quantity = hasSpecificExercises ? this.state.specificWorkouts.totalQuantity : this.state.workoutValues.quantity
+    const { kind } = this.state
+    const detailed = kind == 'detailed'
+    const quantity = detailed ? this.state.specificWorkouts.totalQuantity : this.state.workoutValues.quantity
     return (
       <KeyboardAvoidingView behavior='height' style={styles.container}>
         <LinearGradient 
@@ -111,9 +127,24 @@ export default class NewWorkoutHowMany extends Component {
           { this.state.loading ?
             <ActivityIndicator size="large" style={styles.activityIndicator} color="rgba(255, 255, 255, 0.8)" />
           :
-            <View style={styles.formContainer}>   
-              { hasSpecificExercises ? 
+            <View style={styles.formContainer}>
+              <Text style={styles.howManyUnits}>Quantify your workout</Text>
+              <View style={styles.basicVsDetailedBar}>
+                <TouchableHighlight style={detailed ? styles.basicVsDetailedButton : styles.basicVsDetailedButtonSelected} onPress={this.goBasic} underlayColor='transparent'>
+                  <Text style={styles.basicVsDetailedText}>Quick Entry</Text>
+                </TouchableHighlight>
+                <TouchableHighlight style={detailed ? styles.basicVsDetailedButtonSelected : styles.basicVsDetailedButton} onPress={this.goDetailed} underlayColor='transparent'>
+                  <View style={styles.basicVsDetailedTextColumn}>
+                    <Text style={styles.basicVsDetailedText}>Detailed</Text>
+                    { !this.state.canGoDetailed && 
+                      <Text style={styles.comingSoonText}>Coming Soon!</Text>
+                    }
+                  </View>
+                </TouchableHighlight>
+              </View>
+              { detailed ? 
                 <SpecificExercises
+                  token={this.props.token}
                   specificWorkouts={this.state.specificWorkouts}
                   workout={this.props.workout}
                   workoutKind={this.props.workoutKind}
@@ -121,7 +152,6 @@ export default class NewWorkoutHowMany extends Component {
                   specificWorkoutChange={this.onSpecificWorkoutChange} />
               :
                 <View>
-                  <Text style={styles.howManyUnits}>Enter number of {this.props.workoutKind.attributes.unit}s</Text>
                   <View style={styles.headerHolder}>
                     <View style={styles.workoutIcon}>
                       <DynamicIcon 
@@ -139,11 +169,7 @@ export default class NewWorkoutHowMany extends Component {
                     type={t.struct(this.state.workoutSchema)}
                     onChange={this.onChange}
                     options={this.state.options} />
-                  { !this.state.workoutSchema.notes &&
-                    <TouchableHighlight style={styles.addNotes} onPress={this.addNotes} underlayColor='transparent'>
-                      <Text style={styles.addNotesText}>Add notes</Text>
-                    </TouchableHighlight>
-                  }
+                  <Text style={styles.workoutLabelText}>total {this.props.workoutKind.attributes.unit}s</Text>
                 </View>
               }
             </View>
@@ -164,9 +190,56 @@ const styles = StyleSheet.create({
     flex: 5,
     flexDirection: 'column',
   },
+  basicVsDetailedBar: {
+    flexDirection: 'row',
+    borderRadius: 20,
+    height: 40,
+    margin: 5,
+    backgroundColor: 'rgba(255, 255, 255, 0.25)'
+  },
+  basicVsDetailedButton: {
+    flex: 1,
+    height: 40,
+    backgroundColor: 'transparent',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  basicVsDetailedButtonSelected: {
+    flex: 1,
+    backgroundColor: 'rgba(255, 255, 255, 0.5)',
+    height: 40,
+    borderRadius: 20,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  basicVsDetailedText: {
+    textAlign: 'center',
+    backgroundColor: 'transparent',
+    color: 'white',
+    fontSize: 14,
+    textAlign: 'center',
+    fontFamily: 'Avenir-Black',
+    fontWeight: '400'
+  },
+  basicVsDetailedTextColumn: {
+    flexDirection: 'column',
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  comingSoonText: {
+    textAlign: 'center',
+    backgroundColor: 'transparent',
+    color: 'white',
+    fontSize: 10,
+    textAlign: 'center',
+    fontFamily: 'Avenir-Black',
+    fontWeight: '400',
+    marginLeft: 5
+  },
   formContainer: {
     padding: 20,
-    paddingTop: 5,
+    paddingTop: 0,
     flex: 10
   },
   activityIndicator: {
@@ -186,25 +259,15 @@ const styles = StyleSheet.create({
   },
   headerHolder: {
     alignItems: 'center',
-    margin: 10,
-    marginBottom: 15,
+    margin: 10
   },
   addNotes: {
     padding: 10,
   },
-  addNotesText: {
-    textAlign: 'center',
-    backgroundColor: 'transparent',
-    color: 'white',
-    fontSize: 14,
-    textAlign: 'center',
-    fontFamily: 'Avenir-Black',
-    fontWeight: '900'
-  },
   howManyUnits: {
     backgroundColor: 'transparent',
     color: 'white',
-    fontSize: 25,
+    fontSize: 24,
     textAlign: 'center',
     fontFamily: 'Avenir-Black',
     fontWeight: '900'
@@ -220,5 +283,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontFamily: 'Avenir-Black',
     fontWeight: '400'
-  },
+  }
 });

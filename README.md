@@ -1,5 +1,6 @@
 # TheFitLeague App
 
+TFL applies the format of fantasy sports to personal exercise. Form a league with your friends and compete over a 10-week season. Each week you are paired with a new partner and match up against another duo. All types of exercise are valid (basketball, spin, weightlifting, yoga, Crossfit, etc). It’s free to play.
 
 ### Running iOS
 

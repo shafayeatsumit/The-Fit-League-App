@@ -101,7 +101,7 @@ export default class PlayerCard extends Component {
       HttpUtils.get('profile', this.props.token)
         .then((responseData) => {
           this.setState({ mine: true, bio: responseData.data.attributes.bio, player: responseData.data.attributes, loading: false })
-        }).catch(() => {
+        }).catch((err) => {
           this.setState({ loading: false })
         }).done()
     } else {

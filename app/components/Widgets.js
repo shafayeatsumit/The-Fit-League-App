@@ -22,7 +22,7 @@ export default class Widgets extends Component {
     HttpUtils.get('widgets', this.props.token)
       .then((responseData) => {
         this.setState({ widgets: responseData.data })
-      }).catch(() => {
+      }).catch((err) => {
         this.setState({ widgets: [] })
       }).done()
   }

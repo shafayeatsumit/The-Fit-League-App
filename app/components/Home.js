@@ -65,8 +65,7 @@ export default class Home extends Component {
       .then((responseData) => {
         let { name, image_url } = responseData.data.attributes;
         this.setState({ name, image_url })
-      }).catch(() => {
-        // nuthin'
+      }).catch((err) => {
       }).done()
   }
 
@@ -91,10 +90,10 @@ export default class Home extends Component {
           strength_points, cardio_points, days_worked_out, diversity_points,
           loading: false
         })
-      }).catch(() => {
+      }).catch((err) => {
         this.setState({ 
-          loading: false, 
-          strength_points: 0, cardio_points: 0, days_worked_out: 0, diversity_points: 0 
+          strength_points: 0, cardio_points: 0, days_worked_out: 0, diversity_points: 0,
+          loading: false 
         })
       }).done()
   }
