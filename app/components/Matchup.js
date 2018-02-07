@@ -15,14 +15,15 @@ import { AppEventsLogger } from 'react-native-fbsdk'
 const _ = require('lodash')
 
 import { HttpUtils } from '../services/HttpUtils'
+import { SessionStore } from '../services/SessionStore'
 
 import HamburgerBasement from './HamburgerBasement'
 import OtherHeader from './OtherHeader'
 import MatchupStatusBanner from './MatchupStatusBanner'
 import MatchupLegend from './MatchupLegend'
 
-const lastWeek = require('../../assets/images/lastWeek.png');
-const nextWeek = require('../../assets/images/nextWeek.png');
+const lastWeek = require('../../assets/images/lastWeek.png')
+const nextWeek = require('../../assets/images/nextWeek.png')
 
 export default class Workouts extends Component {
   constructor(props) {
@@ -30,6 +31,7 @@ export default class Workouts extends Component {
     this.getContest = this.getContest.bind(this)
     this.toLastWeek = this.toLastWeek.bind(this)
     this.toNextWeek = this.toNextWeek.bind(this)
+    this.getContestByUrl = this.getContestByUrl.bind(this)
     this.state = { loading: true };
   }
 
@@ -51,8 +53,8 @@ export default class Workouts extends Component {
     AppEventsLogger.logEvent('Viewed Matchup')
   }
 
-  getContest(weeksAgo) {
-    HttpUtils.get('weeks/' + weeksAgo.toString() + '/contest', this.props.token)
+  getContestByUrl(weeksAgo, endPoint) {
+    HttpUtils.get('weeks/' + weeksAgo.toString() + endPoint, this.props.token)
       .then((responseData) => {
         let matchup = responseData.data ? responseData.data.attributes : null
         this.setState({
@@ -64,6 +66,15 @@ export default class Workouts extends Component {
       }).catch((err) => {
         this.setState({ loading: false })
       }).done()
+
+  }
+
+  getContest(weeksAgo) {
+    SessionStore.getLeagueId((leagueId) => {
+      this.getContestByUrl(weeksAgo, '/contest?league_id=' + leagueId.toString())
+    }, () => {
+      this.getContestByUrl(weeksAgo, '/contest')
+    })
   }
 
   render() {

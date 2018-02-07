@@ -18,6 +18,8 @@ import { AppEventsLogger } from 'react-native-fbsdk'
 import { Actions } from 'react-native-router-flux'
 
 import { HttpUtils } from '../services/HttpUtils'
+import { SessionStore } from '../services/SessionStore'
+
 import { LeagueSharer } from '../services/LeagueSharer'
 import DynamicIcon from './DynamicIcon'
 
@@ -46,6 +48,7 @@ export default class Chatterbox extends Component {
     this.sendChatter = this.sendChatter.bind(this)
     this.getChatters = this.getChatters.bind(this)
     this.copyInviteUrl = this.copyInviteUrl.bind(this)
+    this.getChattersByUrl = this.getChattersByUrl.bind(this)
     this.state = { 
       modalVisible: false,
       modalData: {},
@@ -86,8 +89,8 @@ export default class Chatterbox extends Component {
     }, image_url: this.props.image_url, token: this.props.token })
   }
 
-  getChatters() {
-    HttpUtils.get('chatters', this.props.token)
+  getChattersByUrl(url) {
+    HttpUtils.get(url, this.props.token)
       .then((responseData) => {
         this.setState({ 
           chatters: responseData.data, 
@@ -98,6 +101,14 @@ export default class Chatterbox extends Component {
       }).catch((err) => {
         this.setState({ loading: false, refreshing: false, chatters: [] })
       }).done()
+  }
+
+  getChatters() {
+    SessionStore.getLeagueId((leagueId) => {
+      this.getChattersByUrl('leagues/' + leagueId.toString() + '/chatters')
+    }, () => {
+      this.getChattersByUrl('chatters')
+    })
   }
 
   componentDidMount() {

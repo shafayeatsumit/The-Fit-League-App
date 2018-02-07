@@ -16,6 +16,7 @@ import {
 import { Actions } from 'react-native-router-flux'
 
 import { HttpUtils } from '../services/HttpUtils'
+import { SessionStore } from '../services/SessionStore'
 
 import NoLeagueModal from './NoLeagueModal'
 
@@ -52,6 +53,7 @@ export default class HamburgerBasement extends Component {
       links: [HOME_LINK, WORKOUTS_LINK, RULES_LINK],
       basementShowing: false,
       noLeague: false,
+      currentLeague: null,
       basementSpace: {
         marginTop: new Animated.Value(0),
         marginLeft: new Animated.Value(0),
@@ -74,14 +76,21 @@ export default class HamburgerBasement extends Component {
     links.push(leagueLink)
     // May want this to depend on league type?
     links.push(RULES_LINK)
-    this.setState({ links, noLeague: false })
+    SessionStore.save({ leagueId: league.id }, () => {    
+      this.setState({ links, currentLeague: league, noLeague: false })
+    })
   }
 
   componentDidMount() {
     let { token } = this.props
-    HttpUtils.get('leagues/current', token).then((responseData) => {
-      if (responseData.data) {
-        this.setLeagueLinks(responseData.data)
+    HttpUtils.get('leagues', token).then((responseData) => {
+      if (responseData.data.length > 0) {
+        SessionStore.getLeagueId((leagueId) => {
+          let currentLeague = responseData.data.filter((league) => league.id === leagueId)[0]
+          this.setLeagueLinks(currentLeague ? currentLeague : responseData.data[0])
+        }, () => {
+          this.setLeagueLinks(responseData.data[0])
+        })
       } else {
         this.setState({ noLeague: true })
       }
@@ -124,7 +133,7 @@ export default class HamburgerBasement extends Component {
         <Image
           style={styles.basementBackgroundImage}
           source={basementBackground} />
-        <TouchableHighlight onPress={() => Actions.home({ token, image_url }) } underlayColor='rgba(255, 255, 255, 0.25)'>
+        <TouchableHighlight onPress={() => Actions.leagues({ viewRules: this.viewRules, setLeagueLinks: this.setLeagueLinks })} underlayColor='rgba(255, 255, 255, 0.25)'>
           <View style={styles.basementIconRow}>
             <View style={styles.basementBadge}>
               <Image
@@ -132,11 +141,9 @@ export default class HamburgerBasement extends Component {
                 resizeMode='contain'
                 source={badge} />
             </View>
-            <View style={styles.basementLogo}>
-              <Image
-                style={styles.basementLogoIcon}
-                resizeMode='contain'
-                source={logo} />
+            <View style={styles.leagueToggle}>
+              { this.state.currentLeague && <Text style={styles.currentLeagueLabel}>Current League</Text> }
+              { this.state.currentLeague && <Text style={styles.currentLeagueText}>{ this.state.currentLeague.attributes.name }</Text> }
             </View>
           </View>
         </TouchableHighlight>
@@ -202,12 +209,25 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%'
   },
-  basementLogo: {
-    flex: 4,
+  leagueToggle: {
+    flex: 3,
+    padding: 10,
+    flexDirection: 'column',
+    justifyContent: 'flex-start'
   },
-  basementLogoIcon: {
-    width: '100%',
-    height: '100%'
+  currentLeagueLabel: {
+    backgroundColor: 'transparent',
+    color: 'white',
+    fontFamily: 'Avenir-Black',
+    fontSize: 12,
+    fontWeight: '400',
+  },
+  currentLeagueText: {
+    backgroundColor: 'transparent',
+    color: 'white',
+    fontFamily: 'Avenir-Black',
+    fontSize: 25,
+    fontWeight: '900',
   },
   basementNavColumn: {
     position: 'absolute',

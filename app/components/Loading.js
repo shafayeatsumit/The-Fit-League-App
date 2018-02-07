@@ -10,6 +10,7 @@ import { Actions } from 'react-native-router-flux';
 import LinearGradient from 'react-native-linear-gradient';
 
 import { Session } from '../services/Session'
+import { SessionStore } from '../services/SessionStore'
 import { LeagueJoiner } from '../services/LeagueJoiner'
 
 export default class Loading extends Component {
@@ -20,6 +21,8 @@ export default class Loading extends Component {
 
   componentWillMount() {
     Session.check((token) => {
+      // CAN REMOVE WHEN WE RIP OUT Session.js
+      SessionStore.save({ token })
       Actions.home({ token })
     }, () => {
       Actions.welcome({})

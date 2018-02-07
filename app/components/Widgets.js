@@ -8,6 +8,8 @@ import {
 } from 'react-native';
 
 import { HttpUtils } from '../services/HttpUtils'
+import { SessionStore } from '../services/SessionStore'
+
 import Widget from './Widget'
 import Chatterbox from './Chatterbox'
 
@@ -15,16 +17,25 @@ export default class Widgets extends Component {
   
   constructor(props) {
     super(props);
+    this.getWidgetsByUrl = this.getWidgetsByUrl.bind(this)
     this.state = { widgets: [{ attributes: { loading: true }}, { attributes: { loading: true }}] };
   }
 
-  componentDidMount() {
-    HttpUtils.get('widgets', this.props.token)
+  getWidgetsByUrl(url) {
+    HttpUtils.get(url, this.props.token)
       .then((responseData) => {
         this.setState({ widgets: responseData.data })
       }).catch((err) => {
         this.setState({ widgets: [] })
-      }).done()
+      }).done() 
+  }
+
+  componentDidMount() {
+    SessionStore.getLeagueId((leagueId) => {
+      this.getWidgetsByUrl('leagues/' +  leagueId.toString() + '/widgets')
+    }, () => {
+      this.getWidgetsByUrl('widgets')
+    })
   }
 
   render() {

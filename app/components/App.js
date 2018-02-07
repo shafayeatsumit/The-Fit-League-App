@@ -7,6 +7,7 @@ import GameRules from './GameRules';
 import Home from './Home';
 import Matchup from './Matchup';
 import League from './League';
+import Leagues from './Leagues';
 import Workouts from './Workouts';
 import PlayerCard from './PlayerCard';
 import NewWorkoutWhen from './NewWorkoutWhen';
@@ -83,6 +84,11 @@ const App = () => {
           key="sadConnection"
           component={SadConnection}
           title="Slow Interwebz"
+        />
+        <Scene
+          key="leagues"
+          component={Leagues}
+          title="Your Leagues"
         />
       </Scene>
     </Router>

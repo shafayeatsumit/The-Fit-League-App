@@ -21,6 +21,7 @@ import { AppEventsLogger } from 'react-native-fbsdk'
 import { Actions } from 'react-native-router-flux'
 
 import { HttpUtils } from '../services/HttpUtils'
+import { SessionStore } from '../services/SessionStore'
 
 import HamburgerBasement from './HamburgerBasement'
 import PlayerHeader from './PlayerHeader'
@@ -88,8 +89,11 @@ export default class PlayerCard extends Component {
 
   logOut() {
     AppEventsLogger.logEvent('Logged Out')
+    // Can delete when we rip out Session.js
     AsyncStorage.removeItem('auth_token').then(() => {
-      Actions.welcome({})
+      AsyncStorage.removeItem(SessionStore.key).then(() => {
+        Actions.welcome({})
+      })
     })
   }
 

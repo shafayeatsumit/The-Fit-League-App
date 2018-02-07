@@ -17,19 +17,21 @@ import { AppEventsLogger } from 'react-native-fbsdk'
 import { Actions } from 'react-native-router-flux'
 
 import { HttpUtils } from '../services/HttpUtils'
+import { SessionStore } from '../services/SessionStore'
 import { LeagueSharer } from '../services/LeagueSharer'
 
 import HamburgerBasement from './HamburgerBasement'
 import OtherHeader from './OtherHeader'
 
-export default class Workouts extends Component {
+export default class League extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.getMembers = this.getMembers.bind(this)
     this.toggleDetails = this.toggleDetails.bind(this)
     this.copyInviteUrl = this.copyInviteUrl.bind(this)
     this.viewPlayer = this.viewPlayer.bind(this)
-    this.state = { loading: true, viewingDetails: false, columns: {}, inviteUrl: null };
+    this.getMembersByUrl = this.getMembersByUrl.bind(this)
+    this.state = { loading: true, viewingDetails: false, columns: {}, inviteUrl: null }
   }
 
   componentDidMount() {
@@ -52,8 +54,8 @@ export default class Workouts extends Component {
     LeagueSharer.call(this.state.inviteUrl, this.state.leagueName, 'League Details')
   }
 
-  getMembers() {
-    HttpUtils.get('standings', this.props.token)
+  getMembersByUrl(url) {
+    HttpUtils.get(url, this.props.token)
       .then((responseData) => {
         this.setState({
           columns: responseData.meta.columns,
@@ -65,6 +67,14 @@ export default class Workouts extends Component {
       }).catch((err) => {
         this.setState({ loading: false, columns: [], users: [] })
       }).done()
+  }
+
+  getMembers() {
+    SessionStore.getLeagueId((leagueId) => {
+      this.getMembersByUrl('standings/' + leagueId.toString())
+    }, () => {
+      this.getMembersByUrl('standings')
+    }) 
   }
 
   render() {

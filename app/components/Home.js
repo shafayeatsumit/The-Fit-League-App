@@ -15,6 +15,7 @@ import { Actions } from 'react-native-router-flux'
 
 import { HttpUtils } from '../services/HttpUtils'
 import { Pusher } from '../services/Pusher'
+import { SessionStore } from '../services/SessionStore'
 
 import Widgets from './Widgets'
 import HomeHeader from './HomeHeader'
@@ -63,7 +64,8 @@ export default class Home extends Component {
   loadProfile() {
     HttpUtils.get('profile', this.props.token)
       .then((responseData) => {
-        let { name, image_url } = responseData.data.attributes;
+        let { name, image_url } = responseData.data.attributes
+        SessionStore.save({ imageUrl: image_url })
         this.setState({ name, image_url })
       }).catch((err) => {
       }).done()

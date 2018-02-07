@@ -19,6 +19,7 @@ import { AppEventsLogger } from 'react-native-fbsdk';
 
 import { HttpUtils } from '../services/HttpUtils'
 import { Session } from '../services/Session'
+import { SessionStore } from '../services/SessionStore'
 import { LeagueJoiner } from '../services/LeagueJoiner'
 
 const badge = require('../../assets/images/badge.png')
@@ -54,10 +55,11 @@ export default class Welcome extends Component {
             AppEventsLogger.logEvent('Joined League On Registration')
           }
           HttpUtils.post('login', params).then((responseData) => {
-            let { token } = responseData.data.attributes
+            let { token, image_url } = responseData.data.attributes
             AppEventsLogger.logEvent('Logged in with Facebook')
-            Session.save(token);
-            Actions.home({ token });
+            SessionStore.save({ token, imageUrl: image_url, leagueId: responseData.meta.league_id })
+            Session.save(token)
+            Actions.home({ token })
           }).catch((error) => {
             AlertIOS.alert("Sorry! Login failed.", error.message)
             AppEventsLogger.logEvent('Failed to log in with Facebook', { message: error.message })

@@ -1,3 +1,4 @@
+// DEPRECATED in favor of SessionStore in 1.5 (1.90)
 import { AsyncStorage } from 'react-native';
 
 const TOKEN_STORAGE_KEY = 'auth_token';
