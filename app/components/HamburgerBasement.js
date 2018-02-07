@@ -133,7 +133,7 @@ export default class HamburgerBasement extends Component {
         <Image
           style={styles.basementBackgroundImage}
           source={basementBackground} />
-        <TouchableHighlight onPress={() => Actions.leagues({ viewRules: this.viewRules, setLeagueLinks: this.setLeagueLinks })} underlayColor='rgba(255, 255, 255, 0.25)'>
+        <TouchableHighlight onPress={() => Actions.leagues({ setLeagueLinks: this.setLeagueLinks })} underlayColor='rgba(255, 255, 255, 0.25)'>
           <View style={styles.basementIconRow}>
             <View style={styles.basementBadge}>
               <Image
