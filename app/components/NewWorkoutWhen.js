@@ -47,7 +47,7 @@ import LinearGradient from 'react-native-linear-gradient';
 export default class NewWorkoutWhen extends Component {
   constructor(props) {
     super(props)
-    this.state = { date: new Date() }
+    this.state = { date: (props.workout ? new Date(props.workout.attributes.occurred_at) : new Date()) }
     this.onDateChange = this.onDateChange.bind(this)
     this.pickTimeAndroid = this.pickTimeAndroid.bind(this)
     this.pickDateAndroid = this.pickDateAndroid.bind(this)

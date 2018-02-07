@@ -16,6 +16,7 @@ import {
 } from 'react-native';
 
 import { AppEventsLogger } from 'react-native-fbsdk'
+import { Actions } from 'react-native-router-flux'
 
 import { HttpUtils } from '../services/HttpUtils'
 import DynamicIcon from './DynamicIcon'
@@ -24,9 +25,10 @@ import HamburgerBasement from './HamburgerBasement'
 import OtherHeader from './OtherHeader'
 import StatRow from './StatRow'
 
-const lastWeek = require('../../assets/images/lastWeek.png');
-const nextWeek = require('../../assets/images/nextWeek.png');
-const trash = require('../../assets/images/trash.png');
+const lastWeek = require('../../assets/images/lastWeek.png')
+const nextWeek = require('../../assets/images/nextWeek.png')
+const trash = require('../../assets/images/trash.png')
+const edit = require('../../assets/images/edit.png')
 
 export default class Workouts extends Component {
   constructor(props) {
@@ -36,6 +38,7 @@ export default class Workouts extends Component {
     this.toNextWeek = this.toNextWeek.bind(this)
     this.actuallyDelete = this.actuallyDelete.bind(this)
     this.confirmDelete = this.confirmDelete.bind(this)
+    this.editWorkout = this.editWorkout.bind(this)
     this.state = { loading: true }
   }
 
@@ -99,6 +102,17 @@ export default class Workouts extends Component {
       })
   }
 
+  editWorkout(workout) {
+    this.setState({ loading: true })
+    HttpUtils.get('workouts/' + workout.id.toString(), this.props.token).then((responseData) => {
+      // Hack to make this frankenstein endpoint quack more like REST
+      let { attributes } = responseData.data
+      let workoutKind = { id: attributes.workout_kind.id, attributes: attributes.workout_kind }
+      let specificExercises = attributes.specific_exercises
+      Actions.newWorkoutHowMany({ workout, workoutKind, specificExercises, token: this.props.token })
+    })
+  }
+
 
   render() {
     return (
@@ -133,9 +147,14 @@ export default class Workouts extends Component {
                         <View style={styles.workoutDateRow}>
                           <Text style={styles.workoutDay}>{workout.attributes.occurred_day}</Text>
                           <Text style={styles.workoutDate}>{workout.attributes.occurred_date}</Text>
-                          <TouchableHighlight style={styles.workoutTrash} onPress={this.confirmDelete(workout.id)} underlayColor='transparent'>
-                            <Image source={trash} />
-                          </TouchableHighlight>
+                          <View style={styles.workoutActions}>
+                            <TouchableHighlight style={styles.workoutEdit} onPress={() => this.editWorkout(workout)} underlayColor='transparent'>
+                              <Image source={edit} />
+                            </TouchableHighlight>
+                            <TouchableHighlight style={styles.workoutTrash} onPress={this.confirmDelete(workout.id)} underlayColor='transparent'>
+                              <Image source={trash} />
+                            </TouchableHighlight>
+                          </View>
                         </View>
                         <View style={styles.workoutKindRow}>
                           <DynamicIcon 
@@ -228,8 +247,14 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     fontWeight: '400'
   },
-  workoutTrash: {
+  workoutActions: {
     marginLeft: 'auto',
+    flexDirection: 'row'
+  },
+  workoutEdit: {
+    marginRight: 15
+  },
+  workoutTrash: {
     marginRight: 30
   },
   workoutKindRow: {

@@ -14,6 +14,7 @@ import NewWorkoutWhen from './NewWorkoutWhen';
 import NewWorkoutWhat from './NewWorkoutWhat';
 import NewWorkoutHowMany from './NewWorkoutHowMany';
 import NewWorkoutSuccess from './NewWorkoutSuccess';
+import EditWorkoutSuccess from './EditWorkoutSuccess';
 import SadConnection from './SadConnection'
 
 const App = () => {
@@ -54,6 +55,11 @@ const App = () => {
           key="newWorkoutSuccess"
           component={NewWorkoutSuccess}
           title="Yasss! You did it."
+        />
+        <Scene
+          key="editWorkoutSuccess"
+          component={EditWorkoutSuccess}
+          title="Workout Updated"
         />
         <Scene
           key="matchup"

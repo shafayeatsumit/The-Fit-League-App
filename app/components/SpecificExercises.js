@@ -138,7 +138,7 @@ export default class SpecificExercises extends Component {
                   key={key + index.toString()}
                   keyboardType={schema[key].kind == 'Integer' ? 'numeric' : 'default'}
                   style={StyleSheet.flatten([styles.input, { flex: schema[key].width }])}
-                  value={this.state.specificExercises[index][key]}
+                  value={this.state.specificExercises[index][key] ? this.state.specificExercises[index][key].toString() : ''}
                   onChangeText={this.onChange(index, key)}
                 />
               }) }

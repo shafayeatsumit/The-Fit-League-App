@@ -28,13 +28,17 @@ import SpecificExercises from './SpecificExercises'
 export default class NewWorkoutHowMany extends Component {
   constructor(props) {
     super(props)
+    let { workout, specificExercises } = props
+    specificExercises = specificExercises || []
+    let kind = specificExercises.length > 0 ? 'detailed' : 'basic'
+    let quantity = workout.attributes && workout.attributes.quantity ? workout.attributes.quantity : undefined
     this.state = {
+      kind,
       loading: false,
-      kind: 'basic',
       canGoDetailed: props.workoutKind.attributes.has_specific_exercises,
       workoutSchema: { quantity: t.Number },
-      workoutValues: {},
-      specificWorkouts: { totalQuantity: 0 },
+      workoutValues: { quantity },
+      specificWorkouts: { totalQuantity: quantity || 0, specificExercises },
       options: {
         fields: {
           quantity: {
@@ -168,7 +172,7 @@ export default class NewWorkoutHowMany extends Component {
             </View>
           }
         </LinearGradient>
-        <BottomNavBar forward={this.forward} hideForward={!quantity} />
+        <BottomNavBar hideBack={this.props.workout.id} forward={this.forward} hideForward={!quantity} />
       </KeyboardAvoidingView>
     );
   }
