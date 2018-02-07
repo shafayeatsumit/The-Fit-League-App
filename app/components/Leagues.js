@@ -70,7 +70,7 @@ export default class Leagues extends Component {
           <ScrollView>
           { this.state.leagues.map((league, i) => {
             let currentLeague = league.id == this.state.currentLeagueId
-            return <TouchableHighlight onPress={() => this.chooseLeague(league)} key={i}>
+            return <TouchableHighlight onPress={() => this.chooseLeague(league)} key={i} underlayColor='transparent'>
               <View style={styles.leagueRow}>
                 <Text style={StyleSheet.flatten([styles.leagueName, currentLeague ? styles.leagueNameBold : styles.leagueNameLight])}>
                   {league.attributes.name}

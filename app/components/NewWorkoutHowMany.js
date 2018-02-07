@@ -39,7 +39,7 @@ export default class NewWorkoutHowMany extends Component {
         fields: {
           quantity: {
             auto: 'none',
-            placeholder: '# of ' + this.props.workoutKind.attributes.unit + 's',
+            placeholder: '# of total ' + this.props.workoutKind.attributes.unit + 's',
             placeholderTextColor: 'white',
             selectionColor: 'white'
           }

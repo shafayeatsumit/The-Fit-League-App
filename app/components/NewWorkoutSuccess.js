@@ -23,7 +23,7 @@ const contributionLabels = {
   days_worked_out: 'DAYS',
   cardio_points: 'CARDIO',
   strength_points: 'SETS',
-  diversity_points: 'DIVERSITY'
+  diversity_points: 'VARIETY'
 }
 
 export default class NewWorkoutSuccess extends Component {
