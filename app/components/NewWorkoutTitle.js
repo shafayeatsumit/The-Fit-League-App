@@ -28,8 +28,8 @@ export default class NewWorkoutTitle extends Component {
       <View style={styles.titleContainer}>
         <View style={styles.centeringPlaceholder}></View>
         <Text style={styles.titleText}>{ this.props.text }</Text>
-        <TouchableHighlight style={styles.exButton} onPress={this.exit} underlayColor='transparent'>
-          <Image source={exButton} />
+        <TouchableHighlight style={styles.exButtonContainer} onPress={this.exit} underlayColor='transparent'>
+          <Image style={styles.exButton} source={exButton} />
         </TouchableHighlight>
       </View>
     )
@@ -38,14 +38,14 @@ export default class NewWorkoutTitle extends Component {
 
 const styles = StyleSheet.create({
   titleContainer: {
-    height: 72,
+    height: 44,
     backgroundColor: 'transparent',
     flexDirection: 'row',
     alignItems: 'center',
     paddingTop: 20
   },
   centeringPlaceholder: {
-    width: 52,
+    width: 44,
     justifyContent: 'flex-start'
   },
   titleText: {
@@ -53,12 +53,15 @@ const styles = StyleSheet.create({
     fontSize: 12,
     flex: 1,
     textAlign: 'center',
-    fontWeight: '900',
     justifyContent: 'center'
   },
-  exButton: {
-    width: 52,
+  exButtonContainer: {
     paddingRight: 20,
-    justifyContent: 'flex-end'
+    paddingTop: 20,
+    justifyContent: 'flex-end',
+  },
+  exButton: {
+    width: 24,
+    height: 24
   }
 })

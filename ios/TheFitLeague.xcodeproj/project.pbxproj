@@ -5,7 +5,6 @@
 	};
 	objectVersion = 46;
 	objects = {
-
 /* Begin PBXBuildFile section */
 		00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302AC1ABCB8CE00DB3ED1 /* libRCTActionSheet.a */; };
 		00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302BA1ABCB90400DB3ED1 /* libRCTGeolocation.a */; };
@@ -50,6 +49,7 @@
 		B9251EA8AB6E43C890A7F840 /* branch.json in Resources */ = {isa = PBXBuildFile; fileRef = D4774AC8F59540D481A141E2 /* branch.json */; };
 		C7EF9732871D4D119B8F6344 /* Avenir-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 97EE793C86F943179FECD8A0 /* Avenir-Black.ttf */; };
 		E065AEB42AD34DA48BD5E921 /* libRNSentry.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F7F522F5AD64E159B5EDB32 /* libRNSentry.a */; };
+		6D941CF4542947F1B0AD0FC6 /* Avenir-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 60512CD63A254ED7BFE7BD4C /* Avenir-Light.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -351,6 +351,7 @@
 		AC03F7A81CBC4DA7A32653EB /* libBVLinearGradient.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libBVLinearGradient.a; sourceTree = "<group>"; };
 		D4774AC8F59540D481A141E2 /* branch.json */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = branch.json; path = ../branch.json; sourceTree = "<group>"; };
 		DBCC3825746B43F493201D96 /* BVLinearGradient.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = BVLinearGradient.xcodeproj; path = "../node_modules/react-native-linear-gradient/BVLinearGradient.xcodeproj"; sourceTree = "<group>"; };
+		60512CD63A254ED7BFE7BD4C /* Avenir-Light.ttf */ = {isa = PBXFileReference; name = "Avenir-Light.ttf"; path = "../assets/fonts/Avenir-Light.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -672,8 +673,17 @@
 				23F28B371F8AF40200321972 /* splash.png */,
 				97EE793C86F943179FECD8A0 /* Avenir-Black.ttf */,
 				1CAE2F6B0C9844699CA4A5F8 /* Toronto-Gothic.ttf */,
+				60512CD63A254ED7BFE7BD4C /* Avenir-Light.ttf */,
 			);
 			name = Resources;
+			sourceTree = "<group>";
+		};
+		C8175F2C0A3D4BA7AA4362FC /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			path = Application;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1137,6 +1147,7 @@
 				C7EF9732871D4D119B8F6344 /* Avenir-Black.ttf in Resources */,
 				5CA90C7F4EFA44E0AA23BBC7 /* Toronto-Gothic.ttf in Resources */,
 				B9251EA8AB6E43C890A7F840 /* branch.json in Resources */,
+				6D941CF4542947F1B0AD0FC6 /* Avenir-Light.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

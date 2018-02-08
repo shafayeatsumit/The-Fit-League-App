@@ -18,6 +18,7 @@ import { SessionStore } from '../services/SessionStore'
 
 import NoLeagueModal from './NoLeagueModal'
 
+const exButton = require('../../assets/images/exButton.png')
 const background = require('../../assets/images/basementBackground.png')
 const check = require('../../assets/images/check.png')
 
@@ -65,6 +66,11 @@ export default class Leagues extends Component {
         <Image
           style={styles.backgroundImage}
           source={background} />
+        <TouchableHighlight style={styles.exButtonHolder} underlayColor='transparent' onPress={Actions.pop}>
+          <Image
+            style={styles.exButton}
+            source={exButton} />
+        </TouchableHighlight>
         <Text style={styles.header}>Your Leagues</Text>
         <View style={styles.leagueList}>
           <ScrollView>
@@ -100,10 +106,13 @@ const styles = StyleSheet.create({
     color: 'white',
     fontFamily: 'Avenir-Black',
     fontSize: 24,
-    fontWeight: '900',
-    margin: 50,
     marginBottom: 0,
     textAlign: 'center'
+  },
+  exButtonHolder: {
+    alignSelf: 'flex-end',
+    paddingTop: 40,
+    paddingRight: 20
   },
   backgroundImage: {
     backgroundColor: '#0E2442',
@@ -116,7 +125,7 @@ const styles = StyleSheet.create({
   },
   leagueRow: {
     height: 50,
-    marginTop: 40,
+    marginTop: 30,
     borderBottomWidth: 1,
     borderBottomColor: 'white',
     flexDirection: 'row',
@@ -126,16 +135,14 @@ const styles = StyleSheet.create({
   leagueName: {
     backgroundColor: 'transparent',
     color: 'white',
-    fontFamily: 'Avenir-Black',
     fontSize: 20,
-    fontWeight: '400',
     alignSelf: 'center'
   },
   leagueNameBold: {
-    fontWeight: '900',
+    fontFamily: 'Avenir-Black',
   },
   leagueNameLight: {
-    fontWeight: '400',
+    fontFamily: 'Avenir-Light',
   },
   check: {
     height: 25,
@@ -155,7 +162,6 @@ const styles = StyleSheet.create({
   },
   createLeagueText: {
     fontFamily: 'Avenir-Black',
-    fontWeight: '900',
     color: 'white',
     textAlign: 'center',
     fontSize: 18

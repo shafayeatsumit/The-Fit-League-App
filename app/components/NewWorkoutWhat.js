@@ -19,15 +19,11 @@ Form.stylesheet.controlLabel.normal.color = 'white';
 Form.stylesheet.controlLabel.error.color = 'white';
 Form.stylesheet.controlLabel.normal.fontFamily = 'Avenir-Black';
 Form.stylesheet.controlLabel.error.fontFamily = 'Avenir-Black';
-Form.stylesheet.controlLabel.normal.fontWeight = '900';
-Form.stylesheet.controlLabel.error.fontWeight = '900';
 
 Form.stylesheet.textbox.normal.fontSize = 14;
 Form.stylesheet.textbox.error.fontSize = 14;
-Form.stylesheet.textbox.normal.fontFamily = 'Avenir';
-Form.stylesheet.textbox.error.fontFamily = 'Avenir';
-Form.stylesheet.textbox.normal.fontWeight = '300';
-Form.stylesheet.textbox.error.fontWeight = '300';
+Form.stylesheet.textbox.normal.fontFamily = 'Avenir-Light';
+Form.stylesheet.textbox.error.fontFamily = 'Avenir-Light';
 Form.stylesheet.textbox.normal.borderWidth = 1;
 Form.stylesheet.textbox.error.borderWidth = 1;
 Form.stylesheet.textbox.normal.borderRadius = 0;

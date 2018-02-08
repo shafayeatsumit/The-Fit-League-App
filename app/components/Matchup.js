@@ -176,11 +176,10 @@ const styles = StyleSheet.create({
     padding: 20
   },
   dateText: {
-    fontFamily: 'Avenir-Black',
+    fontFamily: 'Avenir-Light',
     color: '#818D9C',
     fontSize: 16,
     backgroundColor: 'transparent',
-    fontWeight: '400'
   },
   contestLabel: {
     flexDirection: 'column',
@@ -191,7 +190,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: 'center',
     backgroundColor: 'transparent',
-    fontWeight: '900'
   },
   noMatchupFound: {
     textAlign: 'center',
@@ -257,7 +255,6 @@ const styles = StyleSheet.create({
   matchupStat: {
     fontFamily: 'Avenir-Black',
     backgroundColor: 'transparent',
-    fontWeight: '900',
     color: '#0E2442',
     fontSize: 22    
   }

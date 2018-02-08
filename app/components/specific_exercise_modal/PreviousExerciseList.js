@@ -41,8 +41,7 @@ const styles = StyleSheet.create({
   header: {
     textAlign: 'center',
     backgroundColor: 'transparent',
-    fontFamily: 'Avenir-Black',
-    fontWeight: '400',
+    fontFamily: 'Avenir-Light',
     color: 'black',
     fontSize: 16,
     padding: 20,
@@ -55,8 +54,7 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 14,
     backgroundColor: 'transparent',
-    fontFamily: 'Avenir',
-    fontWeight: '300',
+    fontFamily: 'Avenir-Light',
     color: 'black',
     padding: 10,
     paddingLeft: 20

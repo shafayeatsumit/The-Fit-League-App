@@ -6,7 +6,8 @@ import {
   Text,
   TextInput,
   TouchableHighlight,
-  Keyboard
+  Keyboard,
+  Platform
 } from 'react-native';
 
 import PreviousExerciseList from './PreviousExerciseList'
@@ -28,7 +29,8 @@ export default class DetailStep extends Component {
   }
 
   componentWillMount () {
-    this.keyboardDidShowListener = Keyboard.addListener('keyboardWillShow', this.keyboardDidShow);
+    let showEv = Platform.OS === 'android' ? 'keyboardDidShow' : 'keyboardWillShow'
+    this.keyboardDidShowListener = Keyboard.addListener(showEv, this.keyboardDidShow);
     this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this.keyboardDidHide);
   }
 
@@ -135,7 +137,7 @@ const styles = StyleSheet.create({
   schemaRow: {
     flexDirection: 'row',
     flex: 1,
-    padding: 20,
+    padding: 10,
     justifyContent: 'center',
     alignItems: 'center'
   },
@@ -143,24 +145,21 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     borderColor: '#508CD8',
     borderWidth: 2,
-    borderRightWidth: 0,
     fontSize: 15,
     padding: 10,
     height: 40,
-    width: 100,
-    fontFamily: 'Avenir',
-    fontWeight: '300',
+    width: 120,
+    fontFamily: 'Avenir-Light',
     color: 'black',
     alignSelf: 'center',
     justifyContent: 'center'
   },
   labelText: {
     backgroundColor: 'transparent',
-    fontFamily: 'Avenir',
-    fontWeight: '300',
+    fontFamily: 'Avenir-Light',
     color: 'black',
-    width: 100,
-    fontSize: 18,
+    width: 120,
+    fontSize: 15,
     marginLeft: 10,
     justifyContent: 'center',
     alignItems: 'center',
@@ -179,7 +178,6 @@ const styles = StyleSheet.create({
   },
   saveButtonText: {
     fontFamily: 'Avenir-Black',
-    fontWeight: '900',
     color: 'white',
     textAlign: 'center',
     fontSize: 18

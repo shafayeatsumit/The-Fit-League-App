@@ -200,11 +200,10 @@ const styles = StyleSheet.create({
     padding: 20
   },
   dateText: {
-    fontFamily: 'Avenir-Black',
+    fontFamily: 'Avenir-Light',
     color: '#818D9C',
     fontSize: 16,
     backgroundColor: 'transparent',
-    fontWeight: '400'
   },
   statRow: {
     flex: 2,
@@ -233,19 +232,17 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   workoutDay: {
-    fontFamily: 'Avenir-Black',
+    fontFamily: 'Avenir-Light',
     color: '#AAAABA',
     fontSize: 20,
     backgroundColor: 'transparent',
-    fontWeight: '400',
     paddingRight: 10
   },
   workoutDate: {
-    fontFamily: 'Avenir-Black',
+    fontFamily: 'Avenir-Light',
     color: '#4F4F6F',
     fontSize: 20,
-    backgroundColor: 'transparent',
-    fontWeight: '400'
+    backgroundColor: 'transparent'
   },
   workoutActions: {
     marginLeft: 'auto',
@@ -277,15 +274,13 @@ const styles = StyleSheet.create({
     color: '#4F4F6F',
     fontSize: 16,
     backgroundColor: 'transparent',
-    fontWeight: '900',
     paddingLeft: 10
   },
   workoutUnit: {
-    fontFamily: 'Avenir-Black',
+    fontFamily: 'Avenir-Light',
     color: '#4F4F6F',
     fontSize: 12,
     backgroundColor: 'transparent',
-    fontWeight: '400',
     marginLeft: 'auto',
     marginRight: 30
   }

@@ -89,8 +89,7 @@ const styles = StyleSheet.create({
   newExerciseLabelText: {
     fontSize: 16,
     backgroundColor: 'transparent',
-    fontFamily: 'Avenir',
-    fontWeight: '900',
+    fontFamily: 'Avenir-Black',
     color: '#508CD8'
   },
   exerciseLabel: {
@@ -100,8 +99,7 @@ const styles = StyleSheet.create({
   exerciseLabelText: {
     fontSize: 16,
     backgroundColor: 'transparent',
-    fontFamily: 'Avenir',
-    fontWeight: '300',
+    fontFamily: 'Avenir-Light',
     color: '#508CD8'
   },
   exerciseDropdown: {

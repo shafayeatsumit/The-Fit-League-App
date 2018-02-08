@@ -72,7 +72,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     textAlign: 'right',
     fontFamily: 'Avenir-Black',
-    fontWeight: '900',
     paddingRight: 20
   }
 })

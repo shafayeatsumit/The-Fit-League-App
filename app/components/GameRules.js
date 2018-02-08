@@ -69,15 +69,13 @@ const styles = StyleSheet.create({
   header: {
     fontFamily: 'Avenir-Black',
     backgroundColor: 'transparent',
-    fontWeight: '900',
     color: '#1DD65B',
     fontSize: 26,
     margin: 10
   },
   paragraph: {
-    fontFamily: 'Avenir-Black',
+    fontFamily: 'Avenir-Light',
     backgroundColor: 'transparent',
-    fontWeight: '400',
     color: '#0E2442',
     fontSize: 16,
     margin: 10

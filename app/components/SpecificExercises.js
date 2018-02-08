@@ -183,8 +183,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     color: 'white',
     fontSize: 12,
-    fontFamily: 'Avenir-Black',
-    fontWeight: '900'    
+    fontFamily: 'Avenir-Black'    
   },
   spacer: {
     height: 130
@@ -223,8 +222,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     padding: 10,
     textAlign: 'left',
-    fontFamily: 'Avenir-Black',
-    fontWeight: '400'
+    fontFamily: 'Avenir-Light'
   },
   workoutQuantity: {
     backgroundColor: 'transparent',
@@ -233,13 +231,11 @@ const styles = StyleSheet.create({
     fontSize: 14,
     padding: 10,
     textAlign: 'right',
-    fontFamily: 'Avenir-Black',
-    fontWeight: '400'
+    fontFamily: 'Avenir-Light'
   },
   input: {
     fontSize: 14,
-    fontFamily: 'Avenir',
-    fontWeight: '300',
+    fontFamily: 'Avenir-Light',
     borderWidth: 1,
     borderRadius: 0,
     height: 50,
@@ -258,8 +254,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 24,
     textAlign: 'center',
-    fontFamily: 'Avenir-Black',
-    fontWeight: '900'
+    fontFamily: 'Avenir-Black'
   },
   newExerciseRow: {
     flexDirection: 'row',
@@ -272,7 +267,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     backgroundColor: 'transparent',
     fontFamily: 'Avenir-Black',
-    fontWeight: '900',
     color: 'white',
     fontSize: 18,
   },

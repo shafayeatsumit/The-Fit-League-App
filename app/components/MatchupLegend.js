@@ -54,14 +54,12 @@ const styles = StyleSheet.create({
   statLegend: {
     fontFamily: 'Avenir-Black',
     backgroundColor: 'transparent',
-    fontWeight: '900',
     color: '#0E2442',
     fontSize: 12
   },
   statLegendSubtitle: {
     fontFamily: 'Avenir-Black',
     backgroundColor: 'transparent',
-    fontWeight: '900',
     color: '#0E2442',
     fontSize: 10
   }

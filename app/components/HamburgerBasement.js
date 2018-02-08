@@ -133,8 +133,8 @@ export default class HamburgerBasement extends Component {
         <Image
           style={styles.basementBackgroundImage}
           source={basementBackground} />
-        <TouchableHighlight onPress={() => Actions.leagues({ setLeagueLinks: this.setLeagueLinks })} underlayColor='rgba(255, 255, 255, 0.25)'>
-          <View style={styles.basementIconRow}>
+        <TouchableHighlight style={styles.leagueToggleRow} onPress={() => Actions.leagues({ setLeagueLinks: this.setLeagueLinks })} underlayColor='rgba(255, 255, 255, 0.25)'>
+          <View style={styles.iconRow}>
             <View style={styles.basementBadge}>
               <Image
                 style={styles.basementBadgeIcon}
@@ -193,11 +193,14 @@ const styles = StyleSheet.create({
     height: '100%',
     justifyContent: 'center',
   },
-  basementIconRow: {
+  leagueToggleRow: {
     height: 140,
     width: '100%',
-    position: 'absolute',
+    top: 0,
     flex: 1,
+    position: 'absolute',
+  },
+  iconRow: {
     flexDirection: 'row',
     padding: 30
   },
@@ -218,16 +221,14 @@ const styles = StyleSheet.create({
   currentLeagueLabel: {
     backgroundColor: 'transparent',
     color: 'white',
-    fontFamily: 'Avenir-Black',
+    fontFamily: 'Avenir-Light',
     fontSize: 12,
-    fontWeight: '400',
   },
   currentLeagueText: {
     backgroundColor: 'transparent',
     color: 'white',
     fontFamily: 'Avenir-Black',
     fontSize: 25,
-    fontWeight: '900',
   },
   basementNavColumn: {
     position: 'absolute',
@@ -238,8 +239,8 @@ const styles = StyleSheet.create({
     top: 140
   },
   basementNavLink: {
-    padding: 15,
-    marginBottom: 30,
+    padding: 10,
+    marginBottom: 20,
     borderRadius: 10,
   },
   basementNavLinkText: {
@@ -247,6 +248,5 @@ const styles = StyleSheet.create({
     color: 'white',
     fontFamily: 'Avenir-Black',
     fontSize: 16,
-    fontWeight: '900',
   }
 })

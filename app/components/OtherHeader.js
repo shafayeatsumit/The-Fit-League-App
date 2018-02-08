@@ -90,7 +90,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Avenir-Black',
     color: '#0E2442',
     fontSize: 20,
-    backgroundColor: 'transparent',
-    fontWeight: '900'
+    backgroundColor: 'transparent'
   }
 })

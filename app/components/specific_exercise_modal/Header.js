@@ -33,7 +33,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     backgroundColor: 'transparent',
     fontFamily: 'Avenir-Black',
-    fontWeight: '900',
     color: 'black',
     fontSize: 18,
     flex: 1,
@@ -41,8 +40,7 @@ const styles = StyleSheet.create({
   subheader: {
     textAlign: 'center',
     backgroundColor: 'transparent',
-    fontFamily: 'Avenir-Black',
-    fontWeight: '400',
+    fontFamily: 'Avenir-Light',
     color: 'black',
     fontSize: 14,
     flex: 1,

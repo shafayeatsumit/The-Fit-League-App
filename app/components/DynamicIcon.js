@@ -93,10 +93,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   text: {
-    fontFamily: 'Avenir-Black',
+    fontFamily: 'Avenir-Light',
     textAlign: 'center',
     backgroundColor: 'transparent',
-    fontWeight: '400'
   },
   darkText: {
     color: '#0E2442',

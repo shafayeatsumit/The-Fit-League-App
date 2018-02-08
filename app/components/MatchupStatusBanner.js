@@ -47,7 +47,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Avenir-Black',
     fontSize: 12,
     backgroundColor: 'transparent',
-    fontWeight: '900',
     padding: 10
   }
 })

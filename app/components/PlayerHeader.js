@@ -12,6 +12,7 @@ import LinearGradient from 'react-native-linear-gradient';
 
 import { Actions } from 'react-native-router-flux'
 
+const exButton = require('../../assets/images/exButton.png')
 const hamburger = require('../../assets/images/hamburger.png')
 
 export default class PlayerHeader extends Component {
@@ -22,9 +23,12 @@ export default class PlayerHeader extends Component {
           start={{x: 0, y: 1}} end={{x: 1, y: 0}}
           colors={['#2857ED', '#1DD65B']}
           style={styles.headerContainer}>
-          <View style={styles.topBar}>     
+          <View style={styles.topBar}>
             <TouchableHighlight style={styles.hamburgerButton} onPress={this.context.toggleBasement} underlayColor='transparent'>
               <Image style={styles.hamburgerButtonIcon} source={hamburger} />
+            </TouchableHighlight>
+            <TouchableHighlight style={styles.exButtonHolder} underlayColor='transparent' onPress={Actions.pop}>
+              <Image style={styles.exButton} source={exButton} />
             </TouchableHighlight>
           </View>
         </LinearGradient>
@@ -51,13 +55,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     height: 30
   },
-  topBarSpacer: {
-    flex: 8,
-  },
   hamburgerButton: {
     flex: 1,
     paddingTop: 10,
     paddingLeft: 20,
     paddingRight: 20,
+    alignSelf: 'flex-start'
+  },
+  exButtonHolder: {
+    flex: 1,
+    paddingTop: 15,
+    paddingRight: 10,
+    alignSelf: 'flex-end',
+    alignItems: 'flex-end'
   },
 })

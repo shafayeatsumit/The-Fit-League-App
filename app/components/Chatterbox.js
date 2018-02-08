@@ -127,7 +127,7 @@ export default class Chatterbox extends Component {
           animationType='slide'
           presentationStyle='fullScreen'
           visible={this.state.modalVisible}
-          onRequestClose={this.hideModal} >
+          onRequestClose={this.hideModal}>
           { this.state.modalVisible &&
             <View style={styles.modal}>
               <View style={styles.modalHeaderHolder}>
@@ -308,24 +308,21 @@ const styles = StyleSheet.create({
     fontFamily: 'Avenir-Black',
     color: '#0E2442',
     backgroundColor: 'transparent',
-    textAlign: 'center',
-    fontWeight: '900'
+    textAlign: 'center'
   },
   chatterLabel: {
     fontSize: 14,
-    fontFamily: 'Avenir-Black',
+    fontFamily: 'Avenir-Light',
     color: '#8691A0',
     backgroundColor: 'transparent',
-    textAlign: 'center',
-    fontWeight: '400'
+    textAlign: 'center'
   },
   chatterQuantity: {
     fontSize: 11,
-    fontFamily: 'Avenir-Black',
+    fontFamily: 'Avenir-Light',
     color: '#8691A0',
     backgroundColor: 'transparent',
-    textAlign: 'center',
-    fontWeight: '400'
+    textAlign: 'center'
   },
   modal: {
     flex: 1,
@@ -339,7 +336,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     backgroundColor: 'transparent',
     fontFamily: 'Avenir-Black',
-    fontWeight: '900',
     color: 'black',
     fontSize: 18,
     padding: 20,
@@ -358,7 +354,6 @@ const styles = StyleSheet.create({
   },
   modalNevermindText: {
     fontFamily: 'Avenir-Black',
-    fontWeight: '900',
     color: 'white',
     textAlign: 'center',
     fontSize: 18
@@ -383,8 +378,7 @@ const styles = StyleSheet.create({
   },
   actionLabel: {
     paddingTop: 20,
-    fontFamily: 'Avenir-Black',
-    fontWeight: '400',
+    fontFamily: 'Avenir-Light',
     color: '#8691A0',
     textAlign: 'center',
     fontSize: 12
@@ -398,6 +392,5 @@ const styles = StyleSheet.create({
     color: '#508CD8',
     backgroundColor: 'transparent',
     textAlign: 'center',
-    fontWeight: '900'
   }
 })

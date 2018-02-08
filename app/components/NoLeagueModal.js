@@ -40,7 +40,12 @@ export default class NoLeagueModal extends Component {
     this.newLeague = this.newLeague.bind(this)
     this.getStarted = this.getStarted.bind(this)
     this.copyShareableLink = this.copyShareableLink.bind(this)
+    this.noop = this.noop.bind(this)
     this.state = { creatingLeague: false, leagueName: '', newLeague: false, loading: false, allowedToProceed: false  }
+  }
+
+  noop() {
+    // According to Android onRequestClose is a required attribute on Modal
   }
 
   newLeague() {
@@ -156,6 +161,7 @@ export default class NoLeagueModal extends Component {
       <Modal
         animationType='slide'
         presentationStyle='fullScreen'
+        onRequestClose={this.noop}
         visible={this.props.show }>
         { this.props.show &&
           <View style={styles.container}>
@@ -215,8 +221,7 @@ const styles = StyleSheet.create({
   explanationText: {
     textAlign: 'center',
     backgroundColor: 'transparent',
-    fontFamily: 'Avenir-Black',
-    fontWeight: '400',
+    fontFamily: 'Avenir-Light',
     color: 'white',
     fontSize: 14,
     paddingRight: 10,
@@ -226,15 +231,13 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     backgroundColor: 'transparent',
     fontFamily: 'Avenir-Black',
-    fontWeight: '900',
     color: '#2857ED',
     fontSize: 14
   },
   finalStepText: {
     textAlign: 'center',
     backgroundColor: 'transparent',
-    fontFamily: 'Avenir-Black',
-    fontWeight: '400',
+    fontFamily: 'Avenir-Light',
     color: 'white',
     fontSize: 14,
     paddingRight: 10,
@@ -244,8 +247,7 @@ const styles = StyleSheet.create({
   biggerExplanationText: {
     textAlign: 'center',
     backgroundColor: 'transparent',
-    fontFamily: 'Avenir-Black',
-    fontWeight: '400',
+    fontFamily: 'Avenir-Light',
     color: 'white',
     fontSize: 18,
     paddingRight: 10,
@@ -255,7 +257,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     backgroundColor: 'transparent',
     fontFamily: 'Avenir-Black',
-    fontWeight: '900',
     color: 'white',
     fontSize: 58,
     paddingRight: 20,
@@ -266,14 +267,12 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     backgroundColor: 'transparent',
     fontFamily: 'Avenir-Black',
-    fontWeight: '900',
     color: 'white',
     fontSize: 18
   },
   leagueNameInput: {
     fontSize: 30,
-    fontFamily: 'Avenir',
-    fontWeight: '300',
+    fontFamily: 'Avenir-Light',
     borderWidth: 1,
     borderRadius: 0,
     height: 80,
@@ -295,8 +294,7 @@ const styles = StyleSheet.create({
   },
   shareableLink: {
     fontSize: 14,
-    fontFamily: 'Avenir',
-    fontWeight: '300',
+    fontFamily: 'Avenir-Light',
     color: 'white',
   },
   backToDash: {

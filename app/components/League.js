@@ -112,9 +112,11 @@ export default class League extends Component {
                       </View>
                       <View style={styles.nameColumn}>
                         <TouchableHighlight onPress={() => this.viewPlayer(user)} underlayColor='transparent'>
-                          <Image style={styles.userImage} source={{ uri: user.attributes.image_url }} />
+                          <View style={styles.playerBtn}>
+                            <Image style={styles.userImage} source={{ uri: user.attributes.image_url }} />
+                            <Text style={styles.dataLabel}>{ user.attributes.name.split(' ').map((s) => s[0]).join('') }</Text>
+                          </View>
                         </TouchableHighlight>
-                        <Text style={styles.dataLabel}>{ user.attributes.name.split(' ').map((s) => s[0]).join('') }</Text>
                       </View>
                       { columns.map((column) => {
                         return <View key={['user', index, column.key].join('-')} style={styles.dataColumn}>
@@ -168,9 +170,8 @@ const styles = StyleSheet.create({
     padding: 5
   }, 
   viewDetailsText: {
-    fontFamily: 'Avenir-Black',
+    fontFamily: 'Avenir-Light',
     backgroundColor: 'transparent',
-    fontWeight: '400',
     color: '#508CD8',
     fontSize: 12
   },
@@ -190,7 +191,6 @@ const styles = StyleSheet.create({
   headerLabel: {
     fontFamily: 'Avenir-Black',
     backgroundColor: 'transparent',
-    fontWeight: '900',
     color: '#0E2442',
     fontSize: 12
   },
@@ -205,7 +205,6 @@ const styles = StyleSheet.create({
     marginLeft: 15,
     fontFamily: 'Avenir-Black',
     backgroundColor: 'transparent',
-    fontWeight: '900',
     color: '#0E2442',
     fontSize: 12
   },
@@ -219,7 +218,6 @@ const styles = StyleSheet.create({
   dataLabel: {
     fontFamily: 'Avenir-Black',
     backgroundColor: 'transparent',
-    fontWeight: '900',
     color: '#0E2442',
     fontSize: 12
   },
@@ -231,12 +229,16 @@ const styles = StyleSheet.create({
   },
   nameColumn: {
     flex: 2,
-    alignItems: 'center',
-    justifyContent: 'flex-start',
     borderRightColor: '#D5D7DC',
     borderRightWidth: 1,
     flexDirection: 'row',
-    overflow: 'hidden'
+  },
+  playerBtn: {
+    flexDirection: 'row',
+    flex: 1,
+    overflow: 'hidden',
+    justifyContent: 'flex-start',    
+    alignItems: 'center',
   },
   userImage: {
     height: 30,
@@ -262,16 +264,14 @@ const styles = StyleSheet.create({
     padding: 20
   },
   inviteUrlText: {
-    fontFamily: 'Avenir-Black',
+    fontFamily: 'Avenir-Light',
     backgroundColor: 'transparent',
-    fontWeight: '400',
     color: '#0E2442',
     fontSize: 12
   },
   inviteUrlLink: {
     fontFamily: 'Avenir-Black',
     backgroundColor: 'transparent',
-    fontWeight: '900',
     color: '#508CD8',
     fontSize: 14
   }

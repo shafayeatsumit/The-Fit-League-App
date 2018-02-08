@@ -57,8 +57,7 @@ const styles = StyleSheet.create({
     padding: 10,
     paddingTop: 10,
     height: 40,
-    fontFamily: 'Avenir',
-    fontWeight: '300',
+    fontFamily: 'Avenir-Light',
     color: 'black',
   },
   saveButton: {
@@ -70,7 +69,6 @@ const styles = StyleSheet.create({
   },
   saveButtonText: {
     fontFamily: 'Avenir-Black',
-    fontWeight: '900',
     color: 'white',
     textAlign: 'center',
     fontSize: 18

@@ -219,7 +219,6 @@ const styles = StyleSheet.create({
     color: '#0E2442',
     fontSize: 20,
     backgroundColor: 'transparent',
-    fontWeight: '900',
     padding: 20,
     marginTop: 55
   },
@@ -258,8 +257,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     padding: 10,
     paddingTop: 10,
-    fontFamily: 'Avenir',
-    fontWeight: '300',
+    fontFamily: 'Avenir-Light',
     color: '#0E2442',
     textAlign: 'center'
   },
@@ -275,15 +273,13 @@ const styles = StyleSheet.create({
   },
   updateBioText: {
     fontFamily: 'Avenir-Black',
-    fontWeight: '900',
     color: 'white',
     textAlign: 'center',
     fontSize: 18
   },
   bio: {
     width: 300,
-    fontFamily: 'Avenir',
-    fontWeight: '300',
+    fontFamily: 'Avenir-Light',
     color: '#0E2442',
     textAlign: 'center',
     fontSize: 15  
@@ -293,7 +289,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     textDecorationLine: 'underline',
     textDecorationColor: '#508CD8',
-    fontWeight: '900',
     color: '#508CD8',
     fontSize: 14
   },
@@ -309,7 +304,6 @@ const styles = StyleSheet.create({
   dangerZoneHeaderText: {
     fontFamily: 'Avenir-Black',
     backgroundColor: 'transparent',
-    fontWeight: '900',
     color: '#0E2442',
     fontSize: 14,
     paddingTop: 30
@@ -327,9 +321,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   dangerActionText: {
-    fontFamily: 'Avenir-Black',
+    fontFamily: 'Avenir-Light',
     backgroundColor: 'transparent',
-    fontWeight: '400',
     color: '#0E2442',
     fontSize: 14,
     padding: 5
@@ -341,9 +334,8 @@ const styles = StyleSheet.create({
     borderColor: '#E9005A',
   },
   dangerButtonText: {
-    fontFamily: 'Avenir-Black',
+    fontFamily: 'Avenir-Light',
     backgroundColor: 'transparent',
-    fontWeight: '400',
     color: '#E9005A',
     fontSize: 10,
     textAlign: 'center',

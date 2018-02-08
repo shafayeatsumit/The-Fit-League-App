@@ -80,6 +80,8 @@ const miniStyles = StyleSheet.create({
 
 const defaultStyles = StyleSheet.create({
   statRow: {
+    flex: 2,
+    alignItems: 'center',
     paddingTop: 0
   },
   statLabelText: {

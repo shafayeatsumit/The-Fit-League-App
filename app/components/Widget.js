@@ -146,11 +146,10 @@ const styles = StyleSheet.create({
   },
   widgetText: {
     fontSize: 14,
-    fontFamily: 'Avenir-Black',
+    fontFamily: 'Avenir-Light',
     color: '#8691A0',
     backgroundColor: 'transparent',
     textAlign: 'center',
-    fontWeight: '400'
   },
   widgetImageHolder: {
     flexDirection: 'row',
@@ -185,7 +184,6 @@ const styles = StyleSheet.create({
     color: '#0A2645',
     backgroundColor: 'transparent',
     textAlign: 'center',
-    fontWeight: '900',
     paddingTop: 10,
     paddingBottom: 10
   },
@@ -194,8 +192,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Avenir-Black',
     color: '#0A2645',
     backgroundColor: 'transparent',
-    textAlign: 'center',
-    fontWeight: '900'
+    textAlign: 'center'
   },
   nextWorkoutArrowImage: {
     maxWidth: '100%',
@@ -216,7 +213,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Avenir-Black',
     color: 'white',
     backgroundColor: 'transparent',
-    textAlign: 'center',
-    fontWeight: '900'  
+    textAlign: 'center'  
   }
 })

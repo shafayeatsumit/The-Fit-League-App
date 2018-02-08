@@ -7,8 +7,7 @@ import {
   Image,
   Modal,
   TouchableHighlight,
-  Keyboard,
-  Dimensions,
+  Platform,
   KeyboardAvoidingView
 } from 'react-native';
 
@@ -48,13 +47,14 @@ export default class NewSpecificExerciseModal extends Component {
   render() {
     const { label, definingNewLabel } = this.state
     const pickingLabel = !(label || definingNewLabel)
+    const hidingBehavior = Platform.OS === 'android' ? 'height' : 'padding'
     return (
       <Modal
         animationType='fade'
         transparent={true}
         visible={this.props.visible}
         onRequestClose={this.hide}>
-        <KeyboardAvoidingView behavior="padding" style={styles.background}>
+        <KeyboardAvoidingView behavior={hidingBehavior} style={styles.background}>
           <View style={styles.container}>
             <Header
               header={label ? label : "Add a specific exercise"}
@@ -112,7 +112,6 @@ const styles = StyleSheet.create({
   },
   saveButtonText: {
     fontFamily: 'Avenir-Black',
-    fontWeight: '900',
     color: 'white',
     textAlign: 'center',
     fontSize: 18

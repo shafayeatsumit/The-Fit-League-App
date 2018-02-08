@@ -29,11 +29,16 @@ const contributionLabels = {
 export default class NewWorkoutSuccess extends Component {
   constructor(props) {
     super(props)
-    this.home = this.home.bind(this);
+    this.home = this.home.bind(this)
+    this.workouts = this.workouts.bind(this)
   }
 
   home() {
-    Actions.home({ token: this.props.token });
+    Actions.home({ token: this.props.token })
+  }
+
+  workouts() {
+    Actions.workouts({ token: this.props.token })
   }
 
   render() {
@@ -78,7 +83,10 @@ export default class NewWorkoutSuccess extends Component {
                   })
                 }
               </View>
-              <Text style={styles.howDoIEdit}>Go to Your Workouts to view or edit this workout.</Text>
+              <Text style={styles.howDoIEditQuestion}>Need to edit or delete?</Text>
+              <TouchableHighlight onPress={this.workouts} underlayColor='transparent'>
+                <Text style={styles.howDoIEdit}>Go to Your Workouts</Text>
+              </TouchableHighlight>
             </View>
           }
         </LinearGradient>
@@ -130,8 +138,7 @@ const styles = StyleSheet.create({
     fontSize: 30,
     padding: 10,
     textAlign: 'center',
-    fontFamily: 'Avenir-Black',
-    fontWeight: '900'
+    fontFamily: 'Avenir-Black'
   },
   statsWillUpdate: {
     backgroundColor: 'transparent',
@@ -140,8 +147,7 @@ const styles = StyleSheet.create({
     paddingTop: 5,
     paddingBottom: 30,
     textAlign: 'center',
-    fontFamily: 'Avenir-Black',
-    fontWeight: '900'
+    fontFamily: 'Avenir-Black'
   },
   bottomBar: {
     flex: 1,
@@ -171,8 +177,7 @@ const styles = StyleSheet.create({
     padding: 10,
     paddingTop: 20,
     textAlign: 'center',
-    fontFamily: 'Avenir-Black',
-    fontWeight: '900'
+    fontFamily: 'Avenir-Black'
   },
   youAdded: {
     fontSize: 12,
@@ -180,17 +185,25 @@ const styles = StyleSheet.create({
     color: 'white',
     padding: 10,
     textAlign: 'center',
+    fontFamily: 'Avenir-Black'
+  },
+  howDoIEditQuestion: {
+    backgroundColor: 'transparent',
+    color: 'rgba(255, 255, 255, 0.6)',
+    fontSize: 16,
+    padding: 10,
+    paddingBottom: 0,
+    textAlign: 'center',
     fontFamily: 'Avenir-Black',
-    fontWeight: '900'
   },
   howDoIEdit: {
     backgroundColor: 'transparent',
     color: 'rgba(255, 255, 255, 0.6)',
-    fontSize: 12,
+    fontSize: 16,
     padding: 10,
+    paddingTop: 0,
     textAlign: 'center',
-    fontFamily: 'Avenir-Black',
-    fontWeight: '400'
+    fontFamily: 'Avenir-Light',
   },
   statRow: {
     flex: 1, 
@@ -207,7 +220,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     color: 'rgba(255, 255, 255, 0.5)',
     fontFamily: 'Avenir-Black',
-    fontWeight: '900',
     paddingTop: 10,
     fontSize: 12
   },
@@ -215,7 +227,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     color: 'white',
     fontFamily: 'Avenir-Black',
-    fontWeight: '900',
     fontSize: 30
   },
   statCircle: {
@@ -232,8 +243,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 14,
     textAlign: 'right',
-    fontFamily: 'Avenir-Black',
-    fontWeight: '900'
+    fontFamily: 'Avenir-Black'
   },
   backToHomeHolder: {
     padding: 20

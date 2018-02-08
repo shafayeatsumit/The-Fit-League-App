@@ -215,8 +215,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 14,
     textAlign: 'center',
-    fontFamily: 'Avenir-Black',
-    fontWeight: '400'
+    fontFamily: 'Avenir-Light',
   },
   basicVsDetailedTextColumn: {
     flexDirection: 'column',
@@ -230,8 +229,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 10,
     textAlign: 'center',
-    fontFamily: 'Avenir-Black',
-    fontWeight: '400',
+    fontFamily: 'Avenir-Light',
     marginLeft: 5
   },
   formContainer: {
@@ -266,8 +264,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 24,
     textAlign: 'center',
-    fontFamily: 'Avenir-Black',
-    fontWeight: '900'
+    fontFamily: 'Avenir-Black'
   },
   workoutLabel: {
     paddingTop: 10
@@ -282,7 +279,6 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 12,
     textAlign: 'center',
-    fontFamily: 'Avenir-Black',
-    fontWeight: '400'
+    fontFamily: 'Avenir-Light',
   }
 });

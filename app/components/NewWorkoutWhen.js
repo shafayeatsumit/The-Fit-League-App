@@ -71,7 +71,6 @@ export default class NewWorkoutWhen extends Component {
 
   componentDidMount() {
     this.getWorkoutKinds()
-    if (Platform.OS === 'android') this.pickDateAndroid()
   }
 
   async pickTimeAndroid(date) {
@@ -187,10 +186,17 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     flex: 10
   },
+  pickDateButton: {
+    margin: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#508CD8',
+    height: 60
+  },
   pickDateText: {
     backgroundColor: 'transparent',
     textAlign: 'center',
-    color: '#2857ED',
+    color: 'white',
     fontFamily: 'Avenir-Black',
     fontSize: 24,
   }
