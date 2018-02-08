@@ -58,11 +58,11 @@ export default class Leagues extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <NoLeagueModal 
+        { this.state.creatingLeague && this.state.token && <NoLeagueModal 
           show={this.state.creatingLeague}
           viewRules={this.goToRules} 
           callback={this.chooseLeague} 
-          token={this.state.token} />
+          token={this.state.token} /> }
         <Image
           style={styles.backgroundImage}
           source={background} />

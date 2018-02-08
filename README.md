@@ -43,16 +43,32 @@ If you get an error about no connected devices, and `adb devices` returns nothin
 Some instructions here: https://facebook.github.io/react-native/docs/signed-apk-android.html
 
     ./clean-before-build.sh
+    npm install
     cd android && ./gradlew assembleRelease
     cd .. && react-native run-android --variant=release
 
 If you have trouble building, go into Android Studio and look for build errors. They may take you to a `build.gradle` file. Make sure that those build files have values that match the `compileSdkVersion` `buildToolsVersion` and `targetSdkVersion` of the main build file: `build.gradle (Module: app)`
+
+`buildToolsVersion` 26.0.1 (paired with `compileSdkVersion` 26) often fixes issues. You may have to apply it to `node_modules/react-native-fbsdk/android/build.gradle` as well.
 
 If you get an error like
 
     com.android.builder.testing.api.DeviceException: com.android.ddmlib.InstallException: Failed to finalize session : INSTALL_FAILED_DUPLICATE_PERMISSION: Package com.thefitleague attempting to redeclare permission com.thefitleague.permission.C2D_MESSAGE already owned by com.thefitleague
 
 You may have to uninstall the app from your phone and try again.
+
+Before deploying to the store, bump the version code in `AndroidManifest.xml`:
+
+```
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.thefitleague"
+    android:versionCode="2"
+    android:versionName="1.1">
+```
+
+and bump versionCode and versionName in the `build.gradle`
+
+Build with `react-native run-android --variant=release`
 
 Once you have built, upload `android/app/build/outputs/apk/app-release.apk` to the app store!
 
