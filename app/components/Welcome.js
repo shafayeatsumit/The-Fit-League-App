@@ -7,8 +7,10 @@ import {
   Text,
   View,
   Image,
+  TextInput,
   ActivityIndicator,
   StatusBar,
+  TouchableHighlight,
   AlertIOS
 } from 'react-native';
 
@@ -35,8 +37,9 @@ const {
 export default class Welcome extends Component {
   constructor(props) {
     super(props);
-    this.state = { loading: false };
-    this.save = this.save.bind(this);
+    this.state = { loading: false, useFacebook: true }
+    this.facebookSave = this.facebookSave.bind(this)
+    this.emailSave = this.emailSave.bind(this)
   }
 
   componentDidMount() {
@@ -44,7 +47,7 @@ export default class Welcome extends Component {
     AppEventsLogger.logEvent('Saw Facebook Login');
   }
 
-  save() {
+  facebookSave() {
     this.setState({ loading: true });
     AccessToken.getCurrentAccessToken().then(
       (data) => {
@@ -63,11 +66,33 @@ export default class Welcome extends Component {
           }).catch((error) => {
             AlertIOS.alert("Sorry! Login failed.", error.message)
             AppEventsLogger.logEvent('Failed to log in with Facebook', { message: error.message })
-            this.setState({ loading: false, hideButton: false })
+            this.setState({ loading: false })
           }).done();          
         })
       }
     )
+  }
+
+  emailSave() {
+    this.setState({ loading: true });
+    LeagueJoiner.getSlug((slug) => {
+      let params = this.state
+      if (slug) {
+        params.league_slug = slug
+        AppEventsLogger.logEvent('Joined League On Email Registration')
+      }
+      HttpUtils.post('email_login', params).then((responseData) => {
+        let { token, image_url } = responseData.data.attributes
+        AppEventsLogger.logEvent('Logged in with Email')
+        SessionStore.save({ token, imageUrl: image_url, leagueId: responseData.meta.league_id })
+        Session.save(token)
+        Actions.home({ token })
+      }).catch((error) => {
+        AlertIOS.alert("Sorry! Login failed.", error.message)
+        AppEventsLogger.logEvent('Failed to log in with Email', { message: error.message })
+        this.setState({ loading: false })
+      }).done();          
+    })
   }
 
   render() {
@@ -84,22 +109,43 @@ export default class Welcome extends Component {
         </View>
         { !this.state.loading &&
           <View style={styles.loginButtonHolder}>
-            <LoginButton
-              style={styles.loginButton}
-              readPermissions={['public_profile', 'email']}
-              onLoginFinished={
-                (error, result) => {
-                  if (error) {
-                    Sentry.captureException(error)
-                    alert('Sorry! Login failed.')
-                  } else if (result.isCancelled) {
-                    alert('Login was cancelled')
-                  } else {
-                    this.save()
+            { this.state.useFacebook ?
+              <LoginButton
+                style={styles.loginButton}
+                readPermissions={['public_profile', 'email']}
+                onLoginFinished={
+                  (error, result) => {
+                    if (error) {
+                      Sentry.captureException(error)
+                      alert('Sorry! Login failed.')
+                    } else if (result.isCancelled) {
+                      alert('Login was cancelled')
+                    } else {
+                      this.facebookSave()
+                    }
                   }
                 }
-              }
-              onLogoutFinished={() => alert("Now you're completely logged out!")}/>
+                onLogoutFinished={() => alert("Now you're completely logged out!")}/>
+              :
+              <View style={styles.loginColumn}>
+                <Text style={styles.label}>Email</Text>
+                <TextInput
+                  style={styles.input}
+                  value={this.state.email}
+                  onChangeText={(email) => this.setState({ email })}
+                />
+                <Text style={styles.label}>Password</Text>
+                <TextInput
+                  style={styles.input}
+                  value={this.state.password}
+                  secureTextEntry={true}
+                  onChangeText={(password) => this.setState({ password })}
+                />
+                <TouchableHighlight style={styles.emailRegBtn} onPress={this.emailSave} underlayColor='transparent'>
+                  <Text style={styles.emailRegText}>Sign Up or Log In</Text>
+                </TouchableHighlight>
+              </View>
+            }
           </View>
         }
         <View style={styles.textHolder}>
@@ -110,6 +156,9 @@ export default class Welcome extends Component {
             for you and your crew.
           </Text>
         </View>
+        <TouchableHighlight style={styles.noFacebook} onPress={() => this.setState({ useFacebook: !this.state.useFacebook })} underlayColor='transparent'>
+          <Text style={styles.noFacebookText}>{ this.state.useFacebook ? 'Not on Facebook?' : 'Have a Facebook?'}</Text>
+        </TouchableHighlight>
       </LinearGradient>
     );
   }
@@ -123,15 +172,17 @@ const styles = StyleSheet.create({
     flexDirection: 'column'
   },
   badgeHolder: {
-    flex: 1,
-    justifyContent: 'center'
+    flex: 2,
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   badge: {
     width: 100
   },
   logoHolder: {
     flex: 1,
-    justifyContent: 'center'
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   logo: {
     width: 300
@@ -141,13 +192,65 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   text: {
+    fontSize: 18,
+    fontFamily: 'Avenir-Light',
+    color: 'white',
+    backgroundColor: 'transparent',
+    textAlign: 'center'
+  },
+  loginColumn: {
+    flexDirection: 'column',
+    flex: 1,
+    width: '80%',
+  },
+  label: {
+    fontSize: 14,
+    fontFamily: 'Avenir-Black',
+    color: 'white',
+    backgroundColor: 'transparent',
+  },
+  input: {
+    fontSize: 22,
+    fontFamily: 'Avenir-Light',
+    borderWidth: 1,
+    borderRadius: 0,
+    height: 50,
+    padding: 14,
+    width: 300,
+    backgroundColor: 'rgba(255, 255, 255, 0.10)',
+    borderColor: 'rgba(255, 255, 255, 0.25)',
+    color: 'white',
+    marginBottom: 10,
+  },
+  loginButtonHolder: {
+    flex: 3,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  noFacebook: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  noFacebookText: {
     fontSize: 14,
     fontFamily: 'Avenir-Black',
     color: 'white',
     backgroundColor: 'transparent',
     textAlign: 'center'
   },
-  loginButtonHolder: {
-    flex: 1
+  emailRegBtn: {
+    backgroundColor: '#2857ED',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 15,
+    marginTop: 10,
   },
+  emailRegText: {
+    fontSize: 16,
+    fontFamily: 'Avenir-Black',
+    color: 'white',
+    backgroundColor: 'transparent',
+    textAlign: 'center'
+  }
 });
