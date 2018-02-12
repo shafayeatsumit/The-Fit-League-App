@@ -104,8 +104,10 @@ export default class Workouts extends Component {
 
   editWorkout(workout) {
     this.setState({ loading: true })
+    // This loading should be moved to NewWorkoutHowMany
     HttpUtils.get('workouts/' + workout.id.toString(), this.props.token).then((responseData) => {
       // Hack to make this frankenstein endpoint quack more like REST
+      this.setState({ loading: false })
       let { attributes } = responseData.data
       let workoutKind = { id: attributes.workout_kind.id, attributes: attributes.workout_kind }
       let specificExercises = attributes.specific_exercises

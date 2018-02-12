@@ -22,8 +22,12 @@ export default class Widget extends Component {
   }
 
   takeAction() {
-    let { action_key, userAttributes } = this.props
-    if (action_key) Actions[action_key](userAttributes)
+    let { action_key, player, userAttributes } = this.props
+    if (action_key) {
+      Actions[action_key](userAttributes)
+    } else if (player) {
+      Actions.playerCard({ player, image_url: userAttributes.image_url, token: userAttributes.token })
+    }
   }
 
   render() {

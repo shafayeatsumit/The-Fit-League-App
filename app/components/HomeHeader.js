@@ -74,7 +74,7 @@ HomeHeader.contextTypes = {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 30,
+    paddingTop: 35,
     flexDirection: 'column'
   },
   topBar: {

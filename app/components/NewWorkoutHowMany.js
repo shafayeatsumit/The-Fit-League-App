@@ -119,7 +119,7 @@ export default class NewWorkoutHowMany extends Component {
           start={{x: 0, y: 1}} end={{x: 1, y: 0}}
           colors={['#2857ED', '#1DD65B']}
           style={styles.backgroundGradient}>
-          <NewWorkoutTitle token={this.props.token} text='Log a workout' />
+          <NewWorkoutTitle token={this.props.token} backTo={this.props.workout.id ? 'workouts' : 'home'} text='Log a workout' />
           { this.state.loading ?
             <ActivityIndicator size="large" style={styles.activityIndicator} color="rgba(255, 255, 255, 0.8)" />
           :

@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 
 import { AppEventsLogger } from 'react-native-fbsdk'
+import { Actions } from 'react-native-router-flux'
 
 const _ = require('lodash')
 
@@ -32,6 +33,7 @@ export default class Workouts extends Component {
     this.toLastWeek = this.toLastWeek.bind(this)
     this.toNextWeek = this.toNextWeek.bind(this)
     this.getContestByUrl = this.getContestByUrl.bind(this)
+    this.viewPlayer = this.viewPlayer.bind(this)
     this.state = { loading: true };
   }
 
@@ -77,6 +79,10 @@ export default class Workouts extends Component {
     })
   }
 
+  viewPlayer(player) {
+    Actions.playerCard({ player, image_url: this.props.image_url, token: this.props.token })
+  }
+
   render() {
     const teams = this.state.matchup ? Object.values(_.groupBy(this.state.matchup.participants, 'team')) : []
     return (
@@ -113,7 +119,10 @@ export default class Workouts extends Component {
                       <View style={styles.matchupImageRow}>
                         { teams.map((team, index) => {
                             return <View key={index} style={styles.matchupColumn}>
-                              { team.map((m, i) => <Image style={i > 0 ? styles.participantImageRight : styles.participantImage} key={m.id} source={{uri: m.image_url}} />) }
+                              { team.map((m, i) => <TouchableHighlight key={m.id} onPress={() => this.viewPlayer(m)} underlayColor='transparent'>
+                                  <Image style={i > 0 ? styles.participantImageRight : styles.participantImage} source={{uri: m.image_url}} />
+                                </TouchableHighlight>) 
+                              }
                             </View>
                           })
                         }
@@ -232,15 +241,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row'
   },
   participantImage: {
-    borderColor: 'white',
-    borderWidth: 3,
+    borderColor: '#D5D7DC',
+    borderWidth: 2,
     borderRadius: 25,
     width: 50,
     height: 50
   },
   participantImageRight: {
-    borderColor: 'white',
-    borderWidth: 3,
+    borderColor: '#D5D7DC',
+    borderWidth: 2,
     marginLeft: -15,
     borderRadius: 25,
     width: 50,

@@ -196,7 +196,7 @@ const styles = StyleSheet.create({
   leagueToggleRow: {
     height: 140,
     width: '100%',
-    top: 0,
+    top: 15,
     flex: 1,
     position: 'absolute',
   },

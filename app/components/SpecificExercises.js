@@ -151,7 +151,6 @@ export default class SpecificExercises extends Component {
             })
           }
           <View>
-          { pastExercises.length > 0 &&
             <TouchableHighlight onPress={this.newExercisesModal} underlayColor='transparent'>
               <View style={styles.newExerciseRow}>
                 <View style={styles.newExerciseButton}>
@@ -160,7 +159,6 @@ export default class SpecificExercises extends Component {
                 <Text style={styles.newExerciseLink}>Add a specific exercise</Text>
               </View>
             </TouchableHighlight>
-          }
           </View>
           <View style={styles.spacer}></View>
         </ScrollView>

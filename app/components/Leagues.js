@@ -6,7 +6,8 @@ import {
   View,
   Image,
   TouchableHighlight,
-  Text
+  Text,
+  ActivityIndicator
 } from 'react-native';
 
 import { AppEventsLogger } from 'react-native-fbsdk'
@@ -27,14 +28,15 @@ export default class Leagues extends Component {
     super(props)
     this.chooseLeague = this.chooseLeague.bind(this)
     this.goToRules = this.goToRules.bind(this)
-    this.state = { leagues: [], creatingLeague: false }
+    this.state = { loading: true, leagues: [], creatingLeague: false }
   }
 
   componentDidMount() {
     SessionStore.get((session) => {
       let { token, imageUrl } = session
       HttpUtils.get('leagues', token).then((responseData) => {
-        this.setState({ 
+        this.setState({
+          loading: false,
           token, image_url: imageUrl,
           leagues: responseData.data, 
           currentLeagueId: session.leagueId 
@@ -73,19 +75,23 @@ export default class Leagues extends Component {
         </TouchableHighlight>
         <Text style={styles.header}>Your Leagues</Text>
         <View style={styles.leagueList}>
-          <ScrollView>
-          { this.state.leagues.map((league, i) => {
-            let currentLeague = league.id == this.state.currentLeagueId
-            return <TouchableHighlight onPress={() => this.chooseLeague(league)} key={i} underlayColor='transparent'>
-              <View style={styles.leagueRow}>
-                <Text style={StyleSheet.flatten([styles.leagueName, currentLeague ? styles.leagueNameBold : styles.leagueNameLight])}>
-                  {league.attributes.name}
-                </Text>
-                { currentLeague && <Image source={check} style={styles.check} /> }
-              </View>
-            </TouchableHighlight>
-          })}
-          </ScrollView>
+          { this.state.loading ? 
+            <ActivityIndicator color="rgba(255, 255, 255, 0.8)" size="large" />
+          :
+            <ScrollView>
+            { this.state.leagues.map((league, i) => {
+              let currentLeague = league.id == this.state.currentLeagueId
+              return <TouchableHighlight onPress={() => this.chooseLeague(league)} key={i} underlayColor='transparent'>
+                <View style={styles.leagueRow}>
+                  <Text style={StyleSheet.flatten([styles.leagueName, currentLeague ? styles.leagueNameBold : styles.leagueNameLight])}>
+                    {league.attributes.name}
+                  </Text>
+                  { currentLeague && <Image source={check} style={styles.check} /> }
+                </View>
+              </TouchableHighlight>
+            })}
+            </ScrollView>
+          }
         </View>
         <TouchableHighlight style={styles.createLeague} onPress={() => { this.setState({ creatingLeague: true }) } } underlayColor='transparent'>
           <Text style={styles.createLeagueText}>Create a League</Text>
@@ -113,6 +119,10 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
     paddingTop: 40,
     paddingRight: 20
+  },
+  exButton: {
+    height: 24,
+    width: 24
   },
   backgroundImage: {
     backgroundColor: '#0E2442',

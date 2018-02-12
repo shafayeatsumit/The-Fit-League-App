@@ -175,6 +175,7 @@ export default class PlayerCard extends Component {
                 :
                 <View>
                   <Text style={styles.bio}>{this.state.player.bio}</Text>
+                  <Text style={styles.comingSoon}>Player Cards coming soon!</Text>
                 </View>
               }
             </View>
@@ -283,6 +284,13 @@ const styles = StyleSheet.create({
     color: '#0E2442',
     textAlign: 'center',
     fontSize: 15  
+  },
+  comingSoon: {
+    fontFamily: 'Avenir-Light',
+    color: '#8691A0',
+    textAlign: 'center',
+    marginTop: 50,
+    fontSize: 12  
   },
   logOutText: {
     fontFamily: 'Avenir-Black',

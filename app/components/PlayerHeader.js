@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
   },
   headerContainer: {
     flex: 1,
-    paddingTop: 30,
+    paddingTop: 35,
     flexDirection: 'column'
   },
   topBar: {
@@ -65,8 +65,12 @@ const styles = StyleSheet.create({
   exButtonHolder: {
     flex: 1,
     paddingTop: 15,
-    paddingRight: 10,
+    paddingRight: 15,
     alignSelf: 'flex-end',
-    alignItems: 'flex-end'
+    alignItems: 'flex-end',
   },
+  exButton: {
+    width: 24,
+    height: 24
+  }
 })

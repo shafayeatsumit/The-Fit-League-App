@@ -20,7 +20,7 @@ export default class NewWorkoutTitle extends Component {
 
   exit() {
     let { token } = this.props
-    Actions.popTo('home', { token })
+    Actions.popTo((this.props.backTo || 'home'), { token })
   }
 
   render() {
@@ -38,14 +38,14 @@ export default class NewWorkoutTitle extends Component {
 
 const styles = StyleSheet.create({
   titleContainer: {
-    height: 44,
+    height: 70,
     backgroundColor: 'transparent',
     flexDirection: 'row',
     alignItems: 'center',
-    paddingTop: 20
+    paddingTop: 46
   },
   centeringPlaceholder: {
-    width: 44,
+    width: 70,
     justifyContent: 'flex-start'
   },
   titleText: {
@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
   },
   exButtonContainer: {
     paddingRight: 20,
-    paddingTop: 20,
+    paddingTop: 46,
     justifyContent: 'flex-end',
   },
   exButton: {

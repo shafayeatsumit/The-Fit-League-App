@@ -23,7 +23,7 @@ export default class NewSpecificExerciseModal extends Component {
     this.pickNewLabel = this.pickNewLabel.bind(this)
     this.save = this.save.bind(this)
     this.hide = this.hide.bind(this)
-    this.state = { label: null, definingNewLabel: false }
+    this.state = { label: null, definingNewLabel: props.pastExercises.length == 0 }
   }
 
   pickNewLabel(label) {
