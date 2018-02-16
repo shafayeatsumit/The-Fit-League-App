@@ -8,9 +8,7 @@ import {
   Text,
   TouchableHighlight,
   Image
-} from 'react-native';
-
-const Form = t.form.Form;
+} from 'react-native'
 
 import { HttpUtils } from '../services/HttpUtils'
 

@@ -10,8 +10,6 @@ import {
   Image
 } from 'react-native';
 
-const Form = t.form.Form;
-
 import { HttpUtils } from '../services/HttpUtils'
 
 import { Actions } from 'react-native-router-flux'

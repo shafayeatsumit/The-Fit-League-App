@@ -16,6 +16,32 @@ import { AppEventsLogger } from 'react-native-fbsdk'
 
 const Form = t.form.Form;
 
+Form.stylesheet.controlLabel.normal.fontSize = 24;
+Form.stylesheet.controlLabel.error.fontSize = 24;
+Form.stylesheet.controlLabel.normal.color = 'white';
+Form.stylesheet.controlLabel.error.color = 'white';
+Form.stylesheet.controlLabel.normal.fontFamily = 'Avenir-Black';
+Form.stylesheet.controlLabel.error.fontFamily = 'Avenir-Black';
+
+Form.stylesheet.textbox.normal.fontSize = 14;
+Form.stylesheet.textbox.error.fontSize = 14;
+Form.stylesheet.textbox.normal.fontFamily = 'Avenir-Light';
+Form.stylesheet.textbox.error.fontFamily = 'Avenir-Light';
+Form.stylesheet.textbox.normal.borderWidth = 1;
+Form.stylesheet.textbox.error.borderWidth = 1;
+Form.stylesheet.textbox.normal.borderRadius = 0;
+Form.stylesheet.textbox.error.borderRadius = 0;
+Form.stylesheet.textbox.normal.height = 50;
+Form.stylesheet.textbox.error.height = 50;
+Form.stylesheet.textbox.normal.paddingLeft = 15;
+Form.stylesheet.textbox.error.paddingLeft = 15;
+Form.stylesheet.textbox.normal.backgroundColor = 'rgba(255, 255, 255, 0.10)';
+Form.stylesheet.textbox.error.backgroundColor = 'rgba(255, 255, 255, 0.10)';
+Form.stylesheet.textbox.normal.borderColor = 'rgba(255, 255, 255, 0.25)';
+Form.stylesheet.textbox.error.borderColor = 'rgba(255, 255, 255, 0.25)';
+Form.stylesheet.textbox.normal.color = 'white';
+Form.stylesheet.textbox.error.color = 'white';
+
 import DynamicIcon from './DynamicIcon'
 import { Workout } from '../services/Workout'
 

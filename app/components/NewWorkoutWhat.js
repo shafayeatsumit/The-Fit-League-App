@@ -1,57 +1,36 @@
 import React, { Component } from 'react';
 
-import t from 'tcomb-form-native';
-
 import {
   StyleSheet,
   View,
+  ScrollView,
   Text,
+  TextInput,
   TouchableHighlight,
-} from 'react-native';
+  Platform,
+  Keyboard,
+} from 'react-native'
 
 import { AppEventsLogger } from 'react-native-fbsdk'
 
-const Form = t.form.Form;
+import DynamicIcon from './DynamicIcon'
 
-Form.stylesheet.controlLabel.normal.fontSize = 24;
-Form.stylesheet.controlLabel.error.fontSize = 24;
-Form.stylesheet.controlLabel.normal.color = 'white';
-Form.stylesheet.controlLabel.error.color = 'white';
-Form.stylesheet.controlLabel.normal.fontFamily = 'Avenir-Black';
-Form.stylesheet.controlLabel.error.fontFamily = 'Avenir-Black';
-
-Form.stylesheet.textbox.normal.fontSize = 14;
-Form.stylesheet.textbox.error.fontSize = 14;
-Form.stylesheet.textbox.normal.fontFamily = 'Avenir-Light';
-Form.stylesheet.textbox.error.fontFamily = 'Avenir-Light';
-Form.stylesheet.textbox.normal.borderWidth = 1;
-Form.stylesheet.textbox.error.borderWidth = 1;
-Form.stylesheet.textbox.normal.borderRadius = 0;
-Form.stylesheet.textbox.error.borderRadius = 0;
-Form.stylesheet.textbox.normal.height = 50;
-Form.stylesheet.textbox.error.height = 50;
-Form.stylesheet.textbox.normal.paddingLeft = 15;
-Form.stylesheet.textbox.error.paddingLeft = 15;
-Form.stylesheet.textbox.normal.backgroundColor = 'rgba(255, 255, 255, 0.10)';
-Form.stylesheet.textbox.error.backgroundColor = 'rgba(255, 255, 255, 0.10)';
-Form.stylesheet.textbox.normal.borderColor = 'rgba(255, 255, 255, 0.25)';
-Form.stylesheet.textbox.error.borderColor = 'rgba(255, 255, 255, 0.25)';
-Form.stylesheet.textbox.normal.color = 'white';
-Form.stylesheet.textbox.error.color = 'white';
-
-const options = {
-  fields: {
-    text: {
-      label: 'Choose workout type',
-      placeholder: 'Search',
-      placeholderTextColor: 'white',
-      selectionColor: 'white'
-    }
-  }
+const topSixify = (arr) => {
+  return arr
+    .filter((w) => w.attributes.workout_count > 0)
+    .sort((a, b) => {
+      if (a.attributes.workout_count > b.attributes.workout_count) {
+        return -1
+      } else if (b.attributes.workout_count > a.attributes.workout_count) {
+        return 1
+      } else {
+        return 0
+      }
+    })
+    .slice(0, 6)
 }
 
-
-const topSixify = arr => arr.slice(0, 6)
+const alphabetical = (a, b) => a.attributes.label.localeCompare(b.attributes.label)
 
 import BottomNavBar from './BottomNavBar'
 import NewWorkoutTitle from './NewWorkoutTitle'
@@ -60,15 +39,17 @@ import WorkoutKindOptions from './WorkoutKindOptions'
 import { Actions } from 'react-native-router-flux';
 import LinearGradient from 'react-native-linear-gradient';
 
-const Search = t.struct({ text: t.String });
-
 export default class NewWorkoutWhat extends Component {
   constructor(props) {
     super(props)
     this.state = { 
       search: '',
+      showingKeyboard: false,
+      filteredKinds: this.props.workoutKinds,
       topSix: topSixify(this.props.workoutKinds),
     }
+    this.keyboardDidShow = this.keyboardDidShow.bind(this)
+    this.keyboardDidHide = this.keyboardDidHide.bind(this)
     this.forward = this.forward.bind(this)
     this.onChange = this.onChange.bind(this)
   }
@@ -91,16 +72,39 @@ export default class NewWorkoutWhat extends Component {
         thisWeek: this.props.thisWeek });
     }
   }
+
+  componentWillMount () {
+    let showEv = Platform.OS === 'android' ? 'keyboardDidShow' : 'keyboardWillShow'
+    this.keyboardDidShowListener = Keyboard.addListener(showEv, this.keyboardDidShow);
+    this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this.keyboardDidHide);
+  }
+
+  componentWillUnmount () {
+    this.keyboardDidShowListener.remove();
+    this.keyboardDidHideListener.remove();
+  }
+
+  keyboardDidShow () {
+    this.setState({ showingKeyboard: true })
+  }
+
+  keyboardDidHide () {
+    this.setState({ showingKeyboard: false })
+  }
   
   onChange(search) {
-    let topSix = topSixify(this.props.workoutKinds.filter((kind) => {
+    let filteredKinds = this.props.workoutKinds.filter((kind) => {
       let kindLabel = kind.attributes.label.toLowerCase()
       if (kind.attributes.specific_exercise_labels && kind.attributes.specific_exercise_labels.length) {
         kindLabel += kind.attributes.specific_exercise_labels.join(' ').toLowerCase()
       }
-      return kindLabel.indexOf(search.text.toLowerCase()) !== -1
-    }))
-    this.setState({ search, topSix })
+      return kindLabel.indexOf(search.toLowerCase()) !== -1
+    })
+    this.setState({ search, filteredKinds })
+  }
+
+  componentDidMount() {
+    if (this.state.topSix.length == 0) this.refs.search.focus()
   }
 
   render() {
@@ -112,13 +116,35 @@ export default class NewWorkoutWhat extends Component {
           style={styles.backgroundGradient}>
           <NewWorkoutTitle token={this.props.token} text='Log a workout' />
           <View style={styles.formContainer}>
-            <Form
-              ref="form"
-              type={Search}
+            <Text style={styles.header}>Choose workout type</Text>
+            <TextInput
+              ref="search"
+              style={styles.input}
               value={this.state.search}
-              onChange={this.onChange}
-              options={options} />
-            <WorkoutKindOptions kindOptions={this.state.topSix} pickWorkout={this.forward} />
+              tintColor="white"
+              selectionColor="white"
+              onChangeText={this.onChange} />
+            { this.state.showingKeyboard &&
+              <View style={styles.listHolder}>
+                <ScrollView keyboardShouldPersistTaps={'always'}>
+                  { this.state.filteredKinds.sort(alphabetical).map((kind) => {
+                    return <TouchableHighlight key={kind.id} onPress={() => this.forward(kind.id)} underlayColor='transparent'>
+                        <View style={styles.kindRow}>
+                          <DynamicIcon 
+                            label={kind.attributes.label} 
+                            shade={'dark'} 
+                            {...StyleSheet.flatten(styles.workoutIconImage)} />
+                            <Text style={styles.kindRowLabel}>{kind.attributes.label}</Text>
+                        </View>
+                      </TouchableHighlight>
+                    })
+                  }
+                </ScrollView>
+              </View>
+            }
+            { this.state.topSix.length > 0 && !this.state.showingKeyboard &&
+              <WorkoutKindOptions kindOptions={this.state.topSix} pickWorkout={this.forward} />
+            }
           </View>
         </LinearGradient>
         <BottomNavBar hideForward={true} />
@@ -131,6 +157,50 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'column',
     flex: 1,
+  },
+  header: {
+    backgroundColor: 'transparent',
+    textAlign: 'center',
+    color: 'white',
+    fontFamily: 'Avenir-Black',
+    fontSize: 24,
+    marginBottom: 5
+  },
+  input: {
+    fontSize: 14,
+    fontFamily: 'Avenir-Light',
+    borderWidth: 1,
+    borderRadius: 0,
+    height: 50,
+    paddingLeft: 15,
+    backgroundColor: 'rgba(255, 255, 255, 0.10)',
+    borderColor: 'rgba(255, 255, 255, 0.25)',
+    color: 'white',
+  },
+  listHolder: {
+    flex: 2,
+  },
+  kindRow: {
+    padding: 10,
+    backgroundColor: 'white',
+    borderBottomColor: '#C6C6C6',
+    borderBottomWidth: 1,
+    flexDirection: 'row'
+  },
+  kindRowLabel: {
+    backgroundColor: 'transparent',
+    color: 'black',
+    fontFamily: 'Avenir-Light',
+    fontSize: 14,
+    padding: 5,
+    paddingLeft: 10
+  },
+  workoutIconImage: {
+    height: 30,
+    width: 30,
+    borderRadius: 15, 
+    borderWidth: 1,
+    borderColor: '#768DA1'
   },
   backgroundGradient: {
     flex: 5,

@@ -17,6 +17,7 @@ export default class WorkoutKindOptions extends Component {
     let rows = [{ key: 0, start: 0, end: half }, { key: 1, start: half, end: kindOptions.length }]
     return (
       <View style={styles.container}>
+        <Text style={styles.header}>Your top workouts:</Text>
         { rows.map((row) => {
           return <View key={row.key} style={styles.workoutRow}>
             { kindOptions.slice(row.start, row.end).map((kind) => {
@@ -40,7 +41,14 @@ export default class WorkoutKindOptions extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 2,
+  },
+  header: {
+    fontSize: 18,
+    padding: 20,
+    backgroundColor: 'transparent',
+    textAlign: 'center',
+    color: 'white'
   },
   workoutRow: {
     flexDirection: 'row',

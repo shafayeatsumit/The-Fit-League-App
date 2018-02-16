@@ -12,24 +12,26 @@ const ICONS = {
     gradientButtSlap: require('../../assets/images/gradientButtSlap.png'),
   },
   dark: {
-    basketball:    require('../../assets/images/dark/basketball.png'),
-    running:       require('../../assets/images/dark/running.png'),
-    stair_running: require('../../assets/images/dark/running.png'),
-    yoga:          require('../../assets/images/dark/yoga.png'),
-    cycling:       require('../../assets/images/dark/cycling.png'),
-    spin_class:    require('../../assets/images/dark/spin_class.png'),
-    hot_yoga:      require('../../assets/images/dark/hot_yoga.png'),
-    weightlifting: require('../../assets/images/dark/weightlifting.png'),
+    basketball:               require('../../assets/images/dark/basketball.png'),
+    running:                  require('../../assets/images/dark/running.png'),
+    stair_running:            require('../../assets/images/dark/running.png'),
+    yoga:                     require('../../assets/images/dark/yoga.png'),
+    cycling:                  require('../../assets/images/dark/cycling.png'),
+    spin_class:               require('../../assets/images/dark/spin_class.png'),
+    hot_yoga:                 require('../../assets/images/dark/hot_yoga.png'),
+    weightlifting:            require('../../assets/images/dark/weightlifting.png'),
+    lifting_slash_bodyweight: require('../../assets/images/dark/weightlifting.png'),
   },
   light: {
-    basketball:    require('../../assets/images/light/basketball.png'),
-    running:       require('../../assets/images/light/running.png'),
-    stair_running: require('../../assets/images/light/running.png'),
-    yoga:          require('../../assets/images/light/yoga.png'),
-    cycling:       require('../../assets/images/light/cycling.png'),
-    spin_class:    require('../../assets/images/light/spin_class.png'),
-    hot_yoga:      require('../../assets/images/light/hot_yoga.png'),
-    weightlifting: require('../../assets/images/light/weightlifting.png'),
+    basketball:               require('../../assets/images/light/basketball.png'),
+    running:                  require('../../assets/images/light/running.png'),
+    stair_running:            require('../../assets/images/light/running.png'),
+    yoga:                     require('../../assets/images/light/yoga.png'),
+    cycling:                  require('../../assets/images/light/cycling.png'),
+    spin_class:               require('../../assets/images/light/spin_class.png'),
+    hot_yoga:                 require('../../assets/images/light/hot_yoga.png'),
+    weightlifting:            require('../../assets/images/light/weightlifting.png'),
+    lifting_slash_bodyweight: require('../../assets/images/light/weightlifting.png'),
   }
 }
 
@@ -49,7 +51,7 @@ export default class DynamicIcon extends Component {
 
   generateSource(props) {
     let source = Object.assign({}, props)
-    if (source.label) source.filename = source.label.toLowerCase().replace(/ /g, '_');
+    if (source.label) source.filename = source.label.toLowerCase().replace(/\//g, 'slash').replace(/ /g, '_')
     if (source.filename) {
       if (source.shade) {
         return ICONS[source.shade][source.filename]
