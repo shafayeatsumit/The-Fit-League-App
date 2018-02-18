@@ -3,6 +3,7 @@ package com.thefitleague;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.instabug.reactlibrary.RNInstabugReactnativePackage;
 import io.sentry.RNSentryPackage;
 import com.facebook.reactnative.androidsdk.FBSDKPackage;
 import com.facebook.react.ReactNativeHost;
@@ -38,12 +39,15 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       mCallbackManager = new CallbackManager.Factory().create();
       ReactPackage packages[] = new ReactPackage[]{
-              new MainReactPackage(),
-            new RNSentryPackage(MainApplication.this),
-              new FBSDKPackage(mCallbackManager),
-              new LinearGradientPackage(),
-              new RNBranchPackage(),
-              new ReactNativePushNotificationPackage(),
+        new MainReactPackage(),
+        new RNInstabugReactnativePackage.Builder("d37fbbc1d19f15dc1d5e1eead35db67a", MainApplication.this)
+          .setInvocationEvent("shake")
+          .build(),
+        new RNSentryPackage(MainApplication.this),
+        new FBSDKPackage(mCallbackManager),
+        new LinearGradientPackage(),
+        new RNBranchPackage(),
+        new ReactNativePushNotificationPackage(),
       };
       return Arrays.<ReactPackage>asList(packages);
     }

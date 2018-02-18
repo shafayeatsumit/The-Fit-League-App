@@ -14,10 +14,11 @@ import {
   AlertIOS
 } from 'react-native';
 
+import Instabug from 'instabug-reactnative'
+import LinearGradient from 'react-native-linear-gradient'
 import { Sentry } from 'react-native-sentry'
-import { Actions } from 'react-native-router-flux';
-import LinearGradient from 'react-native-linear-gradient';
-import { AppEventsLogger } from 'react-native-fbsdk';
+import { Actions } from 'react-native-router-flux'
+import { AppEventsLogger } from 'react-native-fbsdk'
 
 import { HttpUtils } from '../services/HttpUtils'
 import { Session } from '../services/Session'
@@ -58,7 +59,9 @@ export default class Welcome extends Component {
             AppEventsLogger.logEvent('Joined League On Registration')
           }
           HttpUtils.post('login', params).then((responseData) => {
-            let { token, image_url } = responseData.data.attributes
+            let { token, image_url, email, name } = responseData.data.attributes
+            Instabug.identifyUserWithEmail(email, name)
+            Instabug.setUserAttribute("ID", responseData.data.id)
             AppEventsLogger.logEvent('Logged in with Facebook')
             SessionStore.save({ token, imageUrl: image_url, leagueId: responseData.meta.league_id })
             Session.save(token)
@@ -82,7 +85,9 @@ export default class Welcome extends Component {
         AppEventsLogger.logEvent('Joined League On Email Registration')
       }
       HttpUtils.post('email_login', params).then((responseData) => {
-        let { token, image_url } = responseData.data.attributes
+        let { token, image_url, email, name } = responseData.data.attributes
+        Instabug.identifyUserWithEmail(email, name)
+        Instabug.setUserAttribute("ID", responseData.data.id)
         AppEventsLogger.logEvent('Logged in with Email')
         SessionStore.save({ token, imageUrl: image_url, leagueId: responseData.meta.league_id })
         Session.save(token)
