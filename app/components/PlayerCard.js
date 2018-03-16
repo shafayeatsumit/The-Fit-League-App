@@ -14,7 +14,6 @@ import {
   ActivityIndicator
 } from 'react-native'
 
-import Instabug from 'instabug-reactnative'
 import LinearGradient from 'react-native-linear-gradient'
 
 import { AppEventsLogger } from 'react-native-fbsdk'
@@ -89,7 +88,6 @@ export default class PlayerCard extends Component {
   }
 
   logOut() {
-    Instabug.logOut()
     AppEventsLogger.logEvent('Logged Out')
     // Can delete when we rip out Session.js
     AsyncStorage.removeItem('auth_token').then(() => {

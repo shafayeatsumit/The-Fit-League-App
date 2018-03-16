@@ -10,8 +10,6 @@ import { AppRegistry } from 'react-native';
 
 import App from './app/components/App';
 
-import Instabug from 'instabug-reactnative'
-
 import { Sentry } from 'react-native-sentry';
 Sentry.config('https://b5d6b391f5d74a09a782d73aedb5ab0c:812547673eb74c019a3265a3035882ac@sentry.io/265535').install();
 
