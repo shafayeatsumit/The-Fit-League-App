@@ -93,13 +93,13 @@ def enableProguardInReleaseBuilds = false
 android {
     compileSdkVersion 26
     buildToolsVersion "26.0.1"
-
     defaultConfig {
         applicationId "com.thefitleague"
         minSdkVersion 17
         targetSdkVersion 26
         versionCode 3
         versionName "1.2"
+        multiDexEnabled true        
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
@@ -145,6 +145,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-image-crop-picker')
     compile project(':react-native-sentry')
     compile project(':react-native-branch')
     compile project(':react-native-fbsdk')

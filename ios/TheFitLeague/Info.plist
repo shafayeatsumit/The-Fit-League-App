@@ -36,15 +36,15 @@
 	<string>551820571820555</string>
 	<key>FacebookDisplayName</key>
 	<string>The Fit League</string>
-  <key>NSAppTransportSecurity</key>
-  <dict>
-    <key>NSAllowsArbitraryLoads</key>
-    <true/>
-    <key>NSAllowsArbitraryLoadsInWebContent</key>
-    <true/>
-    <key>NSAllowsLocalNetworking</key>
-    <true/>
-  </dict>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+		<key>NSAllowsArbitraryLoadsInWebContent</key>
+		<true/>
+		<key>NSAllowsLocalNetworking</key>
+		<true/>
+	</dict>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>fbapi</string>
@@ -55,16 +55,17 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string/>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>This app does not require access to the microphone.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>This app does not require access to the photo library.</string>
+	<string>This app does require access to the photo library.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Avenir-Black.ttf</string>
 		<string>Toronto-Gothic.ttf</string>
 		<string>Avenir-Light.ttf</string>
+		<string>Avenir.ttc</string>
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>
