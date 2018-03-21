@@ -16,6 +16,7 @@ import NewWorkoutHowMany from './NewWorkoutHowMany';
 import NewWorkoutSuccess from './NewWorkoutSuccess';
 import EditWorkoutSuccess from './EditWorkoutSuccess';
 import SadConnection from './SadConnection'
+import ProfileImage from './ProfileImage'
 
 const App = () => {
   return (
@@ -31,6 +32,11 @@ const App = () => {
           component={Welcome}
           title="Welcome"
         />
+        <Scene
+          key="profileImage"
+          component={ProfileImage}
+          title="Add profile image."
+        />          
         <Scene
           key="home"
           component={Home}

@@ -26,6 +26,7 @@ import { LeagueJoiner } from '../services/LeagueJoiner'
 
 const badge = require('../../assets/images/badge.png')
 const logo = require('../../assets/images/logo.png')
+const blankImageUrl = "https://s3.amazonaws.com/fitbots/no-profile-image.png"
 
 const FBSDK = require('react-native-fbsdk')
 
@@ -86,7 +87,8 @@ export default class Welcome extends Component {
         AppEventsLogger.logEvent('Logged in with Email')
         SessionStore.save({ token, imageUrl: image_url, leagueId: responseData.meta.league_id })
         Session.save(token)
-        Actions.home({ token })
+        //Actions.home({ token })
+        image_url === blankImageUrl ? Actions.profileImage({ token }) : Actions.home({ token })
       }).catch((error) => {
         AlertIOS.alert("Sorry! Login failed.", error.message)
         AppEventsLogger.logEvent('Failed to log in with Email', { message: error.message })
