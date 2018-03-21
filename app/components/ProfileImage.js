@@ -78,6 +78,7 @@ export default class ProfileImage extends Component {
   }
 
   render() {
+    console.log("height weidth",SCREEN_HEIGHT,SCREEN_WIDTH)
     return (
       <LinearGradient 
         start={{x: 0, y: 1}} end={{x: 1, y: 0}}
@@ -155,9 +156,8 @@ const styles = StyleSheet.create({
   addImageButton: {
     height: 70,
     width: 70,
-    position: 'absolute',
-    bottom: SCREEN_HEIGHT/4 - 120,
-    //left: SCREEN_WIDTH/2,
+    position: 'relative',
+    bottom: 35,
     backgroundColor: 'rgba(40, 87, 237, 0.89)',
     borderColor: 'rgba(40, 87, 237, 0.89)',
     borderRadius: 35,
