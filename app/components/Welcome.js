@@ -5,6 +5,8 @@ import t from 'tcomb-form-native';
 import {
   StyleSheet,
   Text,
+  Keyboard,
+  Animated,
   View,
   Image,
   TextInput,
@@ -41,12 +43,40 @@ export default class Welcome extends Component {
     this.state = { loading: false, useFacebook: true }
     this.facebookSave = this.facebookSave.bind(this)
     this.emailSave = this.emailSave.bind(this)
+
+    this.badgeHolderFlex = new Animated.Value(2);
+    this.badgeHeight = new Animated.Value(100);
   }
 
   componentDidMount() {
     StatusBar.setBarStyle('light-content', true)
     AppEventsLogger.logEvent('Saw Facebook Login');
+    this.keyboardWillShowSub = Keyboard.addListener('keyboardDidShow', this.keyboardDidShow);
+    this.keyboardWillHideSub = Keyboard.addListener('keyboardDidHide', this.keyboardDidHide);    
   }
+
+  keyboardDidShow = (event) => {
+    Animated.parallel([
+      Animated.timing(this.badgeHolderFlex, {
+        toValue: 0.5,
+      }),      
+      Animated.timing(this.badgeHeight, {
+        toValue: 40,
+      })
+    ]).start()    
+  };
+
+  keyboardDidHide = (event) => {
+    Animated.parallel([
+      Animated.timing(this.badgeHolderFlex, {
+        toValue: 2,
+      }),      
+      Animated.timing(this.badgeHeight, {
+        toValue: 100,
+      })
+    ]).start()  
+  };
+
 
   facebookSave() {
     this.setState({ loading: true });
@@ -62,10 +92,10 @@ export default class Welcome extends Component {
             let { token, image_url, email, name } = responseData.data.attributes
             AppEventsLogger.logEvent('Logged in with Facebook')
             SessionStore.save({ token, imageUrl: image_url, leagueId: responseData.meta.league_id })
-            Session.save(token)
-            Actions.home({ token })
+            Session.save(token);
+            Actions.addProfile({ token });
           }).catch((error) => {
-            AlertIOS.alert("Sorry! Login failed.", error.message)
+            alert("Sorry! Login failed.")
             AppEventsLogger.logEvent('Failed to log in with Facebook', { message: error.message })
             this.setState({ loading: false })
           }).done();          
@@ -87,13 +117,12 @@ export default class Welcome extends Component {
         AppEventsLogger.logEvent('Logged in with Email')
         SessionStore.save({ token, imageUrl: image_url, leagueId: responseData.meta.league_id })
         Session.save(token)
-        //Actions.home({ token })
         image_url === blankImageUrl ? Actions.profileImage({ token }) : Actions.home({ token })
       }).catch((error) => {
         AlertIOS.alert("Sorry! Login failed.", error.message)
         AppEventsLogger.logEvent('Failed to log in with Email', { message: error.message })
         this.setState({ loading: false })
-      }).done();          
+      }).done();
     })
   }
 
@@ -103,19 +132,27 @@ export default class Welcome extends Component {
         start={{x: 0, y: 1}} end={{x: 1, y: 0}}
         colors={['#2857ED', '#1DD65B']}
         style={styles.contentContainer}>
-        <View style={styles.badgeHolder}>
-          <Image resizeMode='contain' style={styles.badge} source={badge} />
-        </View>      
+        <Animated.View style={[styles.badgeHolder, { flex: this.badgeHolderFlex }]}>
+          <Animated.Image resizeMode='contain' style={[styles.badge, {height:this.badgeHeight}]} source={badge} />
+        </Animated.View>
         <View style={styles.logoHolder}>
           <Image resizeMode='contain' style={styles.logo} source={logo} />
         </View>
+        <View style={styles.textHolder}>
+          <Text style={styles.text}>
+            10-week exercise competitions
+          </Text>
+          <Text style={styles.text}>
+            for you and your crew.
+          </Text>
+        </View>
         { !this.state.loading &&
-          <View style={styles.loginButtonHolder}>
-            { this.state.useFacebook ?
+        <View style={styles.loginButtonHolder}>
+          { this.state.useFacebook ?
               <LoginButton
-                style={styles.loginButton}
-                readPermissions={['public_profile', 'email']}
-                onLoginFinished={
+                  style={styles.loginButton}
+                  readPermissions={['public_profile', 'email']}
+                  onLoginFinished={
                   (error, result) => {
                     if (error) {
                       Sentry.captureException(error)
@@ -127,39 +164,43 @@ export default class Welcome extends Component {
                     }
                   }
                 }
-                onLogoutFinished={() => alert("Now you're completely logged out!")}/>
+                  onLogoutFinished={() => alert("Now you're completely logged out!")}/>
               :
               <View style={styles.loginColumn}>
-                <Text style={styles.label}>Email</Text>
                 <TextInput
-                  style={styles.input}
-                  value={this.state.email}
-                  onChangeText={(email) => this.setState({ email })}
-                />
-                <Text style={styles.label}>Password</Text>
+                    style={styles.input}
+                    value={this.state.name}
+                    placeholder='Full Name'
+                    placeholderTextColor='white'
+                    underlineColorAndroid='rgba(0,0,0,0)'
+                    onChangeText={(name) => this.setState({ name })}
+                    />
                 <TextInput
-                  style={styles.input}
-                  value={this.state.password}
-                  secureTextEntry={true}
-                  onChangeText={(password) => this.setState({ password })}
-                />
+                    style={styles.input}
+                    value={this.state.email}
+                    placeholder='Email'
+                    placeholderTextColor='white'
+                    underlineColorAndroid='rgba(0,0,0,0)'
+                    onChangeText={(email) => this.setState({ email })}
+                    />
+                <TextInput
+                    style={styles.input}
+                    value={this.state.password}
+                    secureTextEntry={true}
+                    placeholder='Password'
+                    placeholderTextColor='white'
+                    underlineColorAndroid='rgba(0,0,0,0)'
+                    onChangeText={(password) => this.setState({ password })}
+                    />
                 <TouchableHighlight style={styles.emailRegBtn} onPress={this.emailSave} underlayColor='transparent'>
                   <Text style={styles.emailRegText}>Sign Up or Log In</Text>
                 </TouchableHighlight>
               </View>
-            }
-          </View>
-        }
-        <View style={styles.textHolder}>
-          <Text style={styles.text}>
-            10-week exercise competitions
-          </Text>
-          <Text style={styles.text}>
-            for you and your crew.
-          </Text>
+          }
         </View>
+        }
         <TouchableHighlight style={styles.noFacebook} onPress={() => this.setState({ useFacebook: !this.state.useFacebook })} underlayColor='transparent'>
-          <Text style={styles.noFacebookText}>{ this.state.useFacebook ? 'Not on Facebook?' : 'Have a Facebook?'}</Text>
+          <Text style={styles.noFacebookText}>{ this.state.useFacebook ? 'Not on Facebook?' : 'Sign up by Facebook'}</Text>
         </TouchableHighlight>
       </LinearGradient>
     );
@@ -174,7 +215,6 @@ const styles = StyleSheet.create({
     flexDirection: 'column'
   },
   badgeHolder: {
-    flex: 2,
     justifyContent: 'center',
     alignItems: 'center'
   },
@@ -182,7 +222,7 @@ const styles = StyleSheet.create({
     width: 100
   },
   logoHolder: {
-    flex: 1,
+    flex: 0.5,
     justifyContent: 'center',
     alignItems: 'center'
   },
@@ -202,7 +242,8 @@ const styles = StyleSheet.create({
   },
   loginColumn: {
     flexDirection: 'column',
-    flex: 1,
+    flex: 0.8,
+    marginTop: 25,
     width: '80%',
   },
   label: {
@@ -212,20 +253,24 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   input: {
-    fontSize: 22,
+    fontSize: 20,
     fontFamily: 'Avenir-Light',
     borderWidth: 1,
     borderRadius: 0,
-    height: 50,
-    padding: 14,
-    width: 300,
+    height: 40,
+    padding: 10,
+    width: 280,
     backgroundColor: 'rgba(255, 255, 255, 0.10)',
     borderColor: 'rgba(255, 255, 255, 0.25)',
     color: 'white',
     marginBottom: 10,
   },
+  placeHolderText: {
+    color: 'white',
+    fontSize: 18
+  },
   loginButtonHolder: {
-    flex: 3,
+    flex: 4,
     alignItems: 'center',
     justifyContent: 'center'
   },
@@ -245,8 +290,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#2857ED',
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 15,
-    marginTop: 10,
+    padding: 10,
+    marginTop: 8,
   },
   emailRegText: {
     fontSize: 16,

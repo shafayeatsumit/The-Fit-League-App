@@ -34,6 +34,7 @@ allprojects {
         configurations.all {
             resolutionStrategy {
                 force 'com.facebook.android:facebook-android-sdk:4.28.0'
+                force 'com.google.android.gms:play-services-gcm:11.6.0'
             }
         }        
     }
