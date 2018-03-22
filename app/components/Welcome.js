@@ -51,8 +51,13 @@ export default class Welcome extends Component {
   componentDidMount() {
     StatusBar.setBarStyle('light-content', true)
     AppEventsLogger.logEvent('Saw Facebook Login');
-    this.keyboardWillShowSub = Keyboard.addListener('keyboardDidShow', this.keyboardDidShow);
-    this.keyboardWillHideSub = Keyboard.addListener('keyboardDidHide', this.keyboardDidHide);    
+    this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this.keyboardDidShow);
+    this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this.keyboardDidHide);    
+  }
+
+  componentWillUnmount() {
+    this.keyboardDidShowListener.remove();
+    this.keyboardDidHideListener.remove();
   }
 
   keyboardDidShow = (event) => {
