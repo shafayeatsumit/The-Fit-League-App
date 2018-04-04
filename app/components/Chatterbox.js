@@ -23,8 +23,9 @@ import { SessionStore } from '../services/SessionStore'
 import { LeagueSharer } from '../services/LeagueSharer'
 import DynamicIcon from './DynamicIcon'
 
-const thumbsUp = require('../../assets/images/thumbsUp.png');
-const thumbsDown = require('../../assets/images/thumbsDown.png');
+const thumbsUp = require('../../assets/images/thumbsUp.png')
+const thumbsDown = require('../../assets/images/thumbsDown.png')
+const trophies = require('../../assets/images/trophies.png')
 
 // Dependency in app/models/chatter.rb in the Rails API.
 const actions = {
@@ -94,7 +95,8 @@ export default class Chatterbox extends Component {
       .then((responseData) => {
         this.setState({ 
           chatters: responseData.data, 
-          inviteUrl: responseData.meta.invite_url, 
+          inviteUrl: responseData.meta.invite_url,
+          playoffs: responseData.meta.playoffs, 
           leagueName: responseData.meta.league_name,
           loading: false, refreshing: false 
         })
@@ -167,6 +169,9 @@ export default class Chatterbox extends Component {
               refreshing={this.state.refreshing}
               onRefresh={this.refresh.bind(this)} />
           } style={styles.chatterColumn}>
+            { this.state.playoffs && 
+              <Image source={trophies} style={styles.trophies} />
+            }
             { this.state.chatters.map((c, i) => {
                 return <TouchableOpacity activeOpacity={1} style={styles.chatter} key={i}>
                   <View style={styles.chatterRow}>
@@ -256,6 +261,12 @@ const styles = StyleSheet.create({
   chatterColumn: {
     flex: 1,
     flexDirection: 'column',
+  },
+  trophies: {
+    resizeMode: 'repeat',
+    position: 'absolute',
+    width: '100%',
+    height: '100%'
   },
   chatter: {
     height: 140,

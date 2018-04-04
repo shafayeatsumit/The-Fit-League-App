@@ -50,11 +50,23 @@ export default class Widget extends Component {
                     {...StyleSheet.flatten(styles.widgetImage)} />
                 </View>
               }
-              { this.props.bordered_image && 
+              { this.props.bordered_image && !this.props.bordered_images &&
                 <View style={styles.widgetImageHolder}>
                   <DynamicIcon 
                     {...this.props.bordered_image} 
                     {...StyleSheet.flatten(styles.widgetPartnerImage)} />
+                </View>
+              }
+              { this.props.bordered_images &&
+                <View style={styles.widgetImageHolder}>
+                  { this.props.bordered_images.map((image, index) => {
+                    let stylesheet = this.props.bordered_images.length > 1 ? (index > 0 ? styles.widgetMultiPartnerImageRight : styles.widgetMultiPartnerImage) : styles.widgetPartnerImage
+                    return <DynamicIcon 
+                      key={index}
+                      {...image}
+                      {...StyleSheet.flatten(stylesheet)} />
+                    })
+                  }
                 </View>
               }
               { this.props.number != undefined && 
@@ -77,14 +89,20 @@ export default class Widget extends Component {
                   <Text style={styles.widgetText}>{this.props.text}</Text>
                 </View>
               }
-              { this.props.stats &&
+              { this.props.stat_rows &&
                 <View style={styles.widgetStatsHolder}>
-                  <StatRow
-                    kind="mini"
-                    daysWorkedOut={parseInt(this.props.stats.days_worked_out)}
-                    cardioPoints={parseInt(this.props.stats.cardio_points)}
-                    strengthPoints={parseInt(this.props.stats.strength_points)}
-                    varietyPoints={parseInt(this.props.stats.diversity_points)} />
+                  { this.props.stat_rows.map((row, index) => {
+                    return <StatRow
+                      kind={this.props.stat_rows.length > 1 ? "multi" : "mini"}
+                      key={index}
+                      hideLabels={index != this.props.stat_rows.length - 1}
+                      initials={this.props.stat_rows.length > 1 && row.initials}
+                      daysWorkedOut={parseInt(row.days_worked_out)}
+                      cardioPoints={parseInt(row.cardio_points)}
+                      strengthPoints={parseInt(row.strength_points)}
+                      varietyPoints={parseInt(row.diversity_points)} />                    
+                    })
+                  }
                 </View>
               }
               { (this.props.banner) &&
@@ -162,6 +180,21 @@ const styles = StyleSheet.create({
   widgetImage: {
     width: 80,
     height: 80  
+  },
+  widgetMultiPartnerImage: {
+    borderColor: '#8092A2',
+    borderRadius: 25,
+    borderWidth: 2,
+    width: 50,
+    height: 50
+  },
+  widgetMultiPartnerImageRight: {
+    borderColor: '#8092A2',
+    borderRadius: 25,
+    marginLeft: -15,
+    borderWidth: 2,
+    width: 50,
+    height: 50
   },
   widgetPartnerImage: {
     borderColor: '#8092A2',

@@ -10,39 +10,55 @@ import {
 export default class StatRow extends Component {
   render() {
     const dynamicStyles = stylesByKind[this.props.kind] || defaultStyles
+    const small = this.props.kind == 'mini' || this.props.kind == 'multi'
     return (
       <View style={[styles.statRow, dynamicStyles.statRow]}>
+        { this.props.initials &&
+          <View style={styles.statCol}>
+            <View style={styles.statNumber}>
+              <Text style={[dynamicStyles.statNumberText, styles.initialsText]}>{this.props.initials}</Text>
+            </View>
+          </View>
+        }
         <View style={styles.statCol}>
           <View style={styles.statNumber}>
             <Text style={[styles.statNumberText, dynamicStyles.statNumberText]}>{ this.props.daysWorkedOut }</Text>
           </View>
-          <View style={styles.statLabel}>
-            <Text style={[styles.statLabelText, dynamicStyles.statLabelText]}>{this.props.kind == 'mini' ? 'D' : 'DAYS'}</Text>
-          </View>
+          { !this.props.hideLabels &&
+            <View style={styles.statLabel}>
+              <Text style={[styles.statLabelText, dynamicStyles.statLabelText]}>{small ? 'D' : 'DAYS'}</Text>
+            </View>
+          }
         </View>
         <View style={styles.statCol}>
           <View style={styles.statNumber}>
             <Text style={[styles.statNumberText, dynamicStyles.statNumberText]}>{ this.props.cardioPoints }</Text>
           </View>
-          <View style={styles.statLabel}>
-            <Text style={[styles.statLabelText, dynamicStyles.statLabelText]}>{this.props.kind == 'mini' ? 'C' : 'CARDIO'}</Text>
-          </View>
+          { !this.props.hideLabels &&
+            <View style={styles.statLabel}>
+              <Text style={[styles.statLabelText, dynamicStyles.statLabelText]}>{small ? 'C' : 'CARDIO'}</Text>
+            </View>
+          }
         </View>
         <View style={styles.statCol}>
           <View style={styles.statNumber}>
             <Text style={[styles.statNumberText, dynamicStyles.statNumberText]}>{ this.props.strengthPoints }</Text>
           </View>
-          <View style={styles.statLabel}>
-            <Text style={[styles.statLabelText, dynamicStyles.statLabelText]}>{this.props.kind == 'mini' ? 'S' : 'STRENGTH'}</Text>
-          </View>
+          { !this.props.hideLabels &&
+            <View style={styles.statLabel}>
+              <Text style={[styles.statLabelText, dynamicStyles.statLabelText]}>{small ? 'S' : 'STRENGTH'}</Text>
+            </View>
+          }
         </View>
         <View style={styles.statCol}>
           <View style={styles.statNumber}>
             <Text style={[styles.statNumberText, dynamicStyles.statNumberText]}>{ this.props.varietyPoints }</Text>
           </View>
-          <View style={styles.statLabel}>
-            <Text style={[styles.statLabelText, dynamicStyles.statLabelText]}>{this.props.kind == 'mini' ? 'V' : 'VARIETY'}</Text>
-          </View>
+          { !this.props.hideLabels &&
+            <View style={styles.statLabel}>
+              <Text style={[styles.statLabelText, dynamicStyles.statLabelText]}>{small ? 'V' : 'VARIETY'}</Text>
+            </View>
+          }
         </View>
       </View>
     )
@@ -78,6 +94,20 @@ const miniStyles = StyleSheet.create({
   }
 });
 
+const multiStyles = StyleSheet.create({
+  statRow: {
+    paddingTop: 22
+  },
+  statLabelText: {
+    fontSize: 8,
+    color: '#8691A0',
+  },
+  statNumberText: {
+    fontSize: 14,
+    color: '#8691A0',
+  }
+});
+
 const defaultStyles = StyleSheet.create({
   statRow: {
     flex: 2,
@@ -96,7 +126,8 @@ const defaultStyles = StyleSheet.create({
 
 const stylesByKind = {
   mini: miniStyles,
-  dark: darkStyles
+  dark: darkStyles,
+  multi: multiStyles
 }
 
 const styles = StyleSheet.create({
@@ -122,6 +153,11 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent'
   },
   statNumberText: {
+    fontFamily: 'Avenir-Black',
+    backgroundColor: 'transparent'
+  },
+  initialsText: {
+    color: '#0E2442',
     fontFamily: 'Avenir-Black',
     backgroundColor: 'transparent'
   }

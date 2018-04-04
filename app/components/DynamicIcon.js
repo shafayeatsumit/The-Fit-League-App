@@ -70,6 +70,8 @@ export default class DynamicIcon extends Component {
       width: this.props.width,
       borderWidth: this.props.borderWidth,
       borderColor: this.props.borderColor,
+      marginLeft: this.props.marginLeft,
+      marginRight: this.props.marginRight,
       borderRadius: this.props.borderRadius
     }
     if (source) {
