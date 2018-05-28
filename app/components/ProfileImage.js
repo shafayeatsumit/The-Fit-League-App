@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient'
 import { Actions } from 'react-native-router-flux'
-import ImagePicker from 'react-native-image-crop-picker';
+import ImagePicker from 'react-native-image-crop-picker'
 import { Sentry } from 'react-native-sentry'
 
 import { HttpUtils } from '../services/HttpUtils'
@@ -78,7 +78,6 @@ export default class ProfileImage extends Component {
   }
 
   render() {
-    console.log("height weidth",SCREEN_HEIGHT,SCREEN_WIDTH)
     return (
       <LinearGradient 
         start={{x: 0, y: 1}} end={{x: 1, y: 0}}

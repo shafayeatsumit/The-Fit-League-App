@@ -38,6 +38,7 @@ export default class PlayerCard extends Component {
     this.confirmInjuredReserve = this.confirmInjuredReserve.bind(this)
     this.confirmLeagueQuit = this.confirmLeagueQuit.bind(this)
     this.logOut = this.logOut.bind(this)
+    this.changeProfilePic = this.changeProfilePic.bind(this)
     this.state = { loading: true, player: props.player, saveLabel: 'Save' }  
   }
 
@@ -49,6 +50,10 @@ export default class PlayerCard extends Component {
       .then((responseData) => {
         this.setState({ saveLabel: 'Saved!' })
       }).done();
+  }
+
+  changeProfilePic() {
+    if (this.state.mine) Actions.profileImage({ token: this.props.token })
   }
 
   confirmInjuredReserve() {
@@ -214,6 +219,15 @@ const styles = StyleSheet.create({
     borderColor: 'white',
     position: 'absolute',
     zIndex: 100
+  },
+  editImageButtonText: {
+    fontFamily: 'Avenir-Black',
+    backgroundColor: 'transparent',
+    textDecorationLine: 'underline',
+    textDecorationColor: '#508CD8',
+    color: '#508CD8',
+    fontSize: 14,
+    marginTop: 60
   },
   playerName: {
     fontFamily: 'Avenir-Black',
