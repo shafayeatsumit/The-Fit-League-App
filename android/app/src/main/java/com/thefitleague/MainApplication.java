@@ -3,8 +3,8 @@ package com.thefitleague;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
-import com.reactnative.ivpusic.imagepicker.PickerPackage;
 import io.sentry.RNSentryPackage;
+import com.reactnative.ivpusic.imagepicker.PickerPackage;
 import com.facebook.reactnative.androidsdk.FBSDKPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
@@ -40,6 +40,7 @@ public class MainApplication extends Application implements ReactApplication {
       mCallbackManager = new CallbackManager.Factory().create();
       ReactPackage packages[] = new ReactPackage[]{
         new MainReactPackage(),
+            new RNSentryPackage(MainApplication.this),
             new PickerPackage(),
         new RNSentryPackage(MainApplication.this),
         new FBSDKPackage(mCallbackManager),
