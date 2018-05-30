@@ -97,8 +97,8 @@ export default class Welcome extends Component {
             let { token, image_url, email, name } = responseData.data.attributes
             AppEventsLogger.logEvent('Logged in with Facebook')
             SessionStore.save({ token, imageUrl: image_url, leagueId: responseData.meta.league_id })
-            Session.save(token);
-            Actions.addProfile({ token });
+            Session.save(token)
+            Actions.home({ token })
           }).catch((error) => {
             alert("Sorry! Login failed.")
             AppEventsLogger.logEvent('Failed to log in with Facebook', { message: error.message })
