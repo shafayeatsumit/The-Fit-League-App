@@ -132,10 +132,10 @@ export default class Workouts extends Component {
                           return <View key={metric} style={styles.matchupStatRow}>
                             { teams.map((team, index) => {
                                 return <View key={index} style={index > 0 ? styles.matchupColumnRight : styles.matchupColumn}>
-                                  { _.any(team, (m) => m.summary === null) ? 
+                                  { _.some(team, (m) => m.summary === null) ? 
                                     <Text style={styles.matchupStat}>?</Text>
                                     :
-                                    <Text style={styles.matchupStat}>{_.sum(team, (m) => m.summary[metric])}</Text>
+                                    <Text style={styles.matchupStat}>{_.sumBy(team, (m) => m.summary[metric])}</Text>
                                   }
                                 </View>
                               })
