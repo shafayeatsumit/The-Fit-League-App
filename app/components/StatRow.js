@@ -82,7 +82,7 @@ const darkStyles = StyleSheet.create({
 
 const miniStyles = StyleSheet.create({
   statRow: {
-    paddingTop: 25
+    minHeight: 20
   },
   statLabelText: {
     fontSize: 9,

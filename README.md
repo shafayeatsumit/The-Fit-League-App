@@ -6,6 +6,8 @@ TFL applies the format of fantasy sports to personal exercise. Form a league wit
 
     react-native run-ios
 
+If you have trouble running, make sure that the Facebook iOS SDK is installed and linked. Ensure that the downloaded SDK matches.: `TheFitLeague > Build Settings > Framework Search Paths`.
+
 ### Building iOS
 
 In Xcode: 
