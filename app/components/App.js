@@ -15,8 +15,9 @@ import NewWorkoutWhat from './NewWorkoutWhat';
 import NewWorkoutHowMany from './NewWorkoutHowMany';
 import NewWorkoutSuccess from './NewWorkoutSuccess';
 import EditWorkoutSuccess from './EditWorkoutSuccess';
-import SadConnection from './SadConnection'
-import ProfileImage from './ProfileImage'
+import SadConnection from './SadConnection';
+import ProfileImage from './ProfileImage';
+import Settings from './Settings';
 
 const App = () => {
   return (
@@ -41,6 +42,11 @@ const App = () => {
           key="home"
           component={Home}
           title="Home"
+        />
+        <Scene
+          key="settings"
+          component={Settings}
+          title="Settings"
         />
         <Scene
           key="newWorkoutWhen"

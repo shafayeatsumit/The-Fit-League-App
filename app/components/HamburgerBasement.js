@@ -35,6 +35,7 @@ const WORKOUTS_LINK = { label: 'Your Workouts', action: 'workouts', props: {} }
 const MATCHUP_LINK =  { label: 'Your Matchup', action: 'matchup', props: {} }
 const LEAGUE_LINK =   { label: 'Your League',  action: 'league' }
 const RULES_LINK =    { label: 'Game Rules',  action: 'rules' }
+const SETTINGS_LINK = { label: 'Settings',  action: 'settings', props: {} }
 
 const LINKS_BY_FEATURE = {
   matchup: MATCHUP_LINK
@@ -75,7 +76,7 @@ export default class HamburgerBasement extends Component {
     let leagueLink = Object.assign({ props: { title: league.attributes.name } }, LEAGUE_LINK);
     links.push(leagueLink)
     // May want this to depend on league type?
-    links.push(RULES_LINK)
+    links.push(RULES_LINK, SETTINGS_LINK)
     SessionStore.save({ leagueId: league.id }, () => {    
       this.setState({ links, currentLeague: league, noLeague: false })
     })
