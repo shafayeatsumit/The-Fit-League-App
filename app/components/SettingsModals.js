@@ -5,7 +5,6 @@ import {
   TouchableHighlight, 
   View,
   Image,
-  ScrollView,
   KeyboardAvoidingView,
   StyleSheet
 } from 'react-native';
@@ -20,7 +19,7 @@ const exButton = require('../../assets/images/exButton.png');
 class SettingsModal extends Component {
   constructor(props){
     super(props);
-    this.modalBoby = this.modalBoby.bind(this)
+    this.modals = this.modals.bind(this)
     this.modalHeader = this.modalHeader.bind(this)
   }
 
@@ -41,7 +40,7 @@ class SettingsModal extends Component {
     )
   }
 
-  modalBoby () {
+  modals () {
     const { modalName } = this.props;
     if ( modalName === 'nameAndPic') {
       const title = "Name and Profile Pic"
@@ -54,7 +53,7 @@ class SettingsModal extends Component {
         </KeyboardAvoidingView>
       )  
     }else if( modalName === "emailAndPass"){
-      const title = "Email and Password"
+      const title = "Email and Password";
       return (
         <KeyboardAvoidingView style={styles.mainContainer} behavior='padding'> 
             {this.modalHeader(title)}
@@ -64,7 +63,7 @@ class SettingsModal extends Component {
         </KeyboardAvoidingView>        
       )
     }else if ( modalName === "aboutMe"){
-      const title = "About Me"
+      const title = "About Me";
       return (
         <KeyboardAvoidingView style={styles.mainContainer} behavior='padding'> 
           {this.modalHeader(title)}
@@ -74,7 +73,7 @@ class SettingsModal extends Component {
         </KeyboardAvoidingView>         
       )
     }else if (modalName === "notifications"){
-      const title = "Notifications Manager"
+      const title = "Notifications Manager";
       return (
         <View style={styles.mainContainer}> 
             {this.modalHeader(title)}
@@ -84,7 +83,7 @@ class SettingsModal extends Component {
         </View>         
       )
     } else {
-      const title = "Pause and Quit"
+      const title = "Pause and Quit";
       return (
         <View style={styles.mainContainer}> 
             {this.modalHeader(title)}
@@ -95,6 +94,7 @@ class SettingsModal extends Component {
       )      
     }
   }
+
   render() {
     return (
       <Modal
@@ -103,7 +103,7 @@ class SettingsModal extends Component {
         visible={this.props.show}
       >
         <View style={styles.modalBackground} >
-          { this.props.show && this.modalBoby()} 
+          { this.props.show && this.modals()} 
         </View>
     </Modal>  
     );
@@ -156,6 +156,6 @@ const styles = StyleSheet.create({
     height: 24,
     tintColor:'#8691a0'
   }  
-})
+});
 
 export default SettingsModal;

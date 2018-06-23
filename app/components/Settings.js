@@ -3,27 +3,23 @@ import {
   StyleSheet,
   View,
   Text,
-  Image,
-  ActivityIndicator,
   TouchableHighlight,
-  StatusBar,
-  Modal,
-  Alert
+  StatusBar
 } from 'react-native';
 
 import HamburgerBasement from './HamburgerBasement'
-import SettingsModal from './SettingsModal'
+import SettingsModals from './SettingsModals'
 import OtherHeader from './OtherHeader'
 
 class Settings extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      showModal: true ,
-      modalName: 'null',
+      showModal: false ,
+      modalName: null,
     }
     this.closeModal = this.closeModal.bind(this)
-    //this.handlePress = this.handlePress(this)
+    this.logoutPressed = this.logoutPressed.bind(this)
   }
 
   componentDidMount(){
@@ -38,11 +34,15 @@ class Settings extends Component {
     this.setState({showModal: false})
   }
 
+  logoutPressed() {
+    // TODO: need send request to server.
+  }
+
   render() {
     return (
       <HamburgerBasement {...this.props}>
         <OtherHeader style={styles.headerContainer} {...this.props} title="Settings" />
-        <SettingsModal show={this.state.showModal} modalName={this.state.modalName} exitModal={this.closeModal} />
+        <SettingsModals show={this.state.showModal} modalName={this.state.modalName} exitModal={this.closeModal} />
         <View style={styles.touchablesRow}>     
           <TouchableHighlight style={styles.touchableItem} underlayColor='#DCDCDC' onPress={this.handlePress.bind(this, "nameAndPic")}>
             <View>
@@ -96,8 +96,8 @@ class Settings extends Component {
           </TouchableHighlight>
         </View>
         <View style={styles.logoutRow}>
-          <TouchableHighlight style={styles.dangerButton} underlayColor='#E9005A' onPress={()=>Alert.alert('pressed')}>
-            <Text style={styles.dangerButtonText}>Log Out</Text>
+          <TouchableHighlight style={styles.logoutButton} underlayColor='#E9005A' onPress={this.logoutPressed}>
+            <Text style={styles.logoutButtonText}>Log Out</Text>
           </TouchableHighlight>
         </View>
       </HamburgerBasement>
@@ -149,7 +149,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center' 
   },
-  dangerButton: {
+  logoutButton: {
     borderWidth: 1,
     width: '80%',
     height: '50%',
@@ -158,7 +158,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'     
   },
-  dangerButtonText: {
+  logoutButtonText: {
     fontFamily: 'Avenir-Black',
     backgroundColor: 'transparent',
     color: '#E6105C',
