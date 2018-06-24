@@ -2,13 +2,21 @@ import React, { Component } from 'react';
 import { 
   Text, 
   View,
-  Image,
   TouchableHighlight,
   TextInput,
   StyleSheet
 } from 'react-native';
 
 class AboutMeSettings extends Component {
+  constructor(props){
+    super(props);
+    this.handleSave = this.handleSave.bind(this)
+  }
+  handleSave() {
+    // TODO: send request
+   
+  }
+
   render(){
     return (
       <View style={styles.mainContainer}>
@@ -17,17 +25,16 @@ class AboutMeSettings extends Component {
             This little bio appears on your Player Card.
           </Text>
           <Text style={styles.explainText}>Everyone will see it. it's really important.</Text>
-          <Text style={[styles.explainText,{textAlign:'center'}]}>Be funny. Do it. </Text>
+          <Text style={styles.explainText}>Be funny. Do it. </Text>
         </View>
         <TextInput
           style={styles.Input}
-          //value="LOCKED(connect to facebook)"
           multiline={true}
           editable = {true}
           numberOfLines = {4}
         />  
         <View style={styles.buttonContainer}>
-          <TouchableHighlight style={styles.saveButton} underlayColor='#E9005A' onPress={()=>Alert.alert('pressed')}>
+          <TouchableHighlight style={styles.saveButton} underlayColor='#E9005A' onPress={this.handleSave}>
             <Text style={styles.saveButtonText}>Save</Text>
           </TouchableHighlight>          
         </View>        
@@ -40,14 +47,13 @@ const styles = StyleSheet.create({
   mainContainer: {
     flex:1
   },
-  explainTextContainer: {
-    
-  },
   explainText: {
     fontFamily: 'Avenir-Light',
     color: '#0E2442',
+    textAlign: 'center',
     fontSize: 16,
-    paddingLeft: 20
+    paddingLeft: 10,
+    paddingRight: 10,
   },
   Input: {
     fontSize: 17,
