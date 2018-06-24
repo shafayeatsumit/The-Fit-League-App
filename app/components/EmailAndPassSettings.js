@@ -17,7 +17,7 @@ class EmailAndPassSettings extends Component {
 
   handleSave() {
     // TODO: send request
-    console.log("handle save")
+    
   }
 
   render() {
