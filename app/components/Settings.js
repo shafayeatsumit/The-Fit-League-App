@@ -15,8 +15,8 @@ class Settings extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      showModal: true ,
-      modalName: 'notifications',
+      showModal: false ,
+      modalName: null,
     }
     this.closeModal = this.closeModal.bind(this)
     this.logoutPressed = this.logoutPressed.bind(this)
