@@ -26,7 +26,6 @@ const App = () => {
         <Scene key="loading"
           component={Loading}
           title="Loading"
-          initial
         />
         <Scene
           key="welcome"
@@ -47,6 +46,7 @@ const App = () => {
           key="settings"
           component={Settings}
           title="Settings"
+          initial
         />
         <Scene
           key="newWorkoutWhen"

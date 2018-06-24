@@ -6,20 +6,73 @@ import {
   Dimensions,
   TouchableHighlight,
   TextInput,
+  Keyboard,
+  Animated,
   StyleSheet
 } from 'react-native';
 
-const editButton = require('../../assets/images/edit.png')
-const imageUrl = "https://s3.amazonaws.com/fitbots/no-profile-image.png"
-var {width, height} = Dimensions.get("window");
+const editButton = require('../../assets/images/edit.png');
+const imageUrl = "https://s3.amazonaws.com/fitbots/no-profile-image.png";
+const {width, height} = Dimensions.get("window");
+
 
 class NameAndPicSettings extends Component {
+  constructor(props) {
+    super(props);
+    this.imageHeight = new Animated.Value(height/3);
+    this.imageWidht = new Animated.Value(height/3);
+    this.imageBorderRadius = new Animated.Value(height/6);
+  }
+
+  componentDidMount() {
+    this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this.keyboardDidShow);
+    this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this.keyboardDidHide); 
+  }
+
+  componentWillUnmount() {
+    this.keyboardDidShowListener.remove();
+    this.keyboardDidHideListener.remove();
+  }
+
+  keyboardDidShow = () => {
+    Animated.parallel([
+      Animated.timing(this.imageHeight, {
+        toValue: height/5,
+      }),
+      Animated.timing(this.imageWidht, {
+        toValue: height/5,
+      }),
+      Animated.timing(this.imageBorderRadius, {
+        toValue: height/10,
+      })      
+    ]).start();    
+  };
+
+  keyboardDidHide = () => {
+    Animated.parallel([
+      Animated.timing(this.imageHeight, {
+        toValue: height/3,
+      }),
+      Animated.timing(this.imageWidht, {
+        toValue: height/3,
+      }),
+      Animated.timing(this.imageBorderRadius, {
+        toValue: height/6,
+      })      
+    ]).start();  
+  };
+
+  imageDimension = () => ({
+    height: this.imageHeight, 
+    width: this.imageWidht, 
+    borderRadius: this.imageBorderRadius
+  })
+
   render() {
-    console.log("height",height,width)
     return (
       <View style={styles.mainContainer}>
         <View style={styles.imageContainer}>
-          <Image style={styles.image} source={{ uri: imageUrl}} />
+          <Animated.Image style={[styles.image, this.imageDimension() ]} source={{ uri: imageUrl}} />
           <TouchableHighlight style={styles.updateImageButton}  underlayColor='rgba(40, 87, 237, 0.70)' >
             <Image style={styles.updateImageButtonEdit} source={editButton} />
           </TouchableHighlight>            
@@ -49,9 +102,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   image: {
-    width: height/3.5,
-    height: height/3.5,
-    borderRadius: height/7,
     borderWidth: 1,
     borderColor: 'white', 
   },

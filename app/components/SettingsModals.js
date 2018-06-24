@@ -113,12 +113,14 @@ class SettingsModal extends Component {
 const styles = StyleSheet.create({
   modalBackground: {
     backgroundColor:'rgba(0,0,0,0.5)', 
-    flex:1
+    height: '100%',
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   mainContainer: {
-    flex:1,
-    marginHorizontal: '5%',
-    marginVertical:'25%', 
+    height: '80%',
+    width: '90%',
     borderWidth:0,
     backgroundColor: 'white',
     borderRadius:10  
