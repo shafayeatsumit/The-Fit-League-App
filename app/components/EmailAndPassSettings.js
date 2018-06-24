@@ -12,6 +12,12 @@ import {
 class EmailAndPassSettings extends Component {
   constructor(props) {
     super(props);
+    this.handleSave = this.handleSave.bind(this)
+  }
+
+  handleSave() {
+    // TODO: send request
+    console.log("handle save")
   }
 
   render() {
@@ -29,13 +35,13 @@ class EmailAndPassSettings extends Component {
         </View> 
         <View style={styles.passwordContainer}>
           <Text style={styles.explanationText}>Update Password</Text>
-            <TextInput
-              style={styles.Input}
-              value="LOCKED(connect to facebook)"
-            />          
+          <TextInput
+            style={styles.Input}
+            value="LOCKED(connect to facebook)"
+          />          
         </View>
         <View style={styles.buttonContainer}>
-          <TouchableHighlight style={styles.saveButton} underlayColor='#E9005A' onPress={()=>Alert.alert('pressed')}>
+          <TouchableHighlight style={styles.saveButton} underlayColor='rgba(44,92,233,0.6)' onPress={this.handleSave}>
             <Text style={styles.saveButtonText}>Save</Text>
           </TouchableHighlight>          
         </View>
@@ -52,7 +58,8 @@ const styles = StyleSheet.create({
     fontFamily: 'Avenir-Light',
     color: '#0E2442',
     fontSize: 16,
-    paddingLeft: 20
+    paddingLeft: 20,
+    paddingRight: 10
   },  
   explanationText: {
     fontFamily: 'Avenir-Black',
