@@ -3,10 +3,15 @@ import {
   StyleSheet,
   View,
   Text,
+  AsyncStorage,
   TouchableHighlight,
   StatusBar
 } from 'react-native';
 
+import { Actions } from 'react-native-router-flux';
+import { AppEventsLogger } from 'react-native-fbsdk';
+
+import { SessionStore } from '../services/SessionStore'
 import HamburgerBasement from './HamburgerBasement'
 import SettingsModals from './SettingsModals'
 import OtherHeader from './OtherHeader'
@@ -19,7 +24,7 @@ class Settings extends Component {
       modalName: null,
     }
     this.closeModal = this.closeModal.bind(this)
-    this.logoutPressed = this.logoutPressed.bind(this)
+    this.logOut = this.logOut.bind(this)
   }
 
   componentDidMount(){
@@ -34,15 +39,22 @@ class Settings extends Component {
     this.setState({showModal: false})
   }
 
-  logoutPressed() {
-    // TODO: need send request to server.
+  logOut() {
+    console.log("logoutPressed");
+    AppEventsLogger.logEvent('Logged Out')
+    AsyncStorage.removeItem('auth_token').then((res) => {
+      console.log()
+      AsyncStorage.removeItem(SessionStore.key).then(() => {
+        Actions.welcome({})
+      })
+    })    
   }
 
   render() {
     return (
       <HamburgerBasement {...this.props}>
         <OtherHeader style={styles.headerContainer} {...this.props} title="Settings" />
-        <SettingsModals show={this.state.showModal} modalName={this.state.modalName} exitModal={this.closeModal} />
+        <SettingsModals show={this.state.showModal} modalName={this.state.modalName} exitModal={this.closeModal} {...this.props}/>
         <View style={styles.touchablesRow}>     
           <TouchableHighlight style={styles.touchableItem} underlayColor='#DCDCDC' onPress={this.handlePress.bind(this, "nameAndPic")}>
             <View>
@@ -96,7 +108,7 @@ class Settings extends Component {
           </TouchableHighlight>
         </View>
         <View style={styles.logoutRow}>
-          <TouchableHighlight style={styles.logoutButton} underlayColor='#E9005A' onPress={this.logoutPressed}>
+          <TouchableHighlight style={styles.logoutButton} underlayColor='#E9005A' onPress={this.logOut}>
             <Text style={styles.logoutButtonText}>Log Out</Text>
           </TouchableHighlight>
         </View>

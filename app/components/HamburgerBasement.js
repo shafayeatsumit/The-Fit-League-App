@@ -35,7 +35,7 @@ const WORKOUTS_LINK = { label: 'Your Workouts', action: 'workouts', props: {} }
 const MATCHUP_LINK =  { label: 'Your Matchup', action: 'matchup', props: {} }
 const LEAGUE_LINK =   { label: 'Your League',  action: 'league' }
 const RULES_LINK =    { label: 'Game Rules',  action: 'rules' }
-const SETTINGS_LINK = { label: 'Settings',  action: 'settings', props: {} }
+const SETTINGS_LINK = { label: 'Settings',  action: 'settings' }
 
 const LINKS_BY_FEATURE = {
   matchup: MATCHUP_LINK

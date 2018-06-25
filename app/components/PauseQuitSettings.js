@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 
 import { AppEventsLogger } from 'react-native-fbsdk';
+
 import { HttpUtils } from '../services/HttpUtils';
 
 class PauseQuitSettings extends Component {
@@ -20,15 +21,42 @@ class PauseQuitSettings extends Component {
   }
   
   handlePause() {
-    // TODO: get token from AsyncStorage send post request
+    AppEventsLogger.logEvent('Considered Injured Reserve')
+    Alert.alert(
+      'Are you sure?',
+      'Do you really want to go on Injured Reserve?',
+      [ { text: 'Nevermind', style: 'cancel' },
+        { text: 'Yep!', 
+          onPress: () => {
+            AppEventsLogger.logEvent('Actually requested Injured Reserve')
+            HttpUtils.post('profile/injured_reserve', {}, this.props.token)
+              .then((responseData) => {
+                Alert.alert('Injured Reserve', 'We will be in touch shortly!')
+              }).done()
+          } 
+        } ]
+    ) 
   }
 
   handleQuit() {
-    // TODO: get token from AsyncStorage send post request
+    AppEventsLogger.logEvent('Considered Quitting League')
+    Alert.alert(
+      'Are you sure?',
+      'Do you really want to quit the league?',
+      [ { text: 'Nevermind', style: 'cancel' },
+        { text: 'Yep!', 
+          onPress: () => {
+            AppEventsLogger.logEvent('Actually Quit League')
+            HttpUtils.post('profile/quit_league', {}, this.props.token)
+              .then((responseData) => {
+                Alert.alert('League Exited', 'We will be in touch shortly!')
+              }).done()
+          } 
+        } ]
+    )      
   }
 
   render(){
-    console.log("props",this.props);
     return (
       <View style={styles.mainContainer}>
         <View style={styles.buttonContainer}>

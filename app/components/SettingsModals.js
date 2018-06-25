@@ -48,7 +48,7 @@ class SettingsModal extends Component {
         <KeyboardAvoidingView style={styles.mainContainer} behavior='padding'> 
             {this.modalHeader(title)}
           <View style={styles.modalBoby} behavior='padding'>
-            <NameAndPicSettings/>
+            <NameAndPicSettings {...this.props}/>
           </View>
         </KeyboardAvoidingView>
       )  
@@ -58,7 +58,7 @@ class SettingsModal extends Component {
         <KeyboardAvoidingView style={styles.mainContainer} behavior='padding'> 
             {this.modalHeader(title)}
           <View style={styles.modalBoby}>
-            <EmailAndPassSettings/>
+            <EmailAndPassSettings {...this.props}/>
           </View>
         </KeyboardAvoidingView>        
       )
@@ -68,7 +68,7 @@ class SettingsModal extends Component {
         <KeyboardAvoidingView style={styles.mainContainer} behavior='padding'> 
           {this.modalHeader(title)}
           <View style={styles.modalBoby}>
-            <AboutMeSettings/>
+            <AboutMeSettings {...this.props}/>
           </View>
         </KeyboardAvoidingView>         
       )
@@ -78,7 +78,7 @@ class SettingsModal extends Component {
         <View style={styles.mainContainer}> 
             {this.modalHeader(title)}
           <View style={styles.modalBoby}>
-            <NotificationSettings/>
+            <NotificationSettings {...this.props}/>
           </View>
         </View>         
       )
@@ -88,7 +88,7 @@ class SettingsModal extends Component {
         <View style={styles.mainContainer}> 
             {this.modalHeader(title)}
           <View style={styles.modalBoby}>
-            <PauseQuitSettings/>
+            <PauseQuitSettings {...this.props}/>
           </View>
         </View>         
       )      
