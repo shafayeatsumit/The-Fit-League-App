@@ -2,19 +2,29 @@ import React, { Component } from 'react';
 import { 
   Text, 
   View,
+  Alert,
   TouchableHighlight,
   TextInput,
   StyleSheet
 } from 'react-native';
 
+import { HttpUtils } from '../services/HttpUtils';
+
 class AboutMeSettings extends Component {
   constructor(props){
     super(props);
+    this.state = { aboutMeText:"" }
     this.handleSave = this.handleSave.bind(this)
   }
+
   handleSave() {
-    // TODO: send request
-   
+    const { token } = this.props;
+    this.setState({ aboutMeText: "" })
+    HttpUtils.put('profile', { bio: this.state.aboutMeText }, token).then((response) => {
+      Alert.alert("YaY! Bio Update Successful.")  
+    }).catch((error) => {
+      Alert.alert("Sorry! Update failed.", error.message)
+    }).done()   
   }
 
   render(){
@@ -30,11 +40,12 @@ class AboutMeSettings extends Component {
         <TextInput
           style={styles.Input}
           multiline={true}
-          editable = {true}
           numberOfLines = {4}
+          value = {this.state.aboutMeText}
+          onChangeText={(val) => this.setState({ aboutMeText: val })}
         />  
         <View style={styles.buttonContainer}>
-          <TouchableHighlight style={styles.saveButton} underlayColor='#E9005A' onPress={this.handleSave}>
+          <TouchableHighlight style={styles.saveButton} underlayColor='transparent' onPress={this.handleSave}>
             <Text style={styles.saveButtonText}>Save</Text>
           </TouchableHighlight>          
         </View>        
