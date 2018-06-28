@@ -45,12 +45,12 @@ class SettingsModal extends Component {
     if ( modalName === 'nameAndPic') {
       const title = "Name and Profile Pic"
       return (
-        <KeyboardAvoidingView style={styles.mainContainer} behavior='padding'> 
+        <View style={styles.mainContainer} > 
             {this.modalHeader(title)}
-          <View style={styles.modalBoby} behavior='padding'>
+          <View style={styles.modalBoby} >
             <NameAndPicSettings {...this.props}/>
           </View>
-        </KeyboardAvoidingView>
+        </View>
       )  
     }else if( modalName === "emailAndPass"){
       const title = "Email and Password";
@@ -96,6 +96,7 @@ class SettingsModal extends Component {
   }
 
   render() {
+    console.log("settings modal 1", this.props)
     return (
       <Modal
         animationType="slide"
@@ -103,7 +104,7 @@ class SettingsModal extends Component {
         visible={this.props.show}
       >
         <View style={styles.modalBackground} >
-          { this.props.show && this.modals()} 
+          { this.props.show && this.modals() } 
         </View>
     </Modal>  
     );
