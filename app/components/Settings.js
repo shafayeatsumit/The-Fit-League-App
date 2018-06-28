@@ -40,7 +40,7 @@ class Settings extends Component {
   }
 
   logOut() {
-    console.log("logoutPressed");
+    // TODO: need to check facebook logout option.
     AppEventsLogger.logEvent('Logged Out')
     AsyncStorage.removeItem('auth_token').then((res) => {
       console.log()

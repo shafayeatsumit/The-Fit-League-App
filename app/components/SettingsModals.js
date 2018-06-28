@@ -96,7 +96,6 @@ class SettingsModal extends Component {
   }
 
   render() {
-    console.log("settings modal 1", this.props)
     return (
       <Modal
         animationType="slide"

@@ -126,7 +126,7 @@ class NameAndPicSettings extends Component {
     const { image, name } = this.state;
     this.setState({ loading: true })
     HttpUtils.put('profile', { image_url: image, name }, token).then((response) => {
-      this.setState({ loading: false, name:""})
+      this.setState({ loading: false, name:"" })
       SessionStore.save({ imageUrl: imageUrl })
       Alert.alert("Yay! Update successful")
     }).catch((error) => {

@@ -64,11 +64,11 @@ export default class Home extends Component {
   loadProfile() {
     HttpUtils.get('profile', this.props.token)
       .then((responseData) => {
-        let { name, image_url } = responseData.data.attributes
+        let { name, image_url, from_facebook } = responseData.data.attributes
         SessionStore.save({ imageUrl: image_url })
-        this.setState({ name, image_url })
+        this.setState({ name, image_url, from_facebook })
       }).catch((err) => {
-      }).done()
+    }).done()
   }
 
   saveDeviceToken() {
@@ -166,7 +166,7 @@ export default class Home extends Component {
 
   render() {
     return (
-      <HamburgerBasement token={this.props.token} image_url={this.state.image_url}>
+      <HamburgerBasement token={this.props.token} image_url={this.state.image_url} from_facebook={this.state.from_facebook}>
         <Animated.Image style={StyleSheet.flatten([styles.chatterUserImage, this.state.chatterUserImage])} source={this.state.chatterUserImageSource} />
         <HomeHeader {...this.state} token={this.props.token} />
         <View style={styles.widgetsDashboard}>

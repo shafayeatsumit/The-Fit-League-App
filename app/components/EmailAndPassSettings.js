@@ -2,25 +2,60 @@ import React, { Component } from 'react';
 import { 
   Text, 
   View,
-  Image,
-  TouchableHighlight,
+  Alert,
   TextInput,
-  StyleSheet
+  StyleSheet,
+  TouchableHighlight
 } from 'react-native';
 
+import { HttpUtils } from '../services/HttpUtils'
 
 class EmailAndPassSettings extends Component {
   constructor(props) {
     super(props);
-    this.handleSave = this.handleSave.bind(this)
+    this.state = {
+      email: "",
+      oldPassword: "",
+      newPassword: "",
+    }
+
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSave = this.handleSave.bind(this);
   }
 
   handleSave() {
-    // TODO: send request
-    
+    const { email, newPassword, oldPassword } = this.state;
+    const { token, from_facebook } = this.props;
+
+    this.setState({ email: "", oldPassword: "", newPassword: "" })
+    // TODO: email validation needs to be added
+
+    HttpUtils.put('profile', { notification_email: email }, token).then((response) => {
+
+      if (from_facebook === false) {
+        HttpUtils.put('profile/password', { current_password: oldPassword , new_password: newPassword }, token).then((passResponse) => {
+          Alert.alert("YaY! Update Successful.")  
+        }).catch((error) => {
+          Alert.alert("Sorry! Update failed.", error.message)
+        }).done()
+      }else {
+        Alert.alert("YaY! Update Successful.")
+      }
+
+    }).catch((error) => {
+      Alert.alert("Sorry! Update failed.", error.message)
+    }).done()  
+  }
+
+  handleChange(name, val) {
+    this.setState({
+      ...this.state,
+      [name]: val,
+    });
   }
 
   render() {
+    const { from_facebook } = this.props;
     return (
       <View style={styles.mainContainer}>
         <View style={styles.emailConatinaer}>
@@ -30,16 +65,35 @@ class EmailAndPassSettings extends Component {
           </Text>
           <TextInput
             style={styles.Input}
-            value="ZAC BARRET"
+            autoCorrect={false}
+            autoCapitalize="none"
+            placeholder = "Update Email"
+            keyboardType="email-address"  
+            value={this.state.email}
+            onChangeText={v => this.handleChange('email', v)}          
           />          
         </View> 
         <View style={styles.passwordContainer}>
           <Text style={styles.explanationText}>Update Password</Text>
           <TextInput
             style={styles.Input}
-            value="LOCKED(connect to facebook)"
+            value={this.state.oldPassword}
+            placeholder = {from_facebook ? "Locked For Facebook" : "Old Password"}
+            secureTextEntry
+            editable={from_facebook ? false : true}
+            onChangeText={v => this.handleChange('oldPassword', v)}
           />          
         </View>
+        <View style={styles.passwordContainer}>
+          <TextInput
+            style={styles.Input}
+            value={this.state.newPassword}
+            placeholder = {from_facebook ? "Locked For Facebook" : "New Password"}
+            editable={from_facebook ? false : true}
+            secureTextEntry
+            onChangeText={v => this.handleChange('newPassword', v)}
+          />          
+        </View>        
         <View style={styles.buttonContainer}>
           <TouchableHighlight style={styles.saveButton} underlayColor='rgba(44,92,233,0.6)' onPress={this.handleSave}>
             <Text style={styles.saveButtonText}>Save</Text>
