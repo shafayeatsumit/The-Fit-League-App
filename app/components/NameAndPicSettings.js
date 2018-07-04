@@ -20,7 +20,7 @@ import { HttpUtils } from '../services/HttpUtils'
 import { SessionStore } from '../services/SessionStore'
 
 const editButton = require('../../assets/images/edit.png');
-const imageUrl = "https://s3.amazonaws.com/fitbots/no-profile-image.png";
+const balankImage = "https://s3.amazonaws.com/fitbots/no-profile-image.png";
 const {width, height} = Dimensions.get("window");
 
 
@@ -30,7 +30,7 @@ class NameAndPicSettings extends Component {
     this.state = { 
       name: "" ,
       presentName: "",
-      image: imageUrl,
+      image: balankImage,
       loading: true,
     }
 
@@ -149,7 +149,7 @@ class NameAndPicSettings extends Component {
     this.setState({ loading: true })
     HttpUtils.put('profile', { image_url: image, name }, token).then((response) => {
       this.setState({ loading: false, name:"" })
-      SessionStore.save({ imageUrl: imageUrl })
+      SessionStore.save({ imageUrl: image })
       this.props.exitModal()
     }).catch((error) => {
       Alert.alert("Sorry! Upload failed.", error.message)

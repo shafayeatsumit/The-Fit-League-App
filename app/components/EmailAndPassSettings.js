@@ -41,17 +41,20 @@ class EmailAndPassSettings extends Component {
   handleSave() {
     const { email, newPassword, oldPassword, from_facebook } = this.state;
     const { token } = this.props;
-    this.setState({ email: "", oldPassword: "", newPassword: "" })
+    this.setState({ email: "", oldPassword: "", newPassword: "", loading: true })
     // TODO: email validation needs to be added
     HttpUtils.put('profile', { notification_email: email }, token).then((response) => {
 
       if (from_facebook === false) {
           HttpUtils.put('profile/password', { current_password: oldPassword , new_password: newPassword }, token).then((passResponse) => {
+          this.setState({ loading: false })
           this.props.exitModal()
         }).catch((error) => {
+          this.setState({ loading: false })
           Alert.alert("Sorry! Update failed.", error.message)
         }).done()
       }else {
+        this.setState({ loading: false })
         this.props.exitModal()
       }
 

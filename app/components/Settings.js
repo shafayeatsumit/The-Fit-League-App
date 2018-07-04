@@ -22,6 +22,7 @@ class Settings extends Component {
     this.state = {
       showModal: false ,
       modalName: null,
+      updatedImage: null,
     }
     this.closeModal = this.closeModal.bind(this)
     this.logOut = this.logOut.bind(this)

@@ -97,7 +97,7 @@ class NotificationSettings extends Component {
     this.setState({ loading: true })
     HttpUtils.put('profile', { notification_preferences: switches }, token).then((response) => {
       this.setState({ loading: false })
-      Alert.alert("YaY! Notification Update Successful.")  
+      this.props.exitModal()
     }).catch((error) => {
       this.setState({ loading: false })
       Alert.alert("Sorry! Update failed.", error.message)
@@ -174,15 +174,14 @@ const styles = StyleSheet.create({
   titleText: {
     fontFamily: 'Avenir-Black',
     color: '#0E2442',
-    fontSize: 18,
+    fontSize: 16,
   },
   subtitleText: {
     fontFamily: 'Avenir-Light',
     color: '#8691a0',
-    fontSize: 16,
+    fontSize: 14,
   },
   buttonContainer: {
-    //flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     paddingVertical: 15,
