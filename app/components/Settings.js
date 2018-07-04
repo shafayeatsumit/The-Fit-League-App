@@ -58,11 +58,10 @@ class Settings extends Component {
         </View>
       )
     }
-    
+
     return (
       <HamburgerBasement {...this.props}>
         <OtherHeader style={styles.headerContainer} {...this.props} title="Settings" />
-        
         <View style={styles.touchablesRow}>     
           <TouchableHighlight style={styles.touchableItem} underlayColor='#DCDCDC' onPress={this.handlePress.bind(this, "nameAndPic")}>
             <View>

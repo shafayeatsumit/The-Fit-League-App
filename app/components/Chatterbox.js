@@ -157,7 +157,7 @@ export default class Chatterbox extends Component {
           }
         </Modal>
         <View style={styles.titleHolder}>
-          <Text style={styles.title}>Chatterbox</Text>
+          <Text style={styles.title}>Workout Feed</Text>
         </View>
         { this.state.loading ?
           <View style={styles.loadingColumn}>
