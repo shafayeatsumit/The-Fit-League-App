@@ -14,6 +14,8 @@ import EmailAndPassSettings from './EmailAndPassSettings'
 import AboutMeSettings from './AboutMeSettings'
 import PauseQuitSettings from './PauseQuitSettings'
 
+import { HttpUtils } from '../services/HttpUtils'
+
 const exButton = require('../../assets/images/exButton.png');
 
 class SettingsModal extends Component {
@@ -112,7 +114,7 @@ class SettingsModal extends Component {
 
 const styles = StyleSheet.create({
   modalBackground: {
-    backgroundColor:'rgba(0,0,0,0.5)', 
+    backgroundColor:'rgba(0,0,0,0.8)', 
     height: '100%',
     width: '100%',
     justifyContent: 'center',
@@ -123,7 +125,7 @@ const styles = StyleSheet.create({
     width: '90%',
     borderWidth:0,
     backgroundColor: 'white',
-    borderRadius:10  
+    borderRadius:5  
   },
   modalHeader: {
     flex:1,

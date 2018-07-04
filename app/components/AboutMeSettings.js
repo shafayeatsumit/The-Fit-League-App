@@ -21,7 +21,7 @@ class AboutMeSettings extends Component {
     const { token } = this.props;
     this.setState({ aboutMeText: "" })
     HttpUtils.put('profile', { bio: this.state.aboutMeText }, token).then((response) => {
-      Alert.alert("YaY! Bio Update Successful.")  
+      this.props.exitModal() 
     }).catch((error) => {
       Alert.alert("Sorry! Update failed.", error.message)
     }).done()   
@@ -42,6 +42,7 @@ class AboutMeSettings extends Component {
           multiline={true}
           numberOfLines = {4}
           value = {this.state.aboutMeText}
+          placeholder = "Type here ..."
           onChangeText={(val) => this.setState({ aboutMeText: val })}
         />  
         <View style={styles.buttonContainer}>
@@ -57,6 +58,9 @@ class AboutMeSettings extends Component {
 const styles = StyleSheet.create({
   mainContainer: {
     flex:1
+  },
+  explainTextContainer: {
+    paddingTop:10,
   },
   explainText: {
     fontFamily: 'Avenir-Light',

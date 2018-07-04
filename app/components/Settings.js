@@ -4,8 +4,8 @@ import {
   View,
   Text,
   AsyncStorage,
-  TouchableHighlight,
-  StatusBar
+  StatusBar,
+  TouchableHighlight
 } from 'react-native';
 
 import { Actions } from 'react-native-router-flux';
@@ -43,7 +43,6 @@ class Settings extends Component {
     // TODO: need to check facebook logout option.
     AppEventsLogger.logEvent('Logged Out')
     AsyncStorage.removeItem('auth_token').then((res) => {
-      console.log()
       AsyncStorage.removeItem(SessionStore.key).then(() => {
         Actions.welcome({})
       })
@@ -132,27 +131,28 @@ const styles = StyleSheet.create({
     borderBottomColor: '#D5D7DC',
     borderBottomWidth: 1,
     marginHorizontal:20,
-    marginVertical:10
   },
   lastTouchableItem: {
     flex:1,
     justifyContent: 'center',
     flexDirection: 'column',
     borderBottomColor: '#D5D7DC',
-    marginHorizontal:20,
-    marginVertical:10    
+    marginHorizontal:20, 
   },
   titleText: {
     fontFamily: 'Avenir-Black',
     color: '#0E2442',
-    fontSize: 20,
-    backgroundColor: 'transparent'
+    fontSize: 18,
+    backgroundColor: 'transparent',
+    textAlign: 'justify',
+    lineHeight: 25,
   }, 
   subtitleText: {
     fontFamily: 'Avenir-Light',
     color: '#0E2442',
-    fontSize: 18,
-    backgroundColor: 'transparent'
+    fontSize: 16,
+    backgroundColor: 'transparent',
+    textAlign: 'justify',
   },    
   logoutRow: {
     flex:1,
@@ -163,17 +163,18 @@ const styles = StyleSheet.create({
   },
   logoutButton: {
     borderWidth: 1,
-    width: '80%',
+    width: '50%',
     height: '50%',
     borderRadius: 5,
     borderColor: '#E9005A',
+    backgroundColor: '#E9005A',
     alignItems: 'center',
     justifyContent: 'center'     
   },
   logoutButtonText: {
     fontFamily: 'Avenir-Black',
     backgroundColor: 'transparent',
-    color: '#E6105C',
+    color: 'white',
     fontSize: 20,
     padding: 5
   },  

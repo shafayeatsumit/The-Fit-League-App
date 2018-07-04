@@ -4,6 +4,7 @@ import {
   View,
   Alert,
   TextInput,
+  ActivityIndicator,
   StyleSheet,
   TouchableHighlight
 } from 'react-native';
@@ -15,31 +16,43 @@ class EmailAndPassSettings extends Component {
     super(props);
     this.state = {
       email: "",
+      emailPlaceHolder: "",
       oldPassword: "",
       newPassword: "",
+      from_facebook: false,
+      loading: true,
     }
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSave = this.handleSave.bind(this);
   }
 
-  handleSave() {
-    const { email, newPassword, oldPassword } = this.state;
-    const { token, from_facebook } = this.props;
+  componentDidMount() {
+    HttpUtils.get('profile', this.props.token)
+      .then((response) => {
+        const { notification_email, from_facebook } = response.data.attributes
+        this.setState({emailPlaceHolder: notification_email, from_facebook, loading: false})
+      }).catch((err)=>{
+        // TODO: sentry stuff
+        this.setState({'loading': false})
+      }).done()
+  }
 
+  handleSave() {
+    const { email, newPassword, oldPassword, from_facebook } = this.state;
+    const { token } = this.props;
     this.setState({ email: "", oldPassword: "", newPassword: "" })
     // TODO: email validation needs to be added
-
     HttpUtils.put('profile', { notification_email: email }, token).then((response) => {
 
       if (from_facebook === false) {
-        HttpUtils.put('profile/password', { current_password: oldPassword , new_password: newPassword }, token).then((passResponse) => {
-          Alert.alert("YaY! Update Successful.")  
+          HttpUtils.put('profile/password', { current_password: oldPassword , new_password: newPassword }, token).then((passResponse) => {
+          this.props.exitModal()
         }).catch((error) => {
           Alert.alert("Sorry! Update failed.", error.message)
         }).done()
       }else {
-        Alert.alert("YaY! Update Successful.")
+        this.props.exitModal()
       }
 
     }).catch((error) => {
@@ -55,50 +68,66 @@ class EmailAndPassSettings extends Component {
   }
 
   render() {
-    const { from_facebook } = this.props;
+    const { from_facebook } = this.state;
+    
     return (
       <View style={styles.mainContainer}>
-        <View style={styles.emailConatinaer}>
-          <Text style={styles.explanationText}>Set Preffered Email</Text>
-          <Text style={styles.explinationDetail}>
-            Make Sure this is a valid email! You don't want to miss the weekly report cards!
-          </Text>
-          <TextInput
-            style={styles.Input}
-            autoCorrect={false}
-            autoCapitalize="none"
-            placeholder = "Update Email"
-            keyboardType="email-address"  
-            value={this.state.email}
-            onChangeText={v => this.handleChange('email', v)}          
-          />          
-        </View> 
-        <View style={styles.passwordContainer}>
-          <Text style={styles.explanationText}>Update Password</Text>
-          <TextInput
-            style={styles.Input}
-            value={this.state.oldPassword}
-            placeholder = {from_facebook ? "Locked For Facebook" : "Old Password"}
-            secureTextEntry
-            editable={from_facebook ? false : true}
-            onChangeText={v => this.handleChange('oldPassword', v)}
-          />          
-        </View>
-        <View style={styles.passwordContainer}>
-          <TextInput
-            style={styles.Input}
-            value={this.state.newPassword}
-            placeholder = {from_facebook ? "Locked For Facebook" : "New Password"}
-            editable={from_facebook ? false : true}
-            secureTextEntry
-            onChangeText={v => this.handleChange('newPassword', v)}
-          />          
-        </View>        
-        <View style={styles.buttonContainer}>
-          <TouchableHighlight style={styles.saveButton} underlayColor='rgba(44,92,233,0.6)' onPress={this.handleSave}>
-            <Text style={styles.saveButtonText}>Save</Text>
-          </TouchableHighlight>          
-        </View>
+        {this.state.loading ?
+          <View style={styles.loadingConainer}>
+            <ActivityIndicator size="large" style={styles.loading} color="#B6B7C2" />
+          </View>      
+          :
+          <View style={styles.mainContainer}>
+            <View style={styles.emailConatinaer}>
+            <Text style={styles.explanationText}>Set Preffered Email</Text>
+            <Text style={styles.explinationDetail}>
+              Make Sure this is a valid email! You don't want to miss the weekly report cards!
+            </Text>
+            <TextInput
+              style={styles.Input}
+              autoCorrect={false}
+              autoCapitalize="none"
+              placeholder = {this.state.emailPlaceHolder}
+              keyboardType="email-address"  
+              value={this.state.email}
+              onChangeText={v => this.handleChange('email', v)}          
+            />          
+          </View> 
+          { this.state.from_facebook === false &&
+            <View>
+              <View style={styles.passwordContainer}>
+                <Text style={styles.explanationText}>Update Password</Text>
+                <TextInput
+                  style={styles.Input}
+                  value={this.state.oldPassword}
+                  placeholder = {this.state.from_facebook ? "Locked For Facebook" : "Old Password"}
+                  secureTextEntry
+                  editable={this.state.from_facebook ? false : true}
+                  onChangeText={v => this.handleChange('oldPassword', v)}
+                />          
+              </View>
+
+              <View style={styles.passwordContainer}>
+                <TextInput
+                  style={styles.Input}
+                  value={this.state.newPassword}
+                  placeholder = {this.state.from_facebook ? "Locked For Facebook" : "New Password"}
+                  editable={this.state.from_facebook ? false : true}
+                  secureTextEntry
+                  onChangeText={v => this.handleChange('newPassword', v)}
+                />          
+              </View>        
+            </View>          
+          }
+
+          <View style={styles.buttonContainer}>
+            <TouchableHighlight style={styles.saveButton} underlayColor='rgba(44,92,233,0.6)' onPress={this.handleSave}>
+              <Text style={styles.saveButtonText}>Save</Text>
+            </TouchableHighlight>          
+          </View> 
+        </View>         
+        }
+
       </View>    
     );
   }
@@ -115,14 +144,17 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
     paddingRight: 10
   },  
+  emailConatinaer: {
+    paddingVertical:20
+  },
   explanationText: {
     fontFamily: 'Avenir-Black',
     color: '#0E2442',
-    fontSize: 20,
+    fontSize: 18,
     paddingLeft: 20
   },  
   Input: {
-    fontSize: 17,
+    fontSize: 16,
     fontFamily: 'Avenir-Light',
     color: '#5B7182',
     borderWidth: 1,
@@ -136,7 +168,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F4F4F4'    
   },
   passwordContainer: {
-    paddingTop: 10
+    paddingTop: 5
   },
   buttonContainer: {
     justifyContent: 'center',
@@ -155,8 +187,13 @@ const styles = StyleSheet.create({
     fontFamily: 'Avenir-Black',
     backgroundColor: 'transparent',
     color: '#F1F4FD',
-    fontSize: 20,
+    fontSize: 18,
     padding: 5    
+  },
+  loadingConainer: {
+    flex:1,
+    justifyContent: 'center',
+    alignItems: 'center'
   }
 })
 

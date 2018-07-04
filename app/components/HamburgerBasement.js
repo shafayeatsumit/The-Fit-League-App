@@ -127,7 +127,7 @@ export default class HamburgerBasement extends Component {
 
   render() {
     const { basementSpace } = this.state
-    const { token, image_url, from_facebook } = this.props
+    const { token, image_url } = this.props
 
     return (
       <View style={styles.basement}>
@@ -151,7 +151,7 @@ export default class HamburgerBasement extends Component {
         </TouchableHighlight>
         <View style={styles.basementNavColumn}>
           { this.state.links.map((link) => {
-            return <TouchableHighlight key={link.action} style={styles.basementNavLink} onPress={() => Actions[link.action]({ token, image_url, from_facebook, ...link.props }) } underlayColor='rgba(255, 255, 255, 0.25)'>
+            return <TouchableHighlight key={link.action} style={styles.basementNavLink} onPress={() => Actions[link.action]({ token, image_url, ...link.props }) } underlayColor='rgba(255, 255, 255, 0.25)'>
               <View>
                 <Text style={styles.basementNavLinkText}>{ link.label }</Text>
               </View>

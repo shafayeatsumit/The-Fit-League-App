@@ -9,6 +9,7 @@ import {
   TouchableHighlight,
   KeyboardAvoidingView,
   TextInput,
+  Easing,
   Keyboard,
   Animated,
   StyleSheet
@@ -28,14 +29,16 @@ class NameAndPicSettings extends Component {
     super(props);
     this.state = { 
       name: "" ,
-      image: this.props.image_url
+      presentName: "",
+      image: imageUrl,
+      loading: true,
     }
 
     this.saveHandler = this.saveHandler.bind(this);
     this.pickImage = this.pickImage.bind(this);
     this.imageDimension = this.imageDimension.bind(this);
     this.keyboardDidHide = this.keyboardDidHide.bind(this);
-    this.keyboardDidShow = this.keyboardDidShow.bind(this);
+    this.keyboardWillShow = this.keyboardWillShow.bind(this);
 
     this.imageHeight = new Animated.Value(height/3.5);
     this.imageWidht = new Animated.Value(height/3.5);
@@ -46,31 +49,44 @@ class NameAndPicSettings extends Component {
   }
 
   componentDidMount() {
-    this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this.keyboardDidShow);
+    this.keyboardWillShowListener = Keyboard.addListener('keyboardWillShow', this.keyboardWillShow);
     this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this.keyboardDidHide); 
+
+    HttpUtils.get('profile', this.props.token)
+    .then((responseData) => {
+      const { name, image_url } = responseData.data.attributes
+      this.setState({presentName: name, image: image_url, loading:false})
+    }).catch((err) => {
+      this.setState({ loading: false })
+    }).done()    
   }
 
   componentWillUnmount() {
-    this.keyboardDidShowListener.remove();
+    this.keyboardWillShowListener.remove();
     this.keyboardDidHideListener.remove();
   }
 
-  keyboardDidShow() {
+  keyboardWillShow() {
     Animated.parallel([
       Animated.timing(this.imageHeight, {
         toValue: height/6,
+        easing: Easing.ease,
       }),
       Animated.timing(this.imageWidht, {
         toValue: height/6,
+        easing: Easing.ease,
       }),
       Animated.timing(this.imageBorderRadius, {
         toValue: height/12,
+        easing: Easing.ease,
       }),
       Animated.timing(this.imageFlex, {
         toValue: 1,
+        easing: Easing.ease,
       }) ,
       Animated.timing(this.buttonFlex, {
         toValue: 2,
+        easing: Easing.ease,
       })                  
     ]).start();    
   };
@@ -116,8 +132,14 @@ class NameAndPicSettings extends Component {
       this.setState({ image: base64Image })
       this.uploadImage(base64Image)
     }).catch(err => {
-      Sentry.captureException(err)
-      throw err        
+      // TODO: need to find a better way to do this.
+      const permissionError = 'Cannot access images. Please allow access if you want to be able to select images.'
+      if (err.message === permissionError) {
+        Alert.alert(
+          'Cannot Access Images',
+          'Please Change Your App Settings To Select Image'
+        )
+      }
     });
   }
 
@@ -128,7 +150,7 @@ class NameAndPicSettings extends Component {
     HttpUtils.put('profile', { image_url: image, name }, token).then((response) => {
       this.setState({ loading: false, name:"" })
       SessionStore.save({ imageUrl: imageUrl })
-      Alert.alert("Yay! Update successful")
+      this.props.exitModal()
     }).catch((error) => {
       Alert.alert("Sorry! Upload failed.", error.message)
       this.setState({loading: false})      
@@ -141,7 +163,7 @@ class NameAndPicSettings extends Component {
         {
           this.state.loading ? 
           <View style={styles.loadingConainer}>
-            <ActivityIndicator size="large" style={styles.loading} color="black" />
+            <ActivityIndicator size="large" style={styles.loading} color="#B6B7C2" />
           </View>
           :
           <View style={styles.mainContainer}>
@@ -158,6 +180,7 @@ class NameAndPicSettings extends Component {
               value={this.state.name}
               autoCorrect={false}
               autoCapitalize='none'
+              placeholder={this.state.presentName}
               underlineColorAndroid='rgba(0,0,0,0)'
               onChangeText={(name) => this.setState({ name })}    
             />          
@@ -169,7 +192,6 @@ class NameAndPicSettings extends Component {
           </Animated.View>
           </View>
         }
-        
     </View>       
     );
   }
@@ -185,12 +207,13 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   imageContainer: {
-    paddingTop: 8,
+    paddingTop: 20,
     justifyContent: 'center',
     alignItems: 'center',
   },
   nameContainer: {
     flex: 1,
+    paddingTop:10,
   },
   buttonContainer: {
     alignItems: 'center'
@@ -205,7 +228,7 @@ const styles = StyleSheet.create({
     width: 60,
     position: 'relative',
     bottom: 30,
-    backgroundColor: 'rgba(233, 0, 90, 0.60)',
+    backgroundColor: 'rgba(233, 0, 90, 0.8)',
     borderColor: 'rgba(40, 87, 237, 0.89)',
     borderRadius: 35,
     justifyContent: 'center',
@@ -221,12 +244,12 @@ const styles = StyleSheet.create({
   explanationText: {
     fontFamily: 'Avenir-Black',
     color: '#0E2442',
-    fontSize: 20,
+    fontSize: 16,
     paddingLeft: 20,
     backgroundColor: 'transparent'
   },
   updateNameInput: {
-    fontSize: 20,
+    fontSize: 15,
     fontFamily: 'Avenir-Light',
     color: '#5B7182',
     borderWidth: 1,

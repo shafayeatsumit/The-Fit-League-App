@@ -59,6 +59,7 @@ class PauseQuitSettings extends Component {
   render(){
     return (
       <View style={styles.mainContainer}>
+        <View style={styles.spacer}/>
         <View style={styles.buttonContainer}>
           <TouchableHighlight style={styles.button} underlayColor='#E9005A' onPress={this.handlePause}>
             <Text style={styles.buttonText}>Pause</Text>
@@ -70,6 +71,7 @@ class PauseQuitSettings extends Component {
           <Text style={styles.explainText}>not assigned a matchup. This is a good</Text>
           <Text style={styles.explainText}>option if you are injured</Text>
         </View>
+        <View style={styles.spacer}/>
         <View style={styles.buttonContainer}>
           <TouchableHighlight style={styles.button} underlayColor='#E9005A' onPress={this.handleQuit}>
             <Text style={styles.buttonText}>Quit</Text>
@@ -93,7 +95,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Avenir-Light',
     textAlign: 'center',
     color: '#0E2442',
-    fontSize: 15,
+    fontSize: 16,
     paddingHorizontal: 20
   },
   buttonContainer: {
@@ -116,9 +118,12 @@ const styles = StyleSheet.create({
     fontFamily: 'Avenir-Black',
     backgroundColor: 'transparent',
     color: '#F1F4FD',
-    fontSize: 20,
+    fontSize: 18,
     padding: 5    
-  }  
+  },
+  spacer: {
+    paddingVertical:10
+  } 
 })
 
 export default PauseQuitSettings;
