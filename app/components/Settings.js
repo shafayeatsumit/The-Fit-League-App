@@ -51,10 +51,18 @@ class Settings extends Component {
   }
 
   render() {
+    if (this.state.showModal) {
+      return (
+        <View style={styles.modalBackground}>
+          <SettingsModals show={this.state.showModal} modalName={this.state.modalName} exitModal={this.closeModal} {...this.props}/>
+        </View>
+      )
+    }
+    
     return (
       <HamburgerBasement {...this.props}>
         <OtherHeader style={styles.headerContainer} {...this.props} title="Settings" />
-        <SettingsModals show={this.state.showModal} modalName={this.state.modalName} exitModal={this.closeModal} {...this.props}/>
+        
         <View style={styles.touchablesRow}>     
           <TouchableHighlight style={styles.touchableItem} underlayColor='#DCDCDC' onPress={this.handlePress.bind(this, "nameAndPic")}>
             <View>
@@ -125,6 +133,13 @@ const styles = StyleSheet.create({
     flex: 6,
     backgroundColor: 'white'    
   },
+  modalBackground: {
+    backgroundColor:'rgba(0,0,0,0.8)', 
+    height: '100%',
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },  
   touchableItem: {
     flex:1,
     justifyContent: 'center',

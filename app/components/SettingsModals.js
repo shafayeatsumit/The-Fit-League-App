@@ -104,17 +104,16 @@ class SettingsModal extends Component {
         transparent={true}
         visible={this.props.show}
       >
-        <View style={styles.modalBackground} >
-          { this.props.show && this.modals() } 
-        </View>
+      <View style={styles.modalContainer}>
+      { this.props.show && this.modals() }   
+      </View>
     </Modal>  
     );
   }
 }
 
 const styles = StyleSheet.create({
-  modalBackground: {
-    backgroundColor:'rgba(0,0,0,0.8)', 
+  modalContainer: {
     height: '100%',
     width: '100%',
     justifyContent: 'center',
