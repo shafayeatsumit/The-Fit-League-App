@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Avenir-Light',
     textAlign: 'center',
     color: '#0E2442',
-    fontSize: 16,
+    fontSize: 14,
     paddingHorizontal: 20
   },
   buttonContainer: {
