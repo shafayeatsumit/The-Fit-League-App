@@ -85,7 +85,7 @@ class SettingsModal extends Component {
         </View>         
       )
     } else {
-      const title = "Pause and Quit";
+      const title = "Pause or Quit";
       return (
         <View style={styles.mainContainer}> 
             {this.modalHeader(title)}

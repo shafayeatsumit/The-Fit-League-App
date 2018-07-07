@@ -157,7 +157,7 @@ const styles = StyleSheet.create({
   titleText: {
     fontFamily: 'Avenir-Black',
     color: '#0E2442',
-    fontSize: 18,
+    fontSize: 17,
     backgroundColor: 'transparent',
     textAlign: 'justify',
     lineHeight: 25,
@@ -165,7 +165,7 @@ const styles = StyleSheet.create({
   subtitleText: {
     fontFamily: 'Avenir-Light',
     color: '#0E2442',
-    fontSize: 16,
+    fontSize: 15,
     backgroundColor: 'transparent',
     textAlign: 'justify',
   },    
@@ -187,10 +187,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center'     
   },
   logoutButtonText: {
-    fontFamily: 'Avenir-Black',
+    fontFamily: 'Avenir-Light',
+    fontWeight: '400',
     backgroundColor: 'transparent',
     color: 'white',
-    fontSize: 20,
+    fontSize: 17,
     padding: 5
   },  
 })

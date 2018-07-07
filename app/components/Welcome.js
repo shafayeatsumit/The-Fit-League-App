@@ -184,6 +184,7 @@ export default class Welcome extends Component {
                     style={styles.input}
                     value={this.state.email}
                     placeholder='Email'
+                    autoCapitalize='none'
                     placeholderTextColor='white'
                     underlineColorAndroid='rgba(0,0,0,0)'
                     onChangeText={(email) => this.setState({ email })}

@@ -15,16 +15,17 @@ class EmailAndPassSettings extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: "",
-      emailPlaceHolder: "",
-      oldPassword: "",
-      newPassword: "",
+      email: null,
+      emailPlaceHolder: null,
+      oldPassword: null,
+      newPassword: null,
       from_facebook: false,
       loading: true,
     }
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSave = this.handleSave.bind(this);
+    this.validateEmail = this.validateEmail.bind(this);
   }
 
   componentDidMount() {
@@ -38,29 +39,45 @@ class EmailAndPassSettings extends Component {
       }).done()
   }
 
+  validateEmail(email) {
+    const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email);
+  }
+  
+
   handleSave() {
-    const { email, newPassword, oldPassword, from_facebook } = this.state;
+    const { newPassword, oldPassword, from_facebook } = this.state;
     const { token } = this.props;
-    this.setState({ email: "", oldPassword: "", newPassword: "", loading: true })
-    // TODO: email validation needs to be added
+    const changePassword = newPassword !== null && oldPassword !== null
+    const email = this.state.email || this.state.emailPlaceHolder
+    const validEmail = this.validateEmail(email)
+
+    if (validEmail === false) {
+      Alert.alert("Not A Valid Email!!")
+      return
+    }
+    this.setState({loading: true})
     HttpUtils.put('profile', { notification_email: email }, token).then((response) => {
 
-      if (from_facebook === false) {
-          HttpUtils.put('profile/password', { current_password: oldPassword , new_password: newPassword }, token).then((passResponse) => {
+      if (changePassword) {
+        HttpUtils.put('profile/password', { current_password: oldPassword , new_password: newPassword }, token).then((passResponse) => {
+          console.log("pass response",passResponse)
           this.setState({ loading: false })
           this.props.exitModal()
         }).catch((error) => {
-          this.setState({ loading: false })
-          Alert.alert("Sorry! Update failed.", error.message)
+          this.setState({ loading: false, email: null, newPassword: null, oldPassword: null })
+          Alert.alert("Sorry! Password Update failed.", error.message)
         }).done()
-      }else {
-        this.setState({ loading: false })
+      } else {
         this.props.exitModal()
-      }
+      }      
 
     }).catch((error) => {
+      this.setState({loading:false, email: null,  newPassword: null, oldPassword: null })
       Alert.alert("Sorry! Update failed.", error.message)
     }).done()  
+
+
   }
 
   handleChange(name, val) {
@@ -82,7 +99,7 @@ class EmailAndPassSettings extends Component {
           :
           <View style={styles.mainContainer}>
             <View style={styles.emailConatinaer}>
-            <Text style={styles.explanationText}>Set Preffered Email</Text>
+            <Text style={styles.explanationText}>Set Preferred Email</Text>
             <Text style={styles.explinationDetail}>
               Make Sure this is a valid email! You don't want to miss the weekly report cards!
             </Text>

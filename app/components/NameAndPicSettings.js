@@ -7,7 +7,6 @@ import {
   ActivityIndicator,
   Dimensions,
   TouchableHighlight,
-  KeyboardAvoidingView,
   TextInput,
   Easing,
   Keyboard,
@@ -16,8 +15,8 @@ import {
 } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 
-import { HttpUtils } from '../services/HttpUtils'
-import { SessionStore } from '../services/SessionStore'
+import { HttpUtils } from '../services/HttpUtils';
+import { SessionStore } from '../services/SessionStore';
 
 const editButton = require('../../assets/images/edit.png');
 const balankImage = "https://s3.amazonaws.com/fitbots/no-profile-image.png";
@@ -28,7 +27,7 @@ class NameAndPicSettings extends Component {
   constructor(props) {
     super(props);
     this.state = { 
-      name: "" ,
+      name: null ,
       presentName: "",
       image: balankImage,
       loading: true,
@@ -145,15 +144,16 @@ class NameAndPicSettings extends Component {
 
   saveHandler() {
     const { token } = this.props;
-    const { image, name } = this.state;
+    let { image } = this.state;
+    let name = this.state.name || this.state.presentName
     this.setState({ loading: true })
     HttpUtils.put('profile', { image_url: image, name }, token).then((response) => {
-      this.setState({ loading: false, name:"" })
+      this.setState({ loading: false, name: null })
       SessionStore.save({ imageUrl: image })
       this.props.exitModal()
     }).catch((error) => {
       Alert.alert("Sorry! Upload failed.", error.message)
-      this.setState({loading: false})      
+      this.setState({loading: false, name: null})      
     }).done()  
   }
 
