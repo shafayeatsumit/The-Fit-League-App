@@ -21,7 +21,10 @@ import { HttpUtils } from '../services/HttpUtils'
 import { SessionStore } from '../services/SessionStore'
 
 import { LeagueSharer } from '../services/LeagueSharer'
+
 import DynamicIcon from './DynamicIcon'
+import PickEmoji from './PickEmoji'
+import AddComment from './AddComment';
 
 const thumbsUp = require('../../assets/images/thumbsUp.png')
 const thumbsDown = require('../../assets/images/thumbsDown.png')
@@ -50,11 +53,16 @@ export default class Chatterbox extends Component {
     this.getChatters = this.getChatters.bind(this)
     this.copyInviteUrl = this.copyInviteUrl.bind(this)
     this.getChattersByUrl = this.getChattersByUrl.bind(this)
+    this.changeModal = this.changeModal.bind(this)
     this.state = { 
       modalVisible: false,
       modalData: {},
       loading: true,
-      refreshing: false
+      refreshing: false,
+      modalInfo: {
+        modalName: 'pickEmoji',
+        data: {}
+      }
     }
   }
 
@@ -82,6 +90,15 @@ export default class Chatterbox extends Component {
     this.setState({ modalVisible: true, modalData: { id, user_image_url, user_name, sentiment } })
   }
 
+  changeModal(modalInfo) {
+    if (modalInfo && modalInfo.modalName === 'pickEmoji'){
+    
+      this.setState({modalInfo, modalVisible: false})
+    }
+    this.setState({modalInfo})
+    // this.setState({modalName})
+  }
+
   viewPlayer(chatter) {
     Actions.playerCard({ player: {
       name: chatter.attributes.user_name,
@@ -107,10 +124,16 @@ export default class Chatterbox extends Component {
 
   getChatters() {
     SessionStore.getLeagueId((leagueId) => {
+      this.setState({leagueId})
       this.getChattersByUrl('leagues/' + leagueId.toString() + '/chatters')
     }, () => {
       this.getChattersByUrl('chatters')
     })
+  }
+
+  getEmojis() {
+    HttpUtils.get('chatter_kinds', this.props.token)
+      .then((response) => this.setState({chatterKinds: response.data}))
   }
 
   componentDidMount() {
@@ -126,34 +149,30 @@ export default class Chatterbox extends Component {
     return ( 
       <View style={styles.container}>
         <Modal
-          animationType='slide'
-          presentationStyle='fullScreen'
+          animationType='fade'
+          transparent={true}
           visible={this.state.modalVisible}
           onRequestClose={this.hideModal}>
           { this.state.modalVisible &&
-            <View style={styles.modal}>
-              <View style={styles.modalHeaderHolder}>
-                <Text style={styles.modalHeader}>How do you want to {modalData.sentiment == 'positive' ? 'root for' : 'boo'} {modalData.user_name.split(' ')[0]}?</Text>
-              </View>
-              <View style={styles.actionRow}>
-                { actions[modalData.sentiment].map((action, i) => {
-                    return <View key={i} style={styles.action}>
-                      <TouchableHighlight onPress={() => this.sendChatter(action)} underlayColor='rgba(255, 255, 255, 0.75)'>
-                        <Image style={styles.actionIcon} source={action.icon} />
-                      </TouchableHighlight>
-                      <Text style={styles.actionLabel}>{action.label}</Text>
-                    </View>
-                  })
-                }
-              </View>
-              <View style={styles.modalNevermindHolder}>
-                <TouchableHighlight style={styles[modalData.sentiment + 'ModalNevermind']} onPress={this.hideModal} underlayColor={modalData.sentiment == 'positive' ? '#508CD8' : '#D61D5A' }>
-                  <View>
-                    <Text style={styles.modalNevermindText}>Nevermind</Text>
-                  </View>
-                </TouchableHighlight>
-              </View>
-            </View>
+             <View style={styles.modalBackground}>
+              {
+                this.state.modalInfo.modalName === 'addComment' ?
+                    <AddComment 
+                    {...this.props} 
+                    exitModal={this.hideModal} 
+                    changeModal={this.changeModal}
+                    modalInfo={this.state.modalInfo}
+                    leagueId={this.state.leagueId}
+                  />
+                  :                
+                  <PickEmoji 
+                    {...this.props} 
+                    exitModal={this.hideModal} 
+                    changeModal={this.changeModal}
+                  />
+              }
+                
+             </View>             
           }
         </Modal>
         <View style={styles.titleHolder}>
@@ -239,6 +258,21 @@ const styles = StyleSheet.create({
     borderLeftWidth: 1,
     borderLeftColor: '#B6B7C2'
   },
+  modalBackground: {
+    backgroundColor:'rgba(0,0,0,0.8)', 
+    height: '100%',
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center'
+  }, 
+  modalContainer: {
+    height: '80%',
+    width: '90%',
+    borderWidth: 0,    
+    backgroundColor: 'white',
+    borderRadius: 5,
+    overflow: 'hidden',
+  },    
   titleHolder: {
     borderLeftColor: '#1DD65B',
     borderLeftWidth: 3,
