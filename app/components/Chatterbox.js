@@ -55,7 +55,7 @@ export default class Chatterbox extends Component {
     this.getChattersByUrl = this.getChattersByUrl.bind(this)
     this.changeModal = this.changeModal.bind(this)
     this.state = { 
-      modalVisible: false,
+      modalVisible: true,
       modalData: {},
       loading: true,
       refreshing: false,

@@ -41,7 +41,6 @@ class AddComment extends Component {
 
     }, this.props.token)
     .then((response) => {
-      console.log("response from ==>", response)
       this.props.exitModal()
     }).catch((error)=> {
       console.error(error)
