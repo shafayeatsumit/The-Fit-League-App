@@ -29,18 +29,21 @@ class AddComment extends Component {
   }
   handleSave() {
     const { modalInfo, leagueId } = this.props;
-    console.log("leagUeID",leagueId)
-    console.log("is_private", this.state.checkBox)
-    console.log("text", this.state.commentText)
-    console.log("chatterKindId", modalInfo.emoji.id)
-    HttpUtils.post('chatters', { 
-      league_id: leagueId, 
+    console.log("Body ==>",{
+      league_id: parseInt(leagueId), 
       is_private: this.state.checkBox,
       text: this.state.commentText,
-      chatter_kind_id: modalInfo.emoji.id
+      chatter_kind_id: parseInt(modalInfo.emoji.id)
+    })
+    HttpUtils.post('chatters', { 
+      league_id: parseInt(leagueId), 
+      is_private: this.state.checkBox,
+      text: this.state.commentText,
+      chatter_kind_id: parseInt(modalInfo.emoji.id)
 
     }, this.props.token)
     .then((response) => {
+      console.log("response ==>", response)
       this.exitModal()
     }).catch((error)=> {
       console.error(error)
@@ -78,24 +81,26 @@ class AddComment extends Component {
             placeholder = "Type here ..."
             onChangeText={(val) => this.setState({ commentText: val })}
           />
-          <View style={{height:'10%'}}>
+          <View style={styles.checkboxContainer}>
+            <View style={styles.checkboxTouchable}>
             <TouchableHighlight                              
               underlayColor='transparent'
               onPress = {()=> this.setState({checkBox: !this.state.checkBox})}              
             >                  
-              <View style={{flexDirection:'row', alignItems:'center', marginHorizontal:20, paddingTop:10}}>
-              {
-                this.state.checkBox ?
-                  <Image source={checkbox} style={{height:20, width:20}}/>
-                  :
-                  <Image source={checkboxOutline} style={{height:20, width:20, tintColor:'#C4CAD1'}}/>
-              }
-                
-                <Text style={{paddingLeft:10, fontSize:16,fontFamily: 'Avenir-Light',color:'#5B7182' }}>
+              <View style={styles.checkbox}>
+                {
+                  this.state.checkBox ?
+                    <Image source={checkbox} style={styles.checkboxTickedImage}/>
+                    :
+                    <Image source={checkboxOutline} style={styles.checkboxOutlineImage}/>
+                }
+                <Text style={styles.checkboxText}>
                   send privately
                 </Text>
               </View>
-            </TouchableHighlight>
+            </TouchableHighlight>            
+            </View>
+            <View style={{ flex:1}}/>
           </View>  
           <View style={styles.buttonContainer}>
             <TouchableHighlight style={styles.saveButton} underlayColor='transparent' onPress={this.handleSave}>
@@ -121,8 +126,7 @@ const styles = StyleSheet.create({
   },  
   modalBody: {
     flex:4, 
-    backgroundColor: 'white',
-    //flexDirection:'row'
+    backgroundColor: 'white'
   },  
   input: {
     fontSize: 17,
@@ -164,6 +168,34 @@ const styles = StyleSheet.create({
     color: '#8691a0',
     fontSize: 24,
     backgroundColor: 'transparent'
+  },
+  checkboxContainer: {
+    height: '10%',
+    flexDirection: 'row'
+  },
+  checkboxTouchable: {
+    flex:1,
+    paddingHorizontal:20
+  },
+  checkbox: {
+    flexDirection:'row', 
+    alignItems:'center', 
+    paddingTop:10
+  },
+  checkboxText: {
+    paddingLeft:10, 
+    fontSize:16,
+    fontFamily: 'Avenir-Light',
+    color:'#5B7182' 
+  },
+  checkboxOutlineImage: {
+    height:20, 
+    width:20,
+    tintColor:'#C4CAD1'
+  },
+  checkboxTickedImage: {
+    height:20, 
+    width:20,
   },
   buttonContainer: {
     justifyContent: 'center',

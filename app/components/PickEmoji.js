@@ -33,7 +33,6 @@ class DynamicEmoji extends Component {
         this.setState({chatterKinds: response.data})
         this.setState({loading:false})
     }).catch((err) => {
-      // TODO: create this error and check if it crashes or not.
       this.setState({ loading: false })
     }).done()        
   }
@@ -75,7 +74,8 @@ class DynamicEmoji extends Component {
               <ActivityIndicator size="large" style={styles.loadingConainer} color="#B6B7C2" />
               :
                 <ScrollView >
-                  {this.state.chatterKinds.map((emoji, indx) => {
+                  {this.state.chatterKinds &&
+                    this.state.chatterKinds.map((emoji, indx) => {
                     if (emoji.attributes.sentiment === 'positive') {
                       return (
                         <View style={styles.emojiHolder} key={indx}>
@@ -103,7 +103,8 @@ class DynamicEmoji extends Component {
               <ActivityIndicator size="large" style={styles.loadingConainer} color="#B6B7C2" />
               :
             <ScrollView >                        
-              {this.state.chatterKinds.map((emoji, indx) => {
+              {this.state.chatterKinds && 
+                this.state.chatterKinds.map((emoji, indx) => {
                 if (emoji.attributes.sentiment === 'negative') {
                   return (
                     <View style={styles.emojiHolder} key={indx}>

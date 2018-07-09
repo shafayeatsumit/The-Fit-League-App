@@ -55,12 +55,12 @@ export default class Chatterbox extends Component {
     this.getChattersByUrl = this.getChattersByUrl.bind(this)
     this.changeModal = this.changeModal.bind(this)
     this.state = { 
-      modalVisible: false,
+      modalVisible: true,
       modalData: {},
       loading: true,
       refreshing: false,
       modalInfo: {
-        modalName: 'pickEmoji',
+        modalName: 'pickeEmoji',
         data: {}
       }
     }
@@ -69,7 +69,9 @@ export default class Chatterbox extends Component {
   sendChatter(action) {
     let { id, user_image_url } = this.state.modalData
     let { label } = action
-    HttpUtils.post('chatters', { label, workout_id: id }, this.props.token).done();
+    HttpUtils.post('chatters', { label, workout_id: id }, this.props.token)
+    .then((res)=> console.log("__",res))
+    .done();
     this.props.fireChatter(action.icon, { uri: user_image_url })
     this.hideModal()
     AppEventsLogger.logEvent('Sent Chatter', { label })

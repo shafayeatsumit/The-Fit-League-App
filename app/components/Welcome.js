@@ -94,9 +94,10 @@ export default class Welcome extends Component {
             AppEventsLogger.logEvent('Joined League On Registration')
           }
           HttpUtils.post('login', params).then((responseData) => {
-            let { token, image_url, email, name } = responseData.data.attributes
+            let { token, email, name } = responseData.data.attributes
+            console.log("after facebook save",responseData.data.attributes)
             AppEventsLogger.logEvent('Logged in with Facebook')
-            SessionStore.save({ token, imageUrl: image_url, leagueId: responseData.meta.league_id })
+            SessionStore.save({ token, leagueId: responseData.meta.league_id })
             Session.save(token)
             Actions.home({ token })
           }).catch((error) => {
