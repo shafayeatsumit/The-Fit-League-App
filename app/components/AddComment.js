@@ -27,6 +27,7 @@ class AddComment extends Component {
     this.handleSave = this.handleSave.bind(this)
     this.exitModal = this.exitModal.bind(this)
   }
+
   handleSave() {
     const { modalInfo, leagueId } = this.props;
     console.log("Body ==>",{
@@ -52,10 +53,11 @@ class AddComment extends Component {
   }
 
   exitModal() {
-    this.props.changeModal({
-      modalName: 'pickEmoji',
+    this.props.switchModal({
+      modalName: null,
       data: {}
-    })    
+    }) 
+    this.props.exitModal()   
   }
 
   render() {

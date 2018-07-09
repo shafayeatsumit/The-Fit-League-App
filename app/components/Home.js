@@ -65,7 +65,6 @@ export default class Home extends Component {
     HttpUtils.get('profile', this.props.token)
       .then((responseData) => {
         let { name, image_url } = responseData.data.attributes
-        console.log("my image loadprofile", image_url)
         SessionStore.save({ imageUrl: image_url })
         this.setState({ name, image_url })
       }).catch((err) => {

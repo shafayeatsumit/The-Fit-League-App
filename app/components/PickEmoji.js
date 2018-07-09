@@ -38,9 +38,9 @@ class DynamicEmoji extends Component {
   }
 
   emojiPressed(emoji) {
-    this.props.changeModal({
+    this.props.switchModal({
       modalName: 'addComment',
-      emoji
+      data: emoji
     })
   }
 
@@ -52,7 +52,6 @@ class DynamicEmoji extends Component {
     return (
       <View style={styles.modalContainer}>
         <View style={styles.modalHeaderContainer}>
-         {/* Header starts */}
           <View>
             <TouchableHighlight style={styles.exButtonContainer}  underlayColor='transparent' onPress={this.props.exitModal}>
               <Image style={styles.exButton} source={exButton} />
@@ -64,6 +63,7 @@ class DynamicEmoji extends Component {
             </Text>
           </View>
         </View>
+
         <View style={styles.modalBody} >              
           <View style={styles.scrollable}>
             <View style={styles.scrollableTitle}>
@@ -91,7 +91,6 @@ class DynamicEmoji extends Component {
                   })}
               </ScrollView>                
             }    
-          
           </View>
           <View style={styles.scrollableDivider}/>
           <View style={styles.scrollable}>
@@ -100,25 +99,26 @@ class DynamicEmoji extends Component {
             </View> 
             {
               this.state.loading ?
+
               <ActivityIndicator size="large" style={styles.loadingConainer} color="#B6B7C2" />
               :
-            <ScrollView >                        
-              {this.state.chatterKinds && 
-                this.state.chatterKinds.map((emoji, indx) => {
-                if (emoji.attributes.sentiment === 'negative') {
-                  return (
-                    <View style={styles.emojiHolder} key={indx}>
-                      <TouchableHighlight onPress={this.emojiPressed} underlayColor='rgba(255, 255, 255, 0.75)'>
-                        <Image source={{uri: emoji.attributes.icon.uri, width: 80, height: 80}}/>
-                      </TouchableHighlight>
-                      <Text style={styles.emojiText}>
-                          {emoji.attributes.label}
-                        </Text>                            
-                    </View>
-                  )  
-                }
-              })} 
-            </ScrollView>                      
+              <ScrollView >                        
+                {this.state.chatterKinds && 
+                  this.state.chatterKinds.map((emoji, indx) => {
+                  if (emoji.attributes.sentiment === 'negative') {
+                    return (
+                      <View style={styles.emojiHolder} key={indx}>
+                        <TouchableHighlight onPress={this.emojiPressed} underlayColor='rgba(255, 255, 255, 0.75)'>
+                          <Image source={{uri: emoji.attributes.icon.uri, width: 80, height: 80}}/>
+                        </TouchableHighlight>
+                        <Text style={styles.emojiText}>
+                            {emoji.attributes.label}
+                          </Text>                            
+                      </View>
+                    )  
+                  }
+                })} 
+              </ScrollView>                      
           }
           </View>
         </View>

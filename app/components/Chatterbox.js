@@ -49,32 +49,19 @@ export default class Chatterbox extends Component {
     super(props)
     this.showModal = this.showModal.bind(this)
     this.hideModal = this.hideModal.bind(this)
-    this.sendChatter = this.sendChatter.bind(this)
     this.getChatters = this.getChatters.bind(this)
     this.copyInviteUrl = this.copyInviteUrl.bind(this)
     this.getChattersByUrl = this.getChattersByUrl.bind(this)
-    this.changeModal = this.changeModal.bind(this)
+    this.switchModal = this.switchModal.bind(this)
     this.state = { 
-      modalVisible: true,
-      modalData: {},
+      modalVisible: false,
       loading: true,
       refreshing: false,
-      modalInfo: {
-        modalName: 'pickeEmoji',
+      modalData: {
+        modalName: null,
         data: {}
       }
     }
-  }
-
-  sendChatter(action) {
-    let { id, user_image_url } = this.state.modalData
-    let { label } = action
-    HttpUtils.post('chatters', { label, workout_id: id }, this.props.token)
-    .then((res)=> console.log("__",res))
-    .done();
-    this.props.fireChatter(action.icon, { uri: user_image_url })
-    this.hideModal()
-    AppEventsLogger.logEvent('Sent Chatter', { label })
   }
 
   hideModal() {
@@ -86,19 +73,12 @@ export default class Chatterbox extends Component {
     this.getChatters()
   }
 
-  showModal(user, sentiment) {
-    let { id, attributes } = user
-    let { user_name, user_image_url } = attributes
-    this.setState({ modalVisible: true, modalData: { id, user_image_url, user_name, sentiment } })
+  showModal() {
+    this.setState({ modalVisible: true })
   }
 
-  changeModal(modalInfo) {
-    if (modalInfo && modalInfo.modalName === 'pickEmoji'){
-    
-      this.setState({modalInfo, modalVisible: false})
-    }
-    this.setState({modalInfo})
-    // this.setState({modalName})
+  switchModal(modalData) {
+    this.setState({modalData})
   }
 
   viewPlayer(chatter) {
@@ -158,11 +138,11 @@ export default class Chatterbox extends Component {
           { this.state.modalVisible &&
              <View style={styles.modalBackground}>
               {
-                this.state.modalInfo.modalName === 'addComment' ?
+                this.state.modalData.modalName === 'addComment' ?
                     <AddComment 
                     {...this.props} 
                     exitModal={this.hideModal} 
-                    changeModal={this.changeModal}
+                    switchModal={this.switchModal}
                     modalInfo={this.state.modalInfo}
                     leagueId={this.state.leagueId}
                   />
@@ -170,7 +150,7 @@ export default class Chatterbox extends Component {
                   <PickEmoji 
                     {...this.props} 
                     exitModal={this.hideModal} 
-                    changeModal={this.changeModal}
+                    switchModal={this.switchModal}
                   />
               }
                 
@@ -197,7 +177,7 @@ export default class Chatterbox extends Component {
                 return <TouchableOpacity activeOpacity={1} style={styles.chatter} key={i}>
                   <View style={styles.chatterRow}>
                     <View style={styles.chatterAction}>
-                      <TouchableHighlight style={styles.chatterActionButton} onPress={() => this.showModal(c, 'negative')} underlayColor='rgba(255, 255, 255, 0.75)'>
+                      <TouchableHighlight style={styles.chatterActionButton} onPress={this.showModal} underlayColor='rgba(255, 255, 255, 0.75)'>
                         <Image source={thumbsDown} />
                       </TouchableHighlight>
                     </View>
