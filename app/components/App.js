@@ -18,6 +18,8 @@ import EditWorkoutSuccess from './EditWorkoutSuccess';
 import SadConnection from './SadConnection';
 import ProfileImage from './ProfileImage';
 import Settings from './Settings';
+import NewChatterbox from './NewChatterbox';
+
 
 const App = () => {
   return (
@@ -83,6 +85,11 @@ const App = () => {
           component={League}
           title="Your League"
         />
+        <Scene
+          key="chatterbox"
+          component={NewChatterbox}
+          title="Chatterbox"
+        />        
         <Scene
           key="workouts"
           component={Workouts}

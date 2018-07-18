@@ -36,6 +36,7 @@ const MATCHUP_LINK =  { label: 'Your Matchup', action: 'matchup', props: {} }
 const LEAGUE_LINK =   { label: 'Your League',  action: 'league' }
 const RULES_LINK =    { label: 'Game Rules',  action: 'rules' }
 const SETTINGS_LINK = { label: 'Settings',  action: 'settings' }
+const CHATTERBOX_LINK = { label: 'Chatterbox', action: 'chatterbox', props: {} }
 
 const LINKS_BY_FEATURE = {
   matchup: MATCHUP_LINK
@@ -51,7 +52,7 @@ export default class HamburgerBasement extends Component {
     this.viewRules = this.viewRules.bind(this)
     this.state = { 
       leagueRequired: !props.ignoreLeagueRequirement,
-      links: [HOME_LINK, WORKOUTS_LINK, RULES_LINK],
+      links: [HOME_LINK, CHATTERBOX_LINK, WORKOUTS_LINK, RULES_LINK],
       basementShowing: false,
       noLeague: false,
       currentLeague: null,
@@ -69,7 +70,7 @@ export default class HamburgerBasement extends Component {
   }
 
   setLeagueLinks(league) {
-    let links = [HOME_LINK, WORKOUTS_LINK]
+    let links = [HOME_LINK, CHATTERBOX_LINK, WORKOUTS_LINK]
     league.attributes.features.forEach((feature) => {
       if (LINKS_BY_FEATURE[feature]) links.push(LINKS_BY_FEATURE[feature])
     })
