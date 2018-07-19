@@ -7,23 +7,48 @@ import {
   Image,
   View 
 } from 'react-native';
+
 import HamburgerBasement from './HamburgerBasement';
 import SpeckledHeader from './SpeckledHeader';
+import { HttpUtils } from '../services/HttpUtils'
+import { SessionStore } from '../services/SessionStore'
 
 const likeButton = require('../../assets/images/bigThumbsUp.png');
 const badgbe = require('../../assets/images/badge.png');
-
-
 
 class NewChatterbox extends Component {
   constructor(props){
     super(props);
     this.state = {
-      activeTab: 'youTab'
+      activeTab: 'youTab',
+      data: []
     }
   }
 
+  getChattersByUrl(url) {
+    // '0740118cb24781dc5dcf0e58679679e5'
+    HttpUtils.get(url, '0740118cb24781dc5dcf0e58679679e5')
+      .then((response)=> this.setState({ data: response.data }))
+      .catch((error)=> {
+        console.log("error",error)
+        // TODO : sentry catch error
+      }).done()
+  }
+
+  getChatters() {
+    SessionStore.getLeagueId((leagueId) => {
+      this.getChattersByUrl('leagues/' + leagueId.toString() + '/chatterbox')
+    }, () => {
+      // TODO: what is the use of this call back thing
+    })
+  }
+
+  componentDidMount() {
+    this.getChatters()
+  }
+
   render() {
+    console.log("data",this.state.data)
     return (
       <HamburgerBasement {...this.props}>
         <SpeckledHeader style={styles.headerContainer} {...this.props} title="Chatterbox" />
@@ -45,6 +70,39 @@ class NewChatterbox extends Component {
             </TouchableOpacity>
           </View>
           {/* tab container ends */}
+
+          {/* scrollable continer */}
+          <View style={styles.scrollContainer} >
+            <ScrollView >
+              {
+                this.state.data && 
+                this.state.data.map((value , indx )=> {
+                  if(value.attributes.kind === 'Chatter') {
+                    return (
+                      <View style={styles.commentCard} key={indx} onStartShouldSetResponder={() => true}>
+                        <View style={{flexDirection:'row', alignItems:'center', padding:20}}>
+                          <Image source={{uri: value.attributes.user_icon}} style={styles.commentCardUserIcon}/>                  
+                          <Text style={styles.commentCardUserName}>{value.attributes.user_name}</Text>
+                          <Text style={styles.commentCardLabel}>{value.attributes.label}</Text>
+                        </View>
+                        <View style={styles.commentHolder}>
+                          <View style={styles.commentTextWrapper}>
+                            <Text  style={styles.commentText}>
+                              {value.attributes.text}
+                            </Text>
+                          </View>
+                          <View style={styles.commentIconHolder}>
+                            <Image source={{ uri:value.attributes.icon }} style={styles.commentIcon}/>
+                          </View>
+                        </View>                      
+                      </View>
+                    )  
+                  }
+                })
+              }
+            </ScrollView>
+          </View>          
+          {/* scrollable container end */}
 
           {/* send message button */}
           <View style={styles.buttonContainer}>
@@ -82,7 +140,7 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor:'#2857ED', 
     width:'80%', 
-    height:'10%', 
+    height:'60%', 
     borderRadius:5, 
     justifyContent:'center', 
     alignItems:'center'
@@ -140,5 +198,57 @@ const styles = StyleSheet.create({
     fontSize:15, 
     fontWeight:'bold', 
     color:'white'
-  }    
+  },
+  scrollContainer: {
+    flex:12, 
+    backgroundColor:'#F7F7F8',
+    paddingTop:10    
+  } ,
+  commentCard: {
+    flex:1,
+  },
+  commentCardUserIcon: {
+    borderRadius: 20,
+    height: 40,
+    width: 40    
+  },
+  commentCardLabel: {
+    fontSize:14, 
+    paddingLeft:5, 
+    fontFamily:'Avenir-Light',
+    fontWeight: '500',
+    color: '#8792A0'    
+  },
+  commentHolder: {
+    flex:1, 
+    flexDirection:'row', 
+    paddingHorizontal: 20     
+  },
+  commentTextWrapper: {
+    backgroundColor:'white',
+    paddingHorizontal:20,
+    paddingRight:40,
+    borderRadius:5,
+    paddingVertical:20
+  },
+  commentCardUserName: {
+    fontSize:16, 
+    paddingLeft:10, 
+    fontFamily:'Avenir-Black',
+    color: '#8792A0'    
+  },
+  commentText: {
+    fontSize:14,
+    color:'#778DA0',                      
+    fontFamily: 'Avenir-Black',
+  },
+  commentIconHolder: {
+    justifyContent:'center',
+    alignItems: 'center',
+    right:20
+  },
+  commentIcon: {
+    height: 40,
+    width: 40,
+  }      
 })

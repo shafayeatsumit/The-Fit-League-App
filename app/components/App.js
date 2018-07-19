@@ -20,7 +20,6 @@ import ProfileImage from './ProfileImage';
 import Settings from './Settings';
 import NewChatterbox from './NewChatterbox';
 
-
 const App = () => {
   return (
     <Router>
