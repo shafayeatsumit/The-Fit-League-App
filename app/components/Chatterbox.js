@@ -140,12 +140,12 @@ export default class Chatterbox extends Component {
               {
                 this.state.modalData.modalName === 'addComment' ?
                     <AddComment 
-                    {...this.props} 
-                    exitModal={this.hideModal} 
-                    switchModal={this.switchModal}
-                    modalInfo={this.state.modalInfo}
-                    leagueId={this.state.leagueId}
-                  />
+                      {...this.props} 
+                      exitModal={this.hideModal} 
+                      switchModal={this.switchModal}
+                      modalInfo={this.state.modalInfo}
+                      leagueId={this.state.leagueId}
+                    />
                   :                
                   <PickEmoji 
                     {...this.props} 

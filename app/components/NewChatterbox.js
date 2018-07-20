@@ -5,10 +5,12 @@ import {
   ScrollView,
   TouchableOpacity,
   ActivityIndicator,
+  Modal,
   View 
 } from 'react-native';
 
 import ChatterProvider from './ChatterProvider';
+import RecipientsList from './chatter_modal/RecipientsList';
 import HamburgerBasement from './HamburgerBasement';
 import SpeckledHeader from './SpeckledHeader';
 import { HttpUtils } from '../services/HttpUtils'
@@ -22,19 +24,23 @@ class NewChatterbox extends Component {
     super(props);
     this.state = {
       activeTab: 'youTab',
+      activeModal: null,
       loading: false,
-      chatters: []
+      chatters: [],
+      modalVisible: true
     }
     this.switchTab = this.switchTab.bind(this);
+    this.hideModal = this.hideModal.bind(this);
   }
 
   getChattersByUrl(url) {
-    // '0740118cb24781dc5dcf0e58679679e5'
+    // TODO: replace this with this.props.token
     this.setState({loading: true})
     HttpUtils.get(url, '0740118cb24781dc5dcf0e58679679e5')
       .then((response)=> this.setState({ chatters: response.data, loading:false }))
       .catch((error)=> {
         // TODO : sentry catch error
+        this.setState({loading: false})        
       }).done()
   }
 
@@ -48,6 +54,10 @@ class NewChatterbox extends Component {
     })
   }
 
+  switchModal(modalName) {
+
+  }
+
   switchTab(tabName) {
     const { leagueId } = this.state;
     const personalChatterUrl = 'leagues/' + leagueId.toString() + '/chatterbox/personal';
@@ -57,14 +67,30 @@ class NewChatterbox extends Component {
     tabName === 'youTab' ? this.getChattersByUrl(personalChatterUrl) : this.getChattersByUrl(chatterboxUrl)
   }
 
+  hideModal() {
+    this.setState({ modalVisible: false })
+  }
+
   componentDidMount() {
     this.getChatters()
   }
 
+
   render() {
-    console.log("data",this.state.chatters)
     return (
       <HamburgerBasement {...this.props}>
+        <Modal
+          animationType='fade'
+          transparent={true}
+          visible={this.state.modalVisible}
+        >
+          <View style={styles.modalBackground}>
+            <RecipientsList 
+              {...this.props} 
+              exitModal={this.hideModal} 
+            />
+          </View>
+        </Modal>
         <SpeckledHeader style={styles.headerContainer} {...this.props} title="Chatterbox" />
         <View style={styles.bodyContainer}>
           {/* tab container */}
@@ -206,5 +232,12 @@ const styles = StyleSheet.create({
     flex:1,
     justifyContent: 'center',
     alignItems: 'center'
-  }        
+  },
+  modalBackground: {
+    backgroundColor:'rgba(0,0,0,0.8)', 
+    height: '100%',
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center'
+  }          
 })
