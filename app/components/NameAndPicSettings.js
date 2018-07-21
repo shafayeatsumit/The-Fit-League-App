@@ -31,9 +31,11 @@ class NameAndPicSettings extends Component {
       presentName: "",
       image: balankImage,
       loading: true,
+      newImagePicked: false
     }
 
     this.saveHandler = this.saveHandler.bind(this);
+    this.updateNameOnly = this.updateNameOnly.bind(this);
     this.pickImage = this.pickImage.bind(this);
     this.imageDimension = this.imageDimension.bind(this);
     this.keyboardDidHide = this.keyboardDidHide.bind(this);
@@ -53,7 +55,8 @@ class NameAndPicSettings extends Component {
 
     HttpUtils.get('profile', this.props.token)
     .then((responseData) => {
-      const { name, image_url } = responseData.data.attributes
+      let { name, image_url } = responseData.data.attributes
+      if(image_url===null) image_url= balankImage
       this.setState({presentName: name, image: image_url, loading:false})
     }).catch((err) => {
       this.setState({ loading: false })
@@ -128,7 +131,7 @@ class NameAndPicSettings extends Component {
       cropperCircleOverlay: false            
     }).then(image => {
       const base64Image = `data:${image.mime};base64,${image.data}`
-      this.setState({ image: base64Image })
+      this.setState({ image: base64Image, newImagePicked:true })
       this.uploadImage(base64Image)
     }).catch(err => {
       // TODO: need to find a better way to do this.
@@ -142,19 +145,43 @@ class NameAndPicSettings extends Component {
     });
   }
 
+  updateNameOnly(name) {
+    const { token } = this.props;
+    this.setState({ loading: true })
+    HttpUtils.put('profile', { name }, token).then((response) => {
+      this.setState({ loading: false, name: null })
+      this.props.exitModal()
+    }).catch((error) => {
+      Alert.alert("Sorry! Update failed.", error.message)
+      this.setState({loading: false, name: null})      
+    }).done()  
+  }
+
   saveHandler() {
     const { token } = this.props;
     let { image } = this.state;
     let name = this.state.name || this.state.presentName
+    
+    if (!this.state.newImagePicked && this.state.name !== null) {
+      this.updateNameOnly(name)
+      return
+    }
+
     this.setState({ loading: true })
-    HttpUtils.put('profile', { image_url: image, name }, token).then((response) => {
-      this.setState({ loading: false, name: null })
-      SessionStore.save({ imageUrl: image })
-      this.props.exitModal()
+    HttpUtils.post('images', {image:  image}, token).then((imagesResponse) => {
+      let { url:imageUrl } = imagesResponse.data.attributes
+      HttpUtils.put('profile', { image_url: imageUrl, name }, token).then((response) => {
+        this.setState({ loading: false, name: null })
+        SessionStore.save({ imageUrl: imageUrl })
+        this.props.exitModal()
+      }).catch((error) => {
+        Alert.alert("Sorry! Upload failed.", error.message)
+        this.setState({loading: false, name: null})      
+      }).done()        
     }).catch((error) => {
       Alert.alert("Sorry! Upload failed.", error.message)
       this.setState({loading: false, name: null})      
-    }).done()  
+    }).done()
   }
 
   render() {

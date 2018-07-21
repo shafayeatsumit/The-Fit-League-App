@@ -11,6 +11,8 @@ import {
 
 import ChatterProvider from './ChatterProvider';
 import RecipientsList from './chatter_modal/RecipientsList';
+import AddComment from './chatter_modal/AddComment';
+import PickEmoji from './chatter_modal/PickEmoji';
 import HamburgerBasement from './HamburgerBasement';
 import SpeckledHeader from './SpeckledHeader';
 import { HttpUtils } from '../services/HttpUtils'
@@ -23,14 +25,18 @@ class NewChatterbox extends Component {
   constructor(props){
     super(props);
     this.state = {
-      activeTab: 'youTab',
-      activeModal: null,
+      activeTab: 'youTab',              //options(youTab, leagueTab)
+      activeModal: 'recipientsModal',  //options(emojiPicker, addComment, recipientsModal)
       loading: false,
       chatters: [],
-      modalVisible: true
+      modalVisible: false,
+      recipientsList: [],
+      emojiData: [],
     }
     this.switchTab = this.switchTab.bind(this);
     this.hideModal = this.hideModal.bind(this);
+    this.switchModal = this.switchModal.bind(this);
+    this.renderModal = this.renderModal.bind(this);
   }
 
   getChattersByUrl(url) {
@@ -54,8 +60,18 @@ class NewChatterbox extends Component {
     })
   }
 
-  switchModal(modalName) {
+  switchModal(modalName, recipients=[], emoji=null) {
 
+    if(modalName === 'emojiPicker'){
+      this.setState({'activeModal': modalName, recipientsList: recipients})
+      return
+    } else if (modalName === 'addComment') {
+      console.log('addcomment picked', recipients, emoji)
+      this.setState({'activeModal': modalName, emojiData:emoji})
+    } else {
+      this.setState({'activeModal': modalName})
+    }
+    
   }
 
   switchTab(tabName) {
@@ -75,6 +91,37 @@ class NewChatterbox extends Component {
     this.getChatters()
   }
 
+  renderModal() {
+    const { activeModal } = this.state;
+    if (activeModal === 'recipientsModal') {
+      return (
+        <RecipientsList 
+          {...this.props} 
+          exitModal={this.hideModal} 
+          switchModal={this.switchModal}
+        />
+      )
+    }else if(activeModal === 'emojiPicker') {
+      return(
+        <PickEmoji
+          {...this.props}
+          exitModal={this.hideModal} 
+          switchModal={this.switchModal}
+        />
+      )
+    }else {
+      return (
+        <AddComment
+          {...this.props}
+          recipients={this.state.recipientsList}
+          emoji={this.state.emojiData}
+          leagueId={this.state.leagueId}
+          exitModal={this.hideModal}
+          switchModal={this.switchModal} 
+        />
+      ) 
+    }
+  }
 
   render() {
     return (
@@ -85,10 +132,7 @@ class NewChatterbox extends Component {
           visible={this.state.modalVisible}
         >
           <View style={styles.modalBackground}>
-            <RecipientsList 
-              {...this.props} 
-              exitModal={this.hideModal} 
-            />
+            {this.renderModal()}
           </View>
         </Modal>
         <SpeckledHeader style={styles.headerContainer} {...this.props} title="Chatterbox" />
@@ -130,11 +174,11 @@ class NewChatterbox extends Component {
 
           {/* send message button */}
           <View style={styles.buttonContainer}>
-            <View style={styles.button}>
+            <TouchableOpacity style={styles.button} onPress={()=> this.setState({modalVisible:true})}>
               <Text style={styles.buttonText}>
                 Send a message
               </Text>
-            </View>
+            </TouchableOpacity>
           </View>
           {/* send message button Ends*/}
         </View>

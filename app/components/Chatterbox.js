@@ -23,8 +23,8 @@ import { SessionStore } from '../services/SessionStore'
 import { LeagueSharer } from '../services/LeagueSharer'
 
 import DynamicIcon from './DynamicIcon'
-import PickEmoji from './PickEmoji'
-import AddComment from './AddComment';
+import AddComment from './chatter_modal/AddComment';
+import PickEmoji from './chatter_modal/PickEmoji';
 
 const thumbsUp = require('../../assets/images/thumbsUp.png')
 const thumbsDown = require('../../assets/images/thumbsDown.png')
@@ -57,10 +57,8 @@ export default class Chatterbox extends Component {
       modalVisible: false,
       loading: true,
       refreshing: false,
-      modalData: {
-        modalName: null,
-        data: {}
-      }
+      emojiData: [],
+      activeModal:'emojipicker' // ('emojiPicker', 'addComent')
     }
   }
 
@@ -77,8 +75,12 @@ export default class Chatterbox extends Component {
     this.setState({ modalVisible: true })
   }
 
-  switchModal(modalData) {
-    this.setState({modalData})
+  switchModal(modalName, emoji) {
+    if(modalName === 'addComment' ) {
+      this.setState({ activeModal: modalName, emojiData:emoji })
+    } else {
+      this.setState({activeModal:modalName, emojiData:[]})
+    }
   }
 
   viewPlayer(chatter) {
@@ -126,6 +128,7 @@ export default class Chatterbox extends Component {
     LeagueSharer.call(this.state.inviteUrl, this.state.leagueName, 'Chatterbox')
   }
 
+
   render() {
     let { modalData } = this.state
     return ( 
@@ -138,13 +141,14 @@ export default class Chatterbox extends Component {
           { this.state.modalVisible &&
              <View style={styles.modalBackground}>
               {
-                this.state.modalData.modalName === 'addComment' ?
+                this.state.activeModal === 'addComment' ?
                     <AddComment 
                       {...this.props} 
                       exitModal={this.hideModal} 
                       switchModal={this.switchModal}
                       modalInfo={this.state.modalInfo}
                       leagueId={this.state.leagueId}
+                      emoji={this.state.emojiData}
                     />
                   :                
                   <PickEmoji 

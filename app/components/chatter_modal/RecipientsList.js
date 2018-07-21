@@ -24,7 +24,8 @@ class RecipientsList extends Component {
     this.state = {
       allRecipientsCheckBox: false,
       recipients: [],
-      selectedRecipients: []
+      selectedRecipients: [],
+      loading: true,
     }
     this.clickRecipient = this.clickRecipient.bind(this);
     this.selectAllRecipipents = this.selectAllRecipipents.bind(this);
@@ -74,7 +75,6 @@ class RecipientsList extends Component {
 
   render() {
     const { selectedRecipients, recipients } = this.state;
-    console.log("selected recipient",this.state.selectedRecipients)
     return (
       <View style={styles.modalContainer}>
         <View style={styles.modalHeaderContainer}>
@@ -90,54 +90,67 @@ class RecipientsList extends Component {
           </View>
         </View>
         <View style={styles.modalBody}>
-          <View style={styles.allRecipientsContainer}>
-            <TouchableHighlight                              
-                underlayColor='transparent'
-                style={styles.checkboxTouchable}
-                onPress = {this.selectAllRecipipents}              
-              >             
-              {  this.state.allRecipientsCheckBox || selectedRecipients.length === recipients.length
-                 ?
-                <Image source={checkbox} style={styles.checkboxTickedImage}/>
-                :
-                <Image source={checkboxOutline} style={styles.checkboxOutlineImage}/>
-              }
-            </TouchableHighlight>
-            <Text style={styles.allmembersText}>
-              ALL  LEAGUE  MEMBERS
-            </Text>                          
-          </View>
-          <View style={styles.scrollableHolder}>
-            <ScrollView >
+        {
+          this.state.loading ?
+
+          <ActivityIndicator size="large" style={styles.loading} color="#B6B7C2" />
+          :
+          <View style={styles.modalBody}>
+            <View style={styles.allRecipientsContainer}>
+              <TouchableHighlight                              
+                  underlayColor='transparent'
+                  style={styles.checkboxTouchable}
+                  onPress = {this.selectAllRecipipents}              
+                >             
+                {  this.state.allRecipientsCheckBox || selectedRecipients.length === recipients.length
+                  ?
+                  <Image source={checkbox} style={styles.checkboxTickedImage}/>
+                  :
+                  <Image source={checkboxOutline} style={styles.checkboxOutlineImage}/>
+                }
+              </TouchableHighlight>
+              <Text style={styles.allmembersText}>
+                ALL  LEAGUE  MEMBERS
+              </Text>                          
+            </View>
+            <View style={styles.scrollableHolder}>
+              <ScrollView >
+                {
+                  this.state.recipients.map((recipient, indx) => {
+                    const recipientSelected = this.state.selectedRecipients.includes(recipient)
+                    return(
+                      <View style={styles.recipientContainer} key={indx}>
+                        <TouchableHighlight                              
+                          underlayColor='transparent'
+                          style={styles.checkboxTouchable}
+                          onPress = {() => this.clickRecipient(recipient)}              
+                        >             
+                          {
+                            recipientSelected ?
+                            <Image source={checkbox} style={styles.checkboxTickedImage}/>
+                            :
+                            <Image source={checkboxOutline} style={styles.checkboxOutlineImage}/>
+                          }
+                        </TouchableHighlight>               
+                        <Text style={styles.recipientName}>{recipient.attributes.name}</Text>
+                      </View>  
+                    )
+                  })
+                }
+              
+              </ScrollView>
               {
-                this.state.recipients.map((recipient, indx) => {
-                  const recipientSelected = this.state.selectedRecipients.includes(recipient)
-                  return(
-                    <View style={styles.recipientContainer} key={indx}>
-                      <TouchableHighlight                              
-                        underlayColor='transparent'
-                        style={styles.checkboxTouchable}
-                        onPress = {() => this.clickRecipient(recipient)}              
-                      >             
-                        {
-                          recipientSelected ?
-                          <Image source={checkbox} style={styles.checkboxTickedImage}/>
-                          :
-                          <Image source={checkboxOutline} style={styles.checkboxOutlineImage}/>
-                        }
-                      </TouchableHighlight>               
-                      <Text style={styles.recipientName}>{recipient.attributes.name}</Text>
-                    </View>  
-                  )
-                })
+                selectedRecipients.length > 0 && 
+                <TouchableHighlight 
+                onPress={()=> this.props.switchModal('emojiPicker', selectedRecipients)}
+                >
+                  <Image source={rigthArrow} style={styles.arrowImage}/>
+                </TouchableHighlight>
               }
-            
-            </ScrollView>
+            </View>
           </View>
-          <TouchableHighlight onPress={()=> console.log("pressed")}>
-            <Image source={rigthArrow} style={styles.arrowImage}/>
-          </TouchableHighlight>
-        </View>
+        }
+        </View> 
       </View>
     )
   }
@@ -235,6 +248,12 @@ const styles = StyleSheet.create({
     position:'absolute',
     bottom:10, 
     alignSelf:'center'
-  }
+  },
+  loading: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center'
+  }  
 })
 

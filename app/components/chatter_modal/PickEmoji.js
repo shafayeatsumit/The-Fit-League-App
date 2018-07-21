@@ -11,9 +11,9 @@ import {
   ActivityIndicator
 } from 'react-native'; 
 
-import { HttpUtils } from '../services/HttpUtils'
+import { HttpUtils } from '../../services/HttpUtils'
 
-const exButton = require('../../assets/images/exButton.png');
+const exButton = require('../../../assets/images/exButton.png');
 
 class DynamicEmoji extends Component {
   constructor(props) {
@@ -28,7 +28,8 @@ class DynamicEmoji extends Component {
   }
 
   getEmojis() {
-    HttpUtils.get('chatter_kinds', this.props.token)
+    //TODO: change the token
+    HttpUtils.get('chatter_kinds', '0740118cb24781dc5dcf0e58679679e5')
       .then((response) => {
         this.setState({chatterKinds: response.data})
         this.setState({loading:false})
@@ -38,10 +39,7 @@ class DynamicEmoji extends Component {
   }
 
   emojiPressed(emoji) {
-    this.props.switchModal({
-      modalName: 'addComment',
-      data: emoji
-    })
+    this.props.switchModal('addComment',null, emoji)
   }
 
   componentDidMount() {
@@ -80,7 +78,7 @@ class DynamicEmoji extends Component {
                       return (
                         <View style={styles.emojiHolder} key={indx}>
                           <TouchableHighlight onPress={this.emojiPressed.bind(this,emoji)} underlayColor='rgba(255, 255, 255, 0.75)'>
-                            <Image source={{uri: emoji.attributes.icon.uri, width: 80, height: 80 }}/>
+                            <Image source={{uri: emoji.attributes.icon, width: 80, height: 80 }}/>
                           </TouchableHighlight>
                           <Text style={styles.emojiText}>
                             {emoji.attributes.label}
@@ -109,7 +107,7 @@ class DynamicEmoji extends Component {
                     return (
                       <View style={styles.emojiHolder} key={indx}>
                         <TouchableHighlight onPress={this.emojiPressed} underlayColor='rgba(255, 255, 255, 0.75)'>
-                          <Image source={{uri: emoji.attributes.icon.uri, width: 80, height: 80}}/>
+                          <Image source={{uri: emoji.attributes.icon, width: 80, height: 80}}/>
                         </TouchableHighlight>
                         <Text style={styles.emojiText}>
                             {emoji.attributes.label}

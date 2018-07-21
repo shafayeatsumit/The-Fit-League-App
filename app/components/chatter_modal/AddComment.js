@@ -11,11 +11,11 @@ import {
   ActivityIndicator
 } from 'react-native'; 
 
-import { HttpUtils } from '../services/HttpUtils'
+import { HttpUtils } from '../../services/HttpUtils'
 
-const exButton = require('../../assets/images/exButton.png');
-const checkbox = require('../../assets/images/checkbox.png');
-const checkboxOutline = require('../../assets/images/checkboxOutline.png');
+const exButton = require('../../../assets/images/exButton.png');
+const checkbox = require('../../../assets/images/checkbox.png');
+const checkboxOutline = require('../../../assets/images/checkboxOutline.png');
 
 class AddComment extends Component {
   constructor(props) {
@@ -29,36 +29,34 @@ class AddComment extends Component {
   }
 
   handleSave() {
-    const { modalInfo, leagueId } = this.props;
-    console.log("Body ==>",{
-      league_id: parseInt(leagueId), 
-      is_private: this.state.checkBox,
-      text: this.state.commentText,
-      chatter_kind_id: parseInt(modalInfo.emoji.id)
-    })
-    HttpUtils.post('chatters', { 
-      league_id: parseInt(leagueId), 
-      is_private: this.state.checkBox,
-      text: this.state.commentText,
-      chatter_kind_id: parseInt(modalInfo.emoji.id)
-
-    }, this.props.token)
-    .then((response) => {
-      console.log("response ==>", response)
-      this.exitModal()
-    }).catch((error)=> {
-      console.error(error)
-      this.props.exitModal()
-    }).done()
+    const { recipients , emoji, leagueId } = this.props;  
+    // console.log("Body ==>",{
+    //   league_id: parseInt(leagueId), 
+    //   is_private: this.state.checkBox,
+    //   text: this.state.commentText,
+    //   chatter_kind_id: emoji.id,
+    //   recipient_ids: recipients.map((recipient) => recipient.id)
+    // })
+    // {league_id:'222',is_private:true,text:"Yo man what up?",chatter_kind_id:'2'}
+    // ,recipient_ids:["565","5"]
+    // 0740118cb24781dc5dcf0e58679679e5
+    HttpUtils.post('chatters',{
+      league_id:222,
+      chatter_kind_id: 2,
+      text: "JJJ",
+      is_private: true,
+      recipient_ids:[565,5]
+      
+    },'0740118cb24781dc5dcf0e58679679e5')
+      .then((r)=> console.log("r",r))
   }
 
   exitModal() {
-    this.props.switchModal({
-      modalName: null,
-      data: {}
-    }) 
+    this.props.switchModal('recipientsModal') 
     this.props.exitModal()   
   }
+
+
 
   render() {
     return (
