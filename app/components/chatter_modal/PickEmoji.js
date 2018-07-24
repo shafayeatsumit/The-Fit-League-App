@@ -29,17 +29,17 @@ class DynamicEmoji extends Component {
 
   getEmojis() {
     //TODO: change the token
-    HttpUtils.get('chatter_kinds', '0740118cb24781dc5dcf0e58679679e5')
+    // token:0740118cb24781dc5dcf0e58679679e5
+    HttpUtils.get('chatter_kinds', this.props.token)
       .then((response) => {
-        this.setState({chatterKinds: response.data})
-        this.setState({loading:false})
+        this.setState({chatterKinds: response.data,loading:false})
     }).catch((err) => {
       this.setState({ loading: false })
     }).done()        
   }
 
   emojiPressed(emoji) {
-    this.props.switchModal('addComment',null, emoji)
+    this.props.switchModal({ modalName:'addComment', emoji })
   }
 
   componentDidMount() {
@@ -106,7 +106,7 @@ class DynamicEmoji extends Component {
                   if (emoji.attributes.sentiment === 'negative') {
                     return (
                       <View style={styles.emojiHolder} key={indx}>
-                        <TouchableHighlight onPress={this.emojiPressed} underlayColor='rgba(255, 255, 255, 0.75)'>
+                        <TouchableHighlight onPress={this.emojiPressed.bind(this,emoji)} underlayColor='rgba(255, 255, 255, 0.75)'>
                           <Image source={{uri: emoji.attributes.icon, width: 80, height: 80}}/>
                         </TouchableHighlight>
                         <Text style={styles.emojiText}>

@@ -33,7 +33,7 @@ class RecipientsList extends Component {
 
   getRecipientsByUrl(url) {
     // TODO : replace token
-    HttpUtils.get(url, '0740118cb24781dc5dcf0e58679679e5')
+    HttpUtils.get(url, this.props.token)
       .then((response) => {
         this.setState({loading:false, recipients: response.data})
     }).catch((err) => {

@@ -58,12 +58,12 @@ export default class Chatterbox extends Component {
       loading: true,
       refreshing: false,
       emojiData: [],
-      activeModal:'emojipicker' // ('emojiPicker', 'addComent')
+      activeModal:'emojiPicker' // ('emojiPicker', 'addComent')
     }
   }
 
   hideModal() {
-    this.setState({ modalVisible: false, modalData: {} })
+    this.setState({ modalVisible: false, emojiData:[], activeModal: 'emojiPicker' })
   }
 
   refresh() {
@@ -75,11 +75,12 @@ export default class Chatterbox extends Component {
     this.setState({ modalVisible: true })
   }
 
-  switchModal(modalName, emoji) {
+  switchModal(args) {
+    const { modalName, emoji } = args
     if(modalName === 'addComment' ) {
-      this.setState({ activeModal: modalName, emojiData:emoji })
+      this.setState({ activeModal:modalName, emojiData:emoji })
     } else {
-      this.setState({activeModal:modalName, emojiData:[]})
+      this.setState({ activeModal:modalName, emojiData:[] })
     }
   }
 
@@ -130,7 +131,7 @@ export default class Chatterbox extends Component {
 
 
   render() {
-    let { modalData } = this.state
+  
     return ( 
       <View style={styles.container}>
         <Modal
@@ -146,7 +147,6 @@ export default class Chatterbox extends Component {
                       {...this.props} 
                       exitModal={this.hideModal} 
                       switchModal={this.switchModal}
-                      modalInfo={this.state.modalInfo}
                       leagueId={this.state.leagueId}
                       emoji={this.state.emojiData}
                     />

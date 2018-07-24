@@ -61,7 +61,6 @@ class EmailAndPassSettings extends Component {
 
       if (changePassword) {
         HttpUtils.put('profile/password', { current_password: oldPassword , new_password: newPassword }, token).then((passResponse) => {
-          console.log("pass response",passResponse)
           this.setState({ loading: false })
           this.props.exitModal()
         }).catch((error) => {

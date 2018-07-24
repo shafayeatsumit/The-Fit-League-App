@@ -10,8 +10,9 @@ const saveToStorage = async (newData) => {
   let rawData = await AsyncStorage.getItem(SESSION_STORAGE_KEY)
   let object = rawData ? JSON.parse(rawData) : {}
   Object.keys(newData).forEach((k) => {
-    if (newData[k]) object[k] = newData[k]
+    if (newData[k] !== undefined) object[k] = newData[k]
   })
+
   await AsyncStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(object))
 }
 

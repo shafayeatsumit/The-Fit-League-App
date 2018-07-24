@@ -3,6 +3,7 @@ import {
   Text,
   StyleSheet, 
   ScrollView,
+  AsyncStorage,
   TouchableOpacity,
   ActivityIndicator,
   Modal,
@@ -18,15 +19,12 @@ import SpeckledHeader from './SpeckledHeader';
 import { HttpUtils } from '../services/HttpUtils'
 import { SessionStore } from '../services/SessionStore'
 
-const likeButton = require('../../assets/images/bigThumbsUp.png');
-const badgbe = require('../../assets/images/badge.png');
-
 class NewChatterbox extends Component {
   constructor(props){
     super(props);
     this.state = {
       activeTab: 'youTab',              //options(youTab, leagueTab)
-      activeModal: 'recipientsModal',  //options(emojiPicker, addComment, recipientsModal)
+      activeModal: 'recipientsModal',        //options(emojiPicker, addComment, recipientsModal)
       loading: false,
       chatters: [],
       modalVisible: false,
@@ -42,8 +40,13 @@ class NewChatterbox extends Component {
   getChattersByUrl(url) {
     // TODO: replace this with this.props.token
     this.setState({loading: true})
-    HttpUtils.get(url, '0740118cb24781dc5dcf0e58679679e5')
-      .then((response)=> this.setState({ chatters: response.data, loading:false }))
+    console.log("token url",this.props.token,url) 
+    HttpUtils.get(url, this.props.token)
+      .then((response)=> {
+        console.log("__",response)
+        //this.setState({ loading: false })
+        this.setState({ chatters: response.data, loading:false })
+      })
       .catch((error)=> {
         // TODO : sentry catch error
         this.setState({loading: false})        
@@ -61,15 +64,14 @@ class NewChatterbox extends Component {
   }
 
   switchModal(modalName, recipients=[], emoji=null) {
-
+    console.log("emoji",emoji)
     if(modalName === 'emojiPicker'){
-      this.setState({'activeModal': modalName, recipientsList: recipients})
-      return
+      this.setState({activeModal: modalName, recipientsList: recipients})
     } else if (modalName === 'addComment') {
-      console.log('addcomment picked', recipients, emoji)
-      this.setState({'activeModal': modalName, emojiData:emoji})
+      this.setState({activeModal: modalName, emojiData:emoji})
+      console.log("Emoji setStated in root", emoji)
     } else {
-      this.setState({'activeModal': modalName})
+      this.setState({activeModal: modalName})
     }
     
   }
@@ -84,7 +86,7 @@ class NewChatterbox extends Component {
   }
 
   hideModal() {
-    this.setState({ modalVisible: false })
+    this.setState({ modalVisible: false, activeModal: 'recipientsModal' })
   }
 
   componentDidMount() {
@@ -142,9 +144,11 @@ class NewChatterbox extends Component {
             <TouchableOpacity style={styles.tabTouchable} onPress={() => this.switchTab('youTab')}>
               <View style={[this.state.activeTab === 'youTab' ? styles.activeTabContent : styles.tabContent]}>
                 <Text style={[this.state.activeTab === 'youTab'? styles.activeTablabel : styles.tabLabel]}>YOU</Text>
-                <View style={styles.chatterInbox} >
-                  <Text style={styles.chatterInboxText}>4</Text>
-                </View>
+                {this.props.chatterInboxCount && 
+                  <View style={styles.chatterInbox} >                  
+                    <Text style={styles.chatterInboxText}>{this.props.chatterInboxCount}</Text>                  
+                  </View>
+                }
               </View>
             </TouchableOpacity>
             <TouchableOpacity style={styles.tabTouchable} onPress={() => this.switchTab('leagueTab')}>

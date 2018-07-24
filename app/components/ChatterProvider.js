@@ -15,9 +15,13 @@ class ChatterProvider extends Component {
             return (
               <View style={styles.commentCard} key={indx} onStartShouldSetResponder={() => true}>
                 <View style={styles.commentCardHeader}>
-                  <Image source={{uri: value.attributes.user_icon}} style={styles.commentCardUserIcon}/>                  
+                  <Image source={{uri: value.attributes.user_icon}} style={styles.commentCardUserIcon}/>                                    
                   <Text style={styles.commentCardUserName}>{value.attributes.user_name}</Text>
-                  <Text style={styles.commentCardLabel}>{value.attributes.label}</Text>
+                  <View style={styles.commentCardLabelWrap}>
+                    <Text style={styles.commentCardLabel} numberOfLines={2} >
+                      {value.attributes.label}
+                    </Text>
+                  </View>
                 </View>
                 <View style={styles.commentHolder}>
                   <View style={styles.commentTextWrapper}>
@@ -52,6 +56,12 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     height: 40,
     width: 40    
+  },
+  commentCardLabelWrap: {
+    width: 0,
+    flex: 1,
+    paddingLeft:3,
+    //paddingRight:3,
   },
   commentCardLabel: {
     fontSize:14, 

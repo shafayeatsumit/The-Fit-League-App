@@ -10,7 +10,7 @@ import {
   View,
   Image,
   TextInput,
-  ActivityIndicator,
+  AsyncStorage,
   StatusBar,
   TouchableHighlight,
   AlertIOS
@@ -95,7 +95,6 @@ export default class Welcome extends Component {
           }
           HttpUtils.post('login', params).then((responseData) => {
             let { token, email, name } = responseData.data.attributes
-            console.log("after facebook save",responseData.data.attributes)
             AppEventsLogger.logEvent('Logged in with Facebook')
             SessionStore.save({ token, leagueId: responseData.meta.league_id })
             Session.save(token)

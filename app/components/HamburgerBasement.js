@@ -9,7 +9,7 @@ import {
   TouchableWithoutFeedback,
   TouchableHighlight,
   Image,
-  Alert,
+  AsyncStorage,
   Linking
 } from 'react-native'
 
@@ -36,7 +36,7 @@ const MATCHUP_LINK =  { label: 'Your Matchup', action: 'matchup', props: {} }
 const LEAGUE_LINK =   { label: 'Your League',  action: 'league' }
 const RULES_LINK =    { label: 'Game Rules',  action: 'rules' }
 const SETTINGS_LINK = { label: 'Settings',  action: 'settings' }
-const CHATTERBOX_LINK = { label: 'Chatterbox', action: 'chatterbox', props: {} }
+const CHATTERBOX_LINK = { label: 'Chatterbox', action: 'chatterbox'}
 
 const LINKS_BY_FEATURE = {
   matchup: MATCHUP_LINK
@@ -70,7 +70,10 @@ export default class HamburgerBasement extends Component {
   }
 
   setLeagueLinks(league) {
-    let links = [HOME_LINK, CHATTERBOX_LINK, WORKOUTS_LINK]
+    const chatterInboxCount =  league.attributes.chatter_inbox_count
+    let chatterboxLink = Object.assign({ props: {chatterInboxCount}}, CHATTERBOX_LINK)
+    let links = [HOME_LINK, chatterboxLink, WORKOUTS_LINK]
+    SessionStore.save({chatterInboxCount: league.attributes.chatter_inbox_count })
     league.attributes.features.forEach((feature) => {
       if (LINKS_BY_FEATURE[feature]) links.push(LINKS_BY_FEATURE[feature])
     })
@@ -78,15 +81,16 @@ export default class HamburgerBasement extends Component {
     links.push(leagueLink)
     // May want this to depend on league type?
     links.push(RULES_LINK, SETTINGS_LINK)
-    SessionStore.save({ leagueId: league.id }, () => {    
-      this.setState({ links, currentLeague: league, noLeague: false })
+    // league.attributes.chatter_inbox_count
+    SessionStore.save({ leagueId: league.id, chatterInboxCount }, () => {    
+      this.setState({ links, currentLeague: league, noLeague: false, chatterInboxCount })
     })
   }
 
   componentDidMount() {
     let { token } = this.props
     HttpUtils.get('leagues', token).then((responseData) => {
-      if (responseData.data.length > 0) {
+      if (responseData.data.length > 0) {  
         SessionStore.getLeagueId((leagueId) => {
           let currentLeague = responseData.data.filter((league) => league.id === leagueId)[0]
           this.setLeagueLinks(currentLeague ? currentLeague : responseData.data[0])
@@ -153,8 +157,15 @@ export default class HamburgerBasement extends Component {
         <View style={styles.basementNavColumn}>
           { this.state.links.map((link) => {
             return <TouchableHighlight key={link.action} style={styles.basementNavLink} onPress={() => Actions[link.action]({ token, image_url, ...link.props }) } underlayColor='rgba(255, 255, 255, 0.25)'>
-              <View>
+              <View style={styles.labelView}>
                 <Text style={styles.basementNavLinkText}>{ link.label }</Text>
+                { 
+                  (link.label === 'Chatterbox' && this.state.chatterInboxCount) &&
+                  <View style={styles.chatterInboxView}>
+                    <Text style={styles.basementNavLinkText}>{ this.state.chatterInboxCount }</Text>
+                  </View>                                  
+                }
+
               </View>
             </TouchableHighlight>
           })}
@@ -251,5 +262,17 @@ const styles = StyleSheet.create({
     color: 'white',
     fontFamily: 'Avenir-Black',
     fontSize: 16,
+  },
+  labelView: {
+    flexDirection: 'row'
+  },
+  chatterInboxView: {
+    height:20, 
+    marginLeft:10, 
+    width:20, 
+    borderRadius:10, 
+    backgroundColor:'#2ED461', 
+    justifyContent:'center', 
+    alignItems:'center'
   }
 })

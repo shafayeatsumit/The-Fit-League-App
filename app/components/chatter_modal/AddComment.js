@@ -30,6 +30,7 @@ class AddComment extends Component {
 
   handleSave() {
     const { recipients , emoji, leagueId } = this.props;  
+    console.log("emoji params **", emoji)
     // console.log("Body ==>",{
     //   league_id: parseInt(leagueId), 
     //   is_private: this.state.checkBox,
@@ -40,15 +41,29 @@ class AddComment extends Component {
     // {league_id:'222',is_private:true,text:"Yo man what up?",chatter_kind_id:'2'}
     // ,recipient_ids:["565","5"]
     // 0740118cb24781dc5dcf0e58679679e5
-    HttpUtils.post('chatters',{
-      league_id:222,
-      chatter_kind_id: 2,
-      text: "JJJ",
-      is_private: true,
-      recipient_ids:[565,5]
+    const params = {
+      league_id: parseInt(leagueId),
+      is_private: this.state.checkBox,
+      text: this.state.checkBox,
+      chatter_kind_id: parseInt(emoji.id),
+      recipient_ids: recipients.map((recipient) => parseInt(recipient.id))
+    }
+    //console.log("params",params)
+    HttpUtils.post('chatters', params, this.props.token)
+      .then((response)=> console.log("response**",response))
+      .catch((error)=> {
+        console.error("e",error)
+      })
+    // HttpUtils.post('chatters',{
+    //   league_id:222,
+    //   workout_id: 22,
+    //   chatter_kind_id: 2,
+    //   text: "JJJ",
+    //   is_private: true,
+    //   recipient_ids:[565,5]
       
-    },'0740118cb24781dc5dcf0e58679679e5')
-      .then((r)=> console.log("r",r))
+    // },this.props.token)
+    //   .then((r)=> console.log("r",r))
   }
 
   exitModal() {
