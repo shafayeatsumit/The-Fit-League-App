@@ -71,8 +71,9 @@ export default class Chatterbox extends Component {
     this.getChatters()
   }
 
-  showModal() {
-    this.setState({ modalVisible: true })
+  showModal(user) {
+    let { id } = user
+    this.setState({ modalVisible: true, workoutId: id })
   }
 
   switchModal(args) {
@@ -143,13 +144,14 @@ export default class Chatterbox extends Component {
              <View style={styles.modalBackground}>
               {
                 this.state.activeModal === 'addComment' ?
-                    <AddComment 
-                      {...this.props} 
-                      exitModal={this.hideModal} 
-                      switchModal={this.switchModal}
-                      leagueId={this.state.leagueId}
-                      emoji={this.state.emojiData}
-                    />
+                  <AddComment 
+                    {...this.props} 
+                    exitModal={this.hideModal} 
+                    switchModal={this.switchModal}
+                    leagueId={this.state.leagueId}
+                    emoji={this.state.emojiData}
+                    workoutId={this.state.workoutId}
+                  />
                   :                
                   <PickEmoji 
                     {...this.props} 
@@ -181,7 +183,7 @@ export default class Chatterbox extends Component {
                 return <TouchableOpacity activeOpacity={1} style={styles.chatter} key={i}>
                   <View style={styles.chatterRow}>
                     <View style={styles.chatterAction}>
-                      <TouchableHighlight style={styles.chatterActionButton} onPress={this.showModal} underlayColor='rgba(255, 255, 255, 0.75)'>
+                      <TouchableHighlight style={styles.chatterActionButton} onPress={() => this.showModal(c)} underlayColor='rgba(255, 255, 255, 0.75)'>
                         <Image source={thumbsDown} />
                       </TouchableHighlight>
                     </View>
@@ -197,7 +199,7 @@ export default class Chatterbox extends Component {
                       </View>
                     </View>
                     <View style={styles.chatterAction}>
-                      <TouchableHighlight style={styles.chatterActionButton} onPress={() => this.showModal(c, 'positive')} underlayColor='rgba(255, 255, 255, 0.75)'>
+                      <TouchableHighlight style={styles.chatterActionButton} onPress={() => this.showModal(c)} underlayColor='rgba(255, 255, 255, 0.75)'>
                         <Image source={thumbsUp} />
                       </TouchableHighlight>
                     </View>

@@ -23,7 +23,7 @@ class NewChatterbox extends Component {
   constructor(props){
     super(props);
     this.state = {
-      activeTab: 'youTab',              //options(youTab, leagueTab)
+      activeTab: 'youTab',                    //options(youTab, leagueTab)
       activeModal: 'recipientsModal',        //options(emojiPicker, addComment, recipientsModal)
       loading: false,
       chatters: [],
@@ -40,11 +40,8 @@ class NewChatterbox extends Component {
   getChattersByUrl(url) {
     // TODO: replace this with this.props.token
     this.setState({loading: true})
-    console.log("token url",this.props.token,url) 
     HttpUtils.get(url, this.props.token)
       .then((response)=> {
-        console.log("__",response)
-        //this.setState({ loading: false })
         this.setState({ chatters: response.data, loading:false })
       })
       .catch((error)=> {
@@ -63,18 +60,18 @@ class NewChatterbox extends Component {
     })
   }
 
-  switchModal(modalName, recipients=[], emoji=null) {
-    console.log("emoji",emoji)
+  switchModal(args) {
+    const { modalName, emoji, recipients } = args
+  
     if(modalName === 'emojiPicker'){
       this.setState({activeModal: modalName, recipientsList: recipients})
     } else if (modalName === 'addComment') {
       this.setState({activeModal: modalName, emojiData:emoji})
-      console.log("Emoji setStated in root", emoji)
     } else {
       this.setState({activeModal: modalName})
-    }
-    
+    }    
   }
+
 
   switchTab(tabName) {
     const { leagueId } = this.state;

@@ -29,6 +29,7 @@ class RecipientsList extends Component {
     }
     this.clickRecipient = this.clickRecipient.bind(this);
     this.selectAllRecipipents = this.selectAllRecipipents.bind(this);
+    this.arrowButtonPressed = this.arrowButtonPressed.bind(this);
   }
 
   getRecipientsByUrl(url) {
@@ -52,7 +53,7 @@ class RecipientsList extends Component {
   }
   
   clickRecipient(recipient) {
-    const { selectedRecipients } = this.state;
+    const { selectedRecipients, recipients } = this.state;
     if(selectedRecipients.includes(recipient)) {
       this.setState({ selectedRecipients: selectedRecipients.filter((val)=> val !== recipient)})
     }else {
@@ -61,7 +62,7 @@ class RecipientsList extends Component {
   }
 
   selectAllRecipipents() {
-    const {recipients , selectedRecipients, allRecipientsCheckBox} = this.state;
+    const { recipients , selectedRecipients, allRecipientsCheckBox } = this.state;
     if(allRecipientsCheckBox === false) {
       this.setState({ selectedRecipients : recipients, allRecipientsCheckBox: true})
     } else {
@@ -73,8 +74,19 @@ class RecipientsList extends Component {
     this.getRecipients()
   }
 
+  arrowButtonPressed() {
+    const { selectedRecipients, allRecipientsCheckBox, recipients } = this.state;
+    
+    if (allRecipientsCheckBox || selectedRecipients.length === recipients.length ){
+      this.props.switchModal({modalName: 'emojiPicker', recipients: "all" })
+    }else{
+      this.props.switchModal({modalName: 'emojiPicker', recipients:selectedRecipients})
+    }
+  }
+
   render() {
     const { selectedRecipients, recipients } = this.state;
+
     return (
       <View style={styles.modalContainer}>
         <View style={styles.modalHeaderContainer}>
@@ -142,7 +154,7 @@ class RecipientsList extends Component {
               {
                 selectedRecipients.length > 0 && 
                 <TouchableHighlight 
-                onPress={()=> this.props.switchModal('emojiPicker', selectedRecipients)}
+                  onPress={this.arrowButtonPressed}
                 >
                   <Image source={rigthArrow} style={styles.arrowImage}/>
                 </TouchableHighlight>

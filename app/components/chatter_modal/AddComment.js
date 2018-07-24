@@ -2,9 +2,7 @@ import React, { Component } from 'react';
 import { 
   StyleSheet,
   View,
-  ScrollView,
   TouchableHighlight,
-  Modal,
   Text,
   TextInput,
   Image,
@@ -23,47 +21,44 @@ class AddComment extends Component {
     this.state = {
       checkBox: false,
       commentText: null,
+      loading:false,
     }
     this.handleSave = this.handleSave.bind(this)
     this.exitModal = this.exitModal.bind(this)
   }
 
   handleSave() {
-    const { recipients , emoji, leagueId } = this.props;  
-    console.log("emoji params **", emoji)
-    // console.log("Body ==>",{
-    //   league_id: parseInt(leagueId), 
-    //   is_private: this.state.checkBox,
-    //   text: this.state.commentText,
-    //   chatter_kind_id: emoji.id,
-    //   recipient_ids: recipients.map((recipient) => recipient.id)
-    // })
-    // {league_id:'222',is_private:true,text:"Yo man what up?",chatter_kind_id:'2'}
-    // ,recipient_ids:["565","5"]
-    // 0740118cb24781dc5dcf0e58679679e5
+    const { recipients , emoji, leagueId, workoutId, exitModal } = this.props;  
+
     const params = {
       league_id: parseInt(leagueId),
       is_private: this.state.checkBox,
-      text: this.state.checkBox,
-      chatter_kind_id: parseInt(emoji.id),
-      recipient_ids: recipients.map((recipient) => parseInt(recipient.id))
+      text: this.state.commentText,
+      chatter_kind_id: parseInt(emoji.id)
     }
-    //console.log("params",params)
+
+    // dtermines whether it's passed from workoutfeed or newchatterbox
+    if(workoutId){
+      params.workout_id =  parseInt(workoutId)
+    }else if(recipients) {
+      recipients === 'all' ? 
+        params.whole_league = true 
+      :
+        params.recipient_ids = recipients.map((recipient) => parseInt(recipient.id))         
+    }
+
+    console.log('params',params)
+    this.setState({ loading: true })
     HttpUtils.post('chatters', params, this.props.token)
-      .then((response)=> console.log("response**",response))
-      .catch((error)=> {
-        console.error("e",error)
+      .then((response)=> {
+        this.setState({ loading:false })
+        exitModal()
       })
-    // HttpUtils.post('chatters',{
-    //   league_id:222,
-    //   workout_id: 22,
-    //   chatter_kind_id: 2,
-    //   text: "JJJ",
-    //   is_private: true,
-    //   recipient_ids:[565,5]
-      
-    // },this.props.token)
-    //   .then((r)=> console.log("r",r))
+      .catch((error)=> {
+        console.log("Err",error)
+        this.setState({ loading:false })
+      })
+
   }
 
   exitModal() {
@@ -88,40 +83,48 @@ class AddComment extends Component {
             </Text>
           </View>        
         </View>
-        <View style={styles.modalBody} >              
-          <TextInput
-            style={styles.input}
-            multiline={true}
-            numberOfLines = {4}
-            placeholder = "Type here ..."
-            onChangeText={(val) => this.setState({ commentText: val })}
-          />
-          <View style={styles.checkboxContainer}>
-            <View style={styles.checkboxTouchable}>
-            <TouchableHighlight                              
-              underlayColor='transparent'
-              onPress = {()=> this.setState({checkBox: !this.state.checkBox})}              
-            >                  
-              <View style={styles.checkbox}>
-                {
-                  this.state.checkBox ?
-                    <Image source={checkbox} style={styles.checkboxTickedImage}/>
-                    :
-                    <Image source={checkboxOutline} style={styles.checkboxOutlineImage}/>
-                }
-                <Text style={styles.checkboxText}>
-                  send privately
-                </Text>
-              </View>
-            </TouchableHighlight>            
-            </View>
-            <View style={{ flex:1}}/>
-          </View>  
-          <View style={styles.buttonContainer}>
-            <TouchableHighlight style={styles.saveButton} underlayColor='transparent' onPress={this.handleSave}>
-              <Text style={styles.saveButtonText}>Send!!</Text>
-            </TouchableHighlight>          
-          </View>        
+        <View style={styles.modalBody}>
+          {
+            this.state.loading ?
+              <ActivityIndicator size="large" style={styles.loading} color="#B6B7C2" />
+              :
+              <View style={styles.modalBody} >              
+                <TextInput
+                  style={styles.input}
+                  multiline={true}
+                  numberOfLines = {4}
+                  placeholder = "Type here ..."
+                  onChangeText={(val) => this.setState({ commentText: val })}
+                />
+                <View style={styles.checkboxContainer}>
+                  <View style={styles.checkboxTouchable}>
+                  <TouchableHighlight                              
+                    underlayColor='transparent'
+                    onPress = {()=> this.setState({checkBox: !this.state.checkBox})}              
+                  >                  
+                    <View style={styles.checkbox}>
+                      {
+                        this.state.checkBox ?
+                          <Image source={checkbox} style={styles.checkboxTickedImage}/>
+                          :
+                          <Image source={checkboxOutline} style={styles.checkboxOutlineImage}/>
+                      }
+                      <Text style={styles.checkboxText}>
+                        send privately
+                      </Text>
+                    </View>
+                  </TouchableHighlight>            
+                  </View>
+                  <View style={{ flex:1}}/>
+                </View>  
+                <View style={styles.buttonContainer}>
+                  <TouchableHighlight style={styles.saveButton} underlayColor='transparent' onPress={this.handleSave}>
+                    <Text style={styles.saveButtonText}>Send!!</Text>
+                  </TouchableHighlight>          
+                </View>        
+            </View>              
+          }
+
         </View>        
       </View>
     );
@@ -231,5 +234,10 @@ const styles = StyleSheet.create({
     color: '#F1F4FD',
     fontSize: 20,
     padding: 5    
+  },
+  loading: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
   }  
 })
