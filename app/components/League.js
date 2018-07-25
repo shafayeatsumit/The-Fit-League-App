@@ -35,7 +35,6 @@ export default class League extends Component {
   }
 
   componentDidMount() {
-    console.log("==>",this.props)
     StatusBar.setBarStyle('dark-content', true)
     this.getMembers()
     AppEventsLogger.logEvent('Viewed League')

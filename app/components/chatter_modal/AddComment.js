@@ -47,7 +47,7 @@ class AddComment extends Component {
         params.recipient_ids = recipients.map((recipient) => parseInt(recipient.id))         
     }
 
-    console.log('params',params)
+
     this.setState({ loading: true })
     HttpUtils.post('chatters', params, this.props.token)
       .then((response)=> {
