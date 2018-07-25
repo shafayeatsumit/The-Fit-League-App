@@ -5,7 +5,6 @@
 	};
 	objectVersion = 46;
 	objects = {
-
 /* Begin PBXBuildFile section */
 		00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302AC1ABCB8CE00DB3ED1 /* libRCTActionSheet.a */; };
 		00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302BA1ABCB90400DB3ED1 /* libRCTGeolocation.a */; };
@@ -62,6 +61,7 @@
 		C7EF9732871D4D119B8F6344 /* Avenir-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 97EE793C86F943179FECD8A0 /* Avenir-Black.ttf */; };
 		D61EB4577DD743D8BF348AE1 /* libRNSentry.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FF53914C69964579B978B775 /* libRNSentry.a */; };
 		E31E6CC99CF848DAE3C307FA /* InstabugCore.framework in Embed Instabug Framework */ = {isa = PBXBuildFile; fileRef = ADF58641EEF67CB4D16FC6FA /* InstabugCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		1AA18A825F664F638EEAD064 /* Fenwick-Outline.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 49645582390A44D7B5EE5DA6 /* Fenwick-Outline.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -460,6 +460,7 @@
 		DBCC3825746B43F493201D96 /* BVLinearGradient.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = BVLinearGradient.xcodeproj; path = "../node_modules/react-native-linear-gradient/BVLinearGradient.xcodeproj"; sourceTree = "<group>"; };
 		F3815A90B37E4D3989A02AEC /* Avenir.ttc */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Avenir.ttc; path = ../assets/fonts/Avenir.ttc; sourceTree = "<group>"; };
 		FF53914C69964579B978B775 /* libRNSentry.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNSentry.a; sourceTree = "<group>"; };
+		49645582390A44D7B5EE5DA6 /* Fenwick-Outline.ttf */ = {isa = PBXFileReference; name = "Fenwick-Outline.ttf"; path = "../assets/fonts/Fenwick-Outline.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -821,8 +822,17 @@
 				1CAE2F6B0C9844699CA4A5F8 /* Toronto-Gothic.ttf */,
 				60512CD63A254ED7BFE7BD4C /* Avenir-Light.ttf */,
 				F3815A90B37E4D3989A02AEC /* Avenir.ttc */,
+				49645582390A44D7B5EE5DA6 /* Fenwick-Outline.ttf */,
 			);
 			name = Resources;
+			sourceTree = "<group>";
+		};
+		C428811CFA5A4F10B127F7A5 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			path = Application;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1368,6 +1378,7 @@
 				B9251EA8AB6E43C890A7F840 /* branch.json in Resources */,
 				6D941CF4542947F1B0AD0FC6 /* Avenir-Light.ttf in Resources */,
 				C380F86320F9447BB195F893 /* Avenir.ttc in Resources */,
+				1AA18A825F664F638EEAD064 /* Fenwick-Outline.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
