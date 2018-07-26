@@ -55,7 +55,7 @@
 		<true/>
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string/>
+	<string></string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>This app does not require access to the microphone.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
@@ -66,7 +66,7 @@
 		<string>Toronto-Gothic.ttf</string>
 		<string>Avenir-Light.ttf</string>
 		<string>Avenir.ttc</string>
-		<string>Fenwick-Outline.ttf</string>
+		<string>Fenwick.ttf</string>
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>

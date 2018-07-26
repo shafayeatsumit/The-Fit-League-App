@@ -23,7 +23,7 @@ const palyOffCard = (value,indx) => {
       </View>
       <View style={styles.fullWidthRightView}>
         <Text style={styles.palyOffText}>
-          {value.attributes.text}
+          weeks untill playoffs!
         </Text>
       </View>              
     </View>
@@ -37,8 +37,8 @@ const sundayCard = (value, indx) => {
         <Image source={tflIcon} style={styles.sudnayBadgeIcon}/>
       </View>
       <View style={styles.fullWidthRightView}>
-        <Text style={styles.sundayText}>
-          It's sudnay log your workout! k thankx byeee!!!
+        <Text style={styles.sundayText} numberOfLines={3}>
+          {value.attributes.text}
         </Text>
       </View>              
     </View>
@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
   },
   bubbleCardUserName: {
     fontSize:16, 
-    paddingLeft:10, 
+    paddingLeft:5, 
     fontFamily:'Avenir-Black',
     color: '#8792A0'    
   },
@@ -188,13 +188,13 @@ const styles = StyleSheet.create({
     fontFamily:'Fenwick',
     textShadowColor: 'white',
     color: 'white',
-    fontSize:16    
+    fontSize:30    
   },
   palyOffText: {
     fontFamily:'Avenir-Black',
     textShadowColor: 'white',                    
     color: 'white',
-    fontSize:12   
+    fontSize:20 
   },
   sudnayBadgeIcon: {
     height:40, 
@@ -205,6 +205,6 @@ const styles = StyleSheet.create({
     fontFamily:'Avenir-Black',
     textShadowColor: 'white',                    
     color: 'white',
-    fontSize:12       
+    fontSize:15      
   }
 })

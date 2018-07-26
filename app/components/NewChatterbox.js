@@ -42,6 +42,7 @@ class NewChatterbox extends Component {
     this.setState({loading: true})
     HttpUtils.get(url, this.props.token)
       .then((response)=> {
+        console.log("r->",response)
         this.setState({ chatters: response.data, loading:false })
       })
       .catch((error)=> {
