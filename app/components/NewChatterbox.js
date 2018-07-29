@@ -40,9 +40,10 @@ class NewChatterbox extends Component {
   getChattersByUrl(url) {
     // TODO: replace this with this.props.token
     this.setState({loading: true})
+    console.log("url ==>",url)
     HttpUtils.get(url, this.props.token)
       .then((response)=> {
-        console.log("r->",response)
+        console.log("r ==>",response)
         this.setState({ chatters: response.data, loading:false })
       })
       .catch((error)=> {
@@ -53,7 +54,7 @@ class NewChatterbox extends Component {
 
   getChatters() {
     SessionStore.getLeagueId((leagueId) => {
-      const chatterboxUrl = 'leagues/' + leagueId.toString() + '/chatterbox';
+      const chatterboxUrl = 'leagues/' + leagueId.toString() + '/chatterbox/personal';
       this.getChattersByUrl(chatterboxUrl)
       this.setState({leagueId})
     }, () => {

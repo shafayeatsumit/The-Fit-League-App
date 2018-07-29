@@ -36,7 +36,7 @@ const sundayCard = (value, indx) => {
       <View style={styles.fullWidthLeftView}>
         <Image source={tflIcon} style={styles.sudnayBadgeIcon}/>
       </View>
-      <View style={styles.fullWidthRightView}>
+      <View style={[styles.fullWidthRightView,{flex:5}]}>
         <Text style={styles.sundayText} numberOfLines={3}>
           {value.attributes.text}
         </Text>
@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
   },
   bubbleCardLabelWrap: {
     width: 0,
-    flex: 1,
+    flex: 1
   },
   bubbleCardLabel: {
     fontSize:14, 
@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
   bubbleTextWrapper: {
     backgroundColor:'white',
     paddingHorizontal:20,
-    paddingRight:40,
+    paddingRight:30,
     borderRadius:5,
     paddingVertical:20
   },
@@ -158,8 +158,9 @@ const styles = StyleSheet.create({
   },
   fullWidhtContainer: {
     flexDirection:'row', 
-    backgroundColor:'gray',
-    height:80
+    backgroundColor:'#949CAB',
+    height:80,
+    marginVertical:15
   },
   fullWidthLeftView: {
     flex:1, 
@@ -205,6 +206,7 @@ const styles = StyleSheet.create({
     fontFamily:'Avenir-Black',
     textShadowColor: 'white',                    
     color: 'white',
-    fontSize:15      
+    fontSize:16,
+    paddingRight:10      
   }
 })
