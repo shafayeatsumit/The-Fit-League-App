@@ -63,6 +63,7 @@
 		C7EF9732871D4D119B8F6344 /* Avenir-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 97EE793C86F943179FECD8A0 /* Avenir-Black.ttf */; };
 		D61EB4577DD743D8BF348AE1 /* libRNSentry.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FF53914C69964579B978B775 /* libRNSentry.a */; };
 		E31E6CC99CF848DAE3C307FA /* InstabugCore.framework in Embed Instabug Framework */ = {isa = PBXBuildFile; fileRef = ADF58641EEF67CB4D16FC6FA /* InstabugCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		F1FB4C2ACDBE45ABA2748C17 /* Avenir-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 98A898F093144596A45E0D45 /* Avenir-Medium.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -455,6 +456,7 @@
 		8CEDA5BEF8754DE3885FC4FC /* RNInstabug.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNInstabug.xcodeproj; path = "../node_modules/instabug-reactnative/ios/RNInstabug.xcodeproj"; sourceTree = "<group>"; };
 		96E4140BB0B445CA878F8D07 /* RNBranch.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNBranch.xcodeproj; path = "../node_modules/react-native-branch/ios/RNBranch.xcodeproj"; sourceTree = "<group>"; };
 		97EE793C86F943179FECD8A0 /* Avenir-Black.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Avenir-Black.ttf"; path = "../assets/fonts/Avenir-Black.ttf"; sourceTree = "<group>"; };
+		98A898F093144596A45E0D45 /* Avenir-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Avenir-Medium.ttf"; path = "../assets/fonts/Avenir-Medium.ttf"; sourceTree = "<group>"; };
 		A981E0BB6A8841E6A9086E7A /* RCTFBSDK.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RCTFBSDK.xcodeproj; path = "../node_modules/react-native-fbsdk/ios/RCTFBSDK.xcodeproj"; sourceTree = "<group>"; };
 		AC03F7A81CBC4DA7A32653EB /* libBVLinearGradient.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libBVLinearGradient.a; sourceTree = "<group>"; };
 		ADF58641EEF67CB4D16FC6FA /* InstabugCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = InstabugCore.framework; path = "../node_modules/instabug-reactnative/ios/InstabugCore.framework"; sourceTree = "<group>"; };
@@ -826,6 +828,7 @@
 				F3815A90B37E4D3989A02AEC /* Avenir.ttc */,
 				49645582390A44D7B5EE5DA6 /* Fenwick-Outline.ttf */,
 				4004C4DD66D248899C1BB9E5 /* Fenwick.ttf */,
+				98A898F093144596A45E0D45 /* Avenir-Medium.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -1374,6 +1377,7 @@
 				6D941CF4542947F1B0AD0FC6 /* Avenir-Light.ttf in Resources */,
 				C380F86320F9447BB195F893 /* Avenir.ttc in Resources */,
 				343CE763E7214D70A5509F91 /* Fenwick.ttf in Resources */,
+				F1FB4C2ACDBE45ABA2748C17 /* Avenir-Medium.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1611,8 +1615,8 @@
 					"-lc++",
 				);
 				PRODUCT_NAME = TheFitLeague;
-				PROVISIONING_PROFILE = "296f2ffe-4a4f-48c0-8530-8a270aa99a55";
-				PROVISIONING_PROFILE_SPECIFIER = "Shafayeat TFL";
+				PROVISIONING_PROFILE = "fd0014c5-e3a4-4fda-ab35-723659e6a118";
+				PROVISIONING_PROFILE_SPECIFIER = "Shafayeat TFL App Store";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -1649,8 +1653,8 @@
 					"-lc++",
 				);
 				PRODUCT_NAME = TheFitLeague;
-				PROVISIONING_PROFILE = "296f2ffe-4a4f-48c0-8530-8a270aa99a55";
-				PROVISIONING_PROFILE_SPECIFIER = "Shafayeat TFL";
+				PROVISIONING_PROFILE = "fd0014c5-e3a4-4fda-ab35-723659e6a118";
+				PROVISIONING_PROFILE_SPECIFIER = "Shafayeat TFL App Store";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 			};

@@ -24,6 +24,12 @@ const App = () => {
   return (
     <Router>
       <Scene key="root" hideNavBar={true}>
+        {/* <Scene
+          key="chatterbox"
+          component={NewChatterbox}
+          title="Chatterbox"
+          initial
+        />        */}
         <Scene key="loading"
           component={Loading}
           title="Loading"

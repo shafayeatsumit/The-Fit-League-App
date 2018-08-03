@@ -31,7 +31,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>5</string>
+	<string>6</string>
 	<key>FacebookAppID</key>
 	<string>551820571820555</string>
 	<key>FacebookDisplayName</key>
@@ -62,6 +62,7 @@
 	<string>This app does require access to the photo library.</string>
 	<key>UIAppFonts</key>
 	<array>
+		<string>Avenir-Medium.ttf</string>
 		<string>Avenir-Black.ttf</string>
 		<string>Toronto-Gothic.ttf</string>
 		<string>Avenir-Light.ttf</string>

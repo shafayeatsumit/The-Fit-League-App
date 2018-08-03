@@ -40,10 +40,8 @@ class NewChatterbox extends Component {
   getChattersByUrl(url) {
     // TODO: replace this with this.props.token
     this.setState({loading: true})
-    console.log("url ==>",url)
     HttpUtils.get(url, this.props.token)
       .then((response)=> {
-        console.log("r ==>",response)
         this.setState({ chatters: response.data, loading:false })
       })
       .catch((error)=> {
@@ -136,7 +134,7 @@ class NewChatterbox extends Component {
             {this.renderModal()}
           </View>
         </Modal>
-        <SpeckledHeader style={styles.headerContainer} {...this.props} title="Chatterbox" />
+        <SpeckledHeader  {...this.props} title="Chatterbox" />
         <View style={styles.bodyContainer}>
           {/* tab container */}
           <View style={styles.tabContainer}>
@@ -145,7 +143,7 @@ class NewChatterbox extends Component {
                 <Text style={[this.state.activeTab === 'youTab'? styles.activeTablabel : styles.tabLabel]}>YOU</Text>
                 {this.props.chatterInboxCount && 
                   <View style={styles.chatterInbox} >                  
-                    <Text style={styles.chatterInboxText}>{this.props.chatterInboxCount}</Text>                  
+                    <Text style={styles.chatterInboxText}>{this.props.chatterInboxCount}</Text>
                   </View>
                 }
               </View>
@@ -166,7 +164,7 @@ class NewChatterbox extends Component {
                 <ActivityIndicator size="large"  color="#B6B7C2" />
               </View>
             :
-            <ScrollView >
+            <ScrollView style={{flex:1}}>
               <ChatterProvider chatters={this.state.chatters} />
             </ScrollView>
           }
@@ -179,10 +177,12 @@ class NewChatterbox extends Component {
           <View style={styles.buttonContainer}>
             <TouchableOpacity style={styles.button} onPress={()=> this.setState({modalVisible:true})}>
               <Text style={styles.buttonText}>
-                Send a message
+                Send Chatter
               </Text>
-            </TouchableOpacity>
+            </TouchableOpacity>          
           </View>
+
+
           {/* send message button Ends*/}
         </View>
       </HamburgerBasement>
@@ -193,28 +193,28 @@ class NewChatterbox extends Component {
 export default NewChatterbox;
 
 const styles = StyleSheet.create({
-  headerContainer: {
-    flex:2,
-    backgroundColor: '#2C5CE9'
-  },
   bodyContainer: {
-    flex:7,
+    flex:8,
     backgroundColor: 'white',
     backgroundColor: '#F7F7F8'
   },
   buttonContainer: {
-    flex:3, 
-    justifyContent:'center', 
-    alignItems:'center', 
-    backgroundColor:'#F7F7F8'
+    position: 'absolute', 
+    left: 0, 
+    right: 0, 
+    bottom: 10,
+    width:'80%',
+    height: 60,
+    marginHorizontal:'10%',
+    
   },
   button: {
-    backgroundColor:'#2857ED', 
-    width:'80%', 
-    height:'60%', 
-    borderRadius:5, 
+    width:'100%',
+    height: 60,
+    backgroundColor:'#2857ED',
     justifyContent:'center', 
-    alignItems:'center'
+    alignItems:'center',
+    borderRadius:5,
   },
   buttonText: {
     fontFamily: 'Avenir-Light', 
@@ -222,8 +222,8 @@ const styles = StyleSheet.create({
     color:'white', 
     fontSize:18    
   },
-  tabContainer: {
-    flex:2,
+    tabContainer: {
+    flex:1.5,
     flexDirection: 'row',
     backgroundColor: 'white'    
   },

@@ -11,6 +11,36 @@ const tflIcon = require('../../assets/images/badge.png');
 
 console.disableYellowBox = true;
 
+const  timeSince = (date) => {
+
+  let seconds = Math.floor((new Date() - date) / 1000);
+
+  let interval = Math.floor(seconds / 31536000);
+
+  if (interval > 1) {
+      return interval + " years";
+  }
+  interval = Math.floor(seconds / 2592000);
+  if (interval > 1) {
+      return interval + " months";
+  }
+  interval = Math.floor(seconds / 86400);
+  if (interval > 1) {
+      return interval + " days";
+  }
+  interval = Math.floor(seconds / 3600);
+  if (interval > 1) {
+      return interval + " hours";
+  }
+  interval = Math.floor(seconds / 60);
+  if (interval > 1) {
+      return interval + " minutes";
+  }
+  return Math.floor(seconds) + " seconds";
+}
+
+
+
 const palyOffCard = (value,indx) => {
   return(
     <View style={styles.fullWidhtContainer} key={indx} onStartShouldSetResponder={() => true}>
@@ -51,11 +81,16 @@ const bubbleCard = (value,indx, iconImage) => {
     <View style={styles.bubbleCard} key={indx} onStartShouldSetResponder={() => true}>
       <View style={styles.bubbleCardHeader}>
         <Image source={{uri: value.attributes.user_icon}} style={styles.bubbleCardUserIcon}/>                                    
-        <Text style={styles.bubbleCardUserName}>{value.attributes.user_name}</Text>
-        <View style={styles.bubbleCardLabelWrap}>
-          <Text style={styles.bubbleCardLabel} numberOfLines={2} >
-            {value.attributes.label}
+        <View style={styles.bubbleCardLabelContainer}>
+          <Text>
+            <Text style={styles.bubbleCardUserName}>{value.attributes.user_name} </Text>
+            <Text style={styles.bubbleCardLabel} numberOfLines={2} >
+              {value.attributes.label}
+            </Text>
           </Text>
+          <Text style={styles.bubbleCardLabel}>
+            {timeSince(new Date(value.attributes.created_at))} 
+          </Text>    
         </View>
       </View>
       <View style={styles.bubbleHolder}>
@@ -82,7 +117,8 @@ class ChatterProvider extends Component {
             return bubbleCard(value, indx)
           }else if(value.attributes.kind === 'AwardNotification'){
             return bubbleCard(value, indx, trophyIcon)
-          }else if(value.attributes.kind === 'PlayoffHeadsUp') {
+          }else
+           if(value.attributes.kind === 'PlayoffHeadsUp') {
             return palyOffCard(value, indx)
           }else if(value.attributes.kind === 'Sunday') {
             return sundayCard(value, indx)
@@ -99,28 +135,37 @@ export default ChatterProvider;
 const styles = StyleSheet.create({
   bubbleCard: {
     flex:1,
-    paddingVertical:10
+    paddingVertical:19
   },
   bubbleCardHeader: {
     flexDirection:'row', 
     alignItems:'center', 
-    padding:20    
+    paddingHorizontal:20, 
+    paddingBottom: 8,
   },
   bubbleCardUserIcon: {
     borderRadius: 15,
     height: 30,
     width: 30    
   },
-  bubbleCardLabelWrap: {
+  bubbleCardLabelContainer: {
     width: 0,
-    flex: 1
+    flex: 1,
+    paddingLeft:10
   },
   bubbleCardLabel: {
     fontSize:14, 
     paddingLeft:3, 
     fontFamily:'Avenir-Light',
     textAlign: 'auto',
-    color: '#8792A0'    
+    color: '#828F9F'    
+  },
+  bubbleCardTime: {
+    fontSize:12, 
+    paddingLeft:3, 
+    fontFamily:'Avenir-Light',
+    textAlign: 'auto',
+    color: '#828F9F'    
   },
   bubbleHolder: {
     flex:1, 
@@ -132,21 +177,21 @@ const styles = StyleSheet.create({
     paddingHorizontal:20,
     paddingRight:30,
     borderRadius:5,
-    paddingVertical:20
+    paddingVertical:15
   },
   bubbleCardUserName: {
-    fontSize:16, 
+    fontSize:14, 
     paddingLeft:5, 
-    fontFamily:'Avenir-Black',
-    color: '#8792A0'    
+    fontFamily:'Avenir-Medium',
+    color: '#808D9E'    
   },
   bubbleText: {
     fontSize:14,
-    color:'#778DA0',                      
+    color:'#4A5F77',                      
     fontFamily: 'Avenir-Light',
-    fontWeight: '400',
     textAlign: 'auto'
   },
+
   bubbleIconHolder: {
     justifyContent:'center',
     alignItems: 'center',
@@ -158,20 +203,18 @@ const styles = StyleSheet.create({
   },
   fullWidhtContainer: {
     flexDirection:'row', 
-    backgroundColor:'#949CAB',
+    backgroundColor:'#949cab',
     height:80,
-    marginVertical:15
+    marginVertical:19
   },
   fullWidthLeftView: {
     flex:1, 
-    backgroundColor:'gray',
     alignItems:'flex-end',
     justifyContent:'center',
     padding:10    
   },
   fullWidthRightView: {
     flex:3, 
-    backgroundColor:'gray',
     justifyContent:'center',
     paddingHorizontal:10
   },
@@ -179,7 +222,6 @@ const styles = StyleSheet.create({
     height:50, 
     width:50, 
     borderRadius:25,
-    backgroundColor:'gray',
     borderWidth:2,
     borderColor: 'white',
     justifyContent:'center',

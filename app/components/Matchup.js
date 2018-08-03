@@ -68,7 +68,6 @@ export default class Workouts extends Component {
       }).catch((err) => {
         this.setState({ loading: false })
       }).done()
-
   }
 
   getContest(weeksAgo) {
