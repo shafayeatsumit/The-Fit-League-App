@@ -12,24 +12,24 @@ import { Actions } from 'react-native-router-flux'
 
 const hamburgerIcon = require('../../assets/images/hamburger.png');
 const headerBackground = require('../../assets/images/speckledBackground.png');
-
+const xOutIcon = require('../../assets/images/xOutWhite.png');
 
 export default class SpeckledHeader extends Component {
   constructor(props) {
     super(props)
-    this.myPlayerCard = this.myPlayerCard.bind(this)
+    
   }
 
-  myPlayerCard() {
-    Actions.playerCard({ mine: true, image_url: this.props.image_url, token: this.props.token })
-  }
+  // myPlayerCard() {
+  //   Actions.playerCard({ mine: true, image_url: this.props.image_url, token: this.props.token })
+  // }
 
   componentDidMount() {
     StatusBar.setBarStyle('light-content', true)
   }
 
   render() {
-    const { image_url, title } = this.props;
+    console.log(Actions._state)
 
     return (
       <ImageBackground source={headerBackground} style={styles.container}>
@@ -37,15 +37,11 @@ export default class SpeckledHeader extends Component {
           <Image source={hamburgerIcon} />
         </TouchableHighlight>      
         <View style={styles.titleContainer}>
-          <Text style={styles.titleText}> { title } </Text>
+          <Text style={styles.titleText}>ChatterBox</Text>
         </View>
-        <View style={styles.userImageHolder}>
-          { image_url && 
-              <TouchableHighlight onPress={this.myPlayerCard} underlayColor='transparent'>
-                <Image style={styles.userImage} source={{uri: image_url}} />
-              </TouchableHighlight>
-          }        
-        </View>       
+        <TouchableHighlight style={styles.xOutButton} onPress={()=> Actions.home({token: this.props.token})} underlayColor='transparent'>
+          <Image source={xOutIcon} style={{height:25,width:25}}/>
+        </TouchableHighlight>        
       </ImageBackground >
       
     )
@@ -60,35 +56,27 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection:'row', 
-    paddingTop:20
+    paddingTop:30
   },
   hamburgerButton: {
     flex:1,  
-    paddingLeft:10,
+    alignItems:'center',
     justifyContent: 'center'
   },
   titleContainer: {
-    flex:2, 
+    flex:4, 
     justifyContent:'center', 
-    alignItems: 'center' 
   },
   titleText: {
     fontFamily: 'Avenir-Black',
     color: 'white',
     fontSize: 20,
-    backgroundColor: 'transparent'
+    backgroundColor: 'transparent',
+    alignSelf:'center'
   },
-  userImageHolder: {
-    flex:1, 
-    justifyContent:'center', 
-    alignItems:'flex-end', 
-    paddingRight:10 
-  },
-  userImage: {
-    borderColor: 'white',
-    borderRadius: 18,
-    borderWidth: 2,
-    height: 36,
-    width: 36,
+  xOutButton: {
+    flex: 1,
+    alignItems:'center',
+    justifyContent:'center',
   }
 })

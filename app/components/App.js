@@ -96,6 +96,7 @@ const App = () => {
           key="chatterbox"
           component={NewChatterbox}
           title="Chatterbox"
+          
         />        
         <Scene
           key="workouts"
