@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Avenir-Black',
     backgroundColor: 'transparent',
     color: '#1DD65B',
-    fontSize: 26,
+    fontSize: 20,
     margin: 10
   },
   paragraph: {
