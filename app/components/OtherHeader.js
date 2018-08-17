@@ -30,7 +30,7 @@ export default class OtherHeader extends Component {
         <View>
           <View style={styles.topBar}>
             <TouchableHighlight style={styles.hamburgerButton} onPress={this.context.toggleBasement} underlayColor='transparent'>
-              <Image style={styles.hamburgerButtonIcon} source={hamburger} />
+              <Image  source={hamburger} />
             </TouchableHighlight>
             <View style={styles.topBarSpacer}></View>
             
@@ -79,8 +79,7 @@ const styles = StyleSheet.create({
   },
   xOutIcon: {
     height:25,
-    width:25,
-    tintColor:'gray'
+    width:25
   },
   title: {
     alignItems: 'center',
