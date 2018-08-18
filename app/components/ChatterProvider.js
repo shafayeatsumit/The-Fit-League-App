@@ -11,35 +11,48 @@ const tflIcon = require('../../assets/images/badge.png');
 
 console.disableYellowBox = true;
 
-const  timeSince = (date) => {
+const timeSince = (date) => {
+	
+	let measures = {
+		second: 1,
+		minute: 60,
+		hour: 3600,
+		day: 86400,
+		week: 604800,
+		month: 2592000,
+		year: 31536000
+	};
+	
+	let chkMultiple = (amount, type) => {
+		return (amount > 1) ? amount + " " + type + "s":"1 " + type;
+	};
+  
+  let dateStr, amount, denomination
+  let current = new Date()
 
-  let seconds = Math.floor((new Date() - date) / 1000);
-
-  let interval = Math.floor(seconds / 31536000);
-
-  if (interval > 1) {
-      return interval + " years";
-  }
-  interval = Math.floor(seconds / 2592000);
-  if (interval > 1) {
-      return interval + " months";
-  }
-  interval = Math.floor(seconds / 86400);
-  if (interval > 1) {
-      return interval + " days";
-  }
-  interval = Math.floor(seconds / 3600);
-  if (interval > 1) {
-      return interval + " hours";
-  }
-  interval = Math.floor(seconds / 60);
-  if (interval > 1) {
-      return interval + " minutes";
-  }
-  return Math.floor(seconds) + " seconds";
-}
-
-
+  let diff = (current - date) / 1000; // work with seconds
+    
+	  if(diff > measures.year) {
+	    denomination = "year";
+	  } else if(diff > measures.month) {
+	    denomination = "month";
+	  } else if(diff > measures.week) {
+	    denomination = "week";
+	  } else if(diff > measures.day) {
+	    denomination = "day";
+	  } else if(diff > measures.hour) {
+	    denomination = "hour";
+	  } else if(diff > measures.minute) {
+	    denomination = "minute";
+	  } else {
+	    dateStr = "Few seconds ago";
+	    return dateStr;
+	  }	
+	  amount = Math.round(diff/measures[denomination]);
+    dateStr =  chkMultiple(amount, denomination) ;
+    
+	  return dateStr;    
+};
 
 const palyOffCard = (value,indx) => {
   return(

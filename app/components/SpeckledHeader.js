@@ -29,8 +29,6 @@ export default class SpeckledHeader extends Component {
   }
 
   render() {
-    console.log(Actions._state)
-
     return (
       <ImageBackground source={headerBackground} style={styles.container}>
         <TouchableHighlight style={styles.hamburgerButton} onPress={this.context.toggleBasement} underlayColor='transparent'>

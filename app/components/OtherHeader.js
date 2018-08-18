@@ -24,7 +24,6 @@ export default class OtherHeader extends Component {
   }
 
   render() {
-    console.log(Actions._state)
     return (
       <View style={styles.container}>
         <View>
