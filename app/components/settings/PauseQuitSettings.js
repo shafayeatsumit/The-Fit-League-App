@@ -11,7 +11,7 @@ import {
 
 import { AppEventsLogger } from 'react-native-fbsdk';
 
-import { HttpUtils } from '../services/HttpUtils';
+import { HttpUtils } from '../../services/HttpUtils';
 
 class PauseQuitSettings extends Component {
   constructor(props){

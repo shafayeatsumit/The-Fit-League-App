@@ -17,11 +17,11 @@ import SettingsModals from './SettingsModals'
 import OtherHeader from './OtherHeader'
 
 const settingsContent = [
-  {title:'Name and Profile Pic' , subtitle:'Update your display name and image'},
-  {title:'Email and Password' , subtitle:'Change preferred email and password'},
-  {title:'About Me' , subtitle:'Describe yourself'},
-  {title:'Notifications' , subtitle:'Manage push notifications'},
-  {title:'Pause or Quit' , subtitle:'Go temporarily inactive or quit league'},
+  {title:'Name and Profile Pic' , subtitle:'Update your display name and image', modalName:'nameAndPic'},
+  {title:'Email and Password' , subtitle:'Change preferred email and password', modalName:'emailAndPass'},
+  {title:'About Me' , subtitle:'Describe yourself', modalName:'aboutMe'},
+  {title:'Notifications' , subtitle:'Manage push notifications', modalName:'notifications'},
+  {title:'Pause or Quit' , subtitle:'Go temporarily inactive or quit league', modalName:'pause'},
 ]
 
 
@@ -50,7 +50,6 @@ class Settings extends Component {
   }
 
   logOut() {
-    // TODO: need to check facebook logout option.
     AppEventsLogger.logEvent('Logged Out')
     AsyncStorage.removeItem('auth_token').then((res) => {
       AsyncStorage.removeItem(SessionStore.key).then(() => {
@@ -78,7 +77,7 @@ class Settings extends Component {
                 <TouchableHighlight 
                   style={[styles.touchableItem, content.title === 'Pause or Quit'? {borderBottomWidth:0} : {borderBottomWidth:1}]} 
                   underlayColor='#DCDCDC' 
-                  onPress={this.handlePress.bind(this, "nameAndPic")} 
+                  onPress={this.handlePress.bind(this, content.modalName)} 
                   key={content.name}
                 >
                   <View>

@@ -10,7 +10,7 @@ import {
   StyleSheet
 } from 'react-native';
 
-import { HttpUtils } from '../services/HttpUtils';
+import { HttpUtils } from '../../services/HttpUtils';
 
 const settings = [
   {

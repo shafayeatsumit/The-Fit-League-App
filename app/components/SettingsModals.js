@@ -8,11 +8,11 @@ import {
   KeyboardAvoidingView,
   StyleSheet
 } from 'react-native';
-import NameAndPicSettings from './NameAndPicSettings'
-import NotificationSettings from './NotificationSettings'
-import EmailAndPassSettings from './EmailAndPassSettings'
-import AboutMeSettings from './AboutMeSettings'
-import PauseQuitSettings from './PauseQuitSettings'
+import NameAndPicSettings from './settings/NameAndPicSettings'
+import NotificationSettings from './settings/NotificationSettings'
+import EmailAndPassSettings from './settings/EmailAndPassSettings'
+import AboutMeSettings from './settings/AboutMeSettings'
+import PauseQuitSettings from './settings/PauseQuitSettings'
 
 import { HttpUtils } from '../services/HttpUtils'
 

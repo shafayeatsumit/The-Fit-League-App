@@ -15,10 +15,10 @@ import {
 } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 
-import { HttpUtils } from '../services/HttpUtils';
-import { SessionStore } from '../services/SessionStore';
+import { HttpUtils } from '../../services/HttpUtils';
+import { SessionStore } from '../../services/SessionStore';
 
-const editButton = require('../../assets/images/editNoBorder.png');
+const editButton = require('../../../assets/images/editNoBorder.png');
 const balankImage = "https://s3.amazonaws.com/fitbots/no-profile-image.png";
 const {width, height} = Dimensions.get("window");
 

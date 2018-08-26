@@ -9,9 +9,9 @@ import {
   StyleSheet
 } from 'react-native';
 
-import { HttpUtils } from '../services/HttpUtils';
+import { HttpUtils } from '../../services/HttpUtils';
 
-class AboutMeSettings extends Component {
+export default class AboutMeSettings extends Component {
   constructor(props){
     super(props);
     this.state = { 
@@ -135,4 +135,3 @@ const styles = StyleSheet.create({
   }  
 })
 
-export default AboutMeSettings;

@@ -9,7 +9,7 @@ import {
   TouchableHighlight
 } from 'react-native';
 
-import { HttpUtils } from '../services/HttpUtils'
+import { HttpUtils } from '../../services/HttpUtils'
 
 class EmailAndPassSettings extends Component {
   constructor(props) {
