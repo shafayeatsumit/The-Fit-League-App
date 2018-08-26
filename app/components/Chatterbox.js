@@ -3,7 +3,6 @@ import {
   Text,
   StyleSheet, 
   ScrollView,
-  AsyncStorage,
   TouchableOpacity,
   ActivityIndicator,
   Modal,

@@ -72,13 +72,13 @@ class Settings extends Component {
         <OtherHeader style={styles.headerContainer} {...this.props} title="Settings" />
         <View style={styles.touchablesRow}>     
           {
-            settingsContent.map((content) => {
+            settingsContent.map((content, indx) => {
               return(
                 <TouchableHighlight 
                   style={[styles.touchableItem, content.title === 'Pause or Quit'? {borderBottomWidth:0} : {borderBottomWidth:1}]} 
                   underlayColor='#DCDCDC' 
                   onPress={this.handlePress.bind(this, content.modalName)} 
-                  key={content.name}
+                  key={indx}
                 >
                   <View>
                     <Text style={styles.titleText}>
