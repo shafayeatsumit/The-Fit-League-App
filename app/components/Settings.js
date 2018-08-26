@@ -16,6 +16,15 @@ import HamburgerBasement from './HamburgerBasement'
 import SettingsModals from './SettingsModals'
 import OtherHeader from './OtherHeader'
 
+const settingsContent = [
+  {title:'Name and Profile Pic' , subtitle:'Update your display name and image'},
+  {title:'Email and Password' , subtitle:'Change preferred email and password'},
+  {title:'About Me' , subtitle:'Describe yourself'},
+  {title:'Notifications' , subtitle:'Manage push notifications'},
+  {title:'Pause or Quit' , subtitle:'Go temporarily inactive or quit league'},
+]
+
+
 class Settings extends Component {
   constructor(props) {
     super(props);
@@ -63,56 +72,27 @@ class Settings extends Component {
       <HamburgerBasement {...this.props}>
         <OtherHeader style={styles.headerContainer} {...this.props} title="Settings" />
         <View style={styles.touchablesRow}>     
-          <TouchableHighlight style={styles.touchableItem} underlayColor='#DCDCDC' onPress={this.handlePress.bind(this, "nameAndPic")}>
-            <View>
-              <Text style={styles.titleText}>
-                Name and Profile Pic
-              </Text> 
-              <Text style={styles.subtitleText}>
-                Update your display name and image
-              </Text>
-            </View>
-          </TouchableHighlight>
-          <TouchableHighlight style={styles.touchableItem} underlayColor='#DCDCDC' onPress={this.handlePress.bind(this, "emailAndPass")}>
-            <View >
-              <Text style={styles.titleText}>
-                Email and Password
-              </Text> 
-              <Text style={styles.subtitleText}>
-                Change preferred email and password
-              </Text>                               
-            </View>
-          </TouchableHighlight>
-          <TouchableHighlight style={styles.touchableItem} underlayColor='#DCDCDC' onPress={this.handlePress.bind(this, "aboutMe")}>
-            <View >
-              <Text style={styles.titleText}>
-                About Me
-              </Text> 
-              <Text style={styles.subtitleText}>
-                Describe yourself
-              </Text>                               
-            </View>
-          </TouchableHighlight>
-          <TouchableHighlight style={styles.touchableItem} underlayColor='#DCDCDC' onPress={this.handlePress.bind(this, "notifications")}>
-            <View>
-              <Text style={styles.titleText}>
-                Notifications
-              </Text> 
-              <Text style={styles.subtitleText}>
-                Manage push notifications
-              </Text>                               
-            </View>
-          </TouchableHighlight>
-          <TouchableHighlight style={styles.lastTouchableItem} underlayColor='#DCDCDC' onPress={this.handlePress.bind(this, "pause")}>
-          <View >
-            <Text style={styles.titleText}>
-              Pause or Quit
-            </Text> 
-            <Text style={styles.subtitleText}>
-              Go temporarily inactive or quit league
-            </Text>                               
-          </View>              
-          </TouchableHighlight>
+          {
+            settingsContent.map((content) => {
+              return(
+                <TouchableHighlight 
+                  style={[styles.touchableItem, content.title === 'Pause or Quit'? {borderBottomWidth:0} : {borderBottomWidth:1}]} 
+                  underlayColor='#DCDCDC' 
+                  onPress={this.handlePress.bind(this, "nameAndPic")} 
+                  key={content.name}
+                >
+                  <View>
+                    <Text style={styles.titleText}>
+                      {content.title}
+                    </Text> 
+                    <Text style={styles.subtitleText}>
+                      {content.subtitle}
+                    </Text>
+                  </View>
+                </TouchableHighlight>                
+              )
+            })
+          }
         </View>
         <View style={styles.logoutRow}>
           <TouchableHighlight style={styles.logoutButton} underlayColor='#E9005A' onPress={this.logOut}>
@@ -144,15 +124,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flexDirection: 'column',
     borderBottomColor: '#D5D7DC',
-    borderBottomWidth: 1,
     marginHorizontal:20,
-  },
-  lastTouchableItem: {
-    flex:1,
-    justifyContent: 'center',
-    flexDirection: 'column',
-    borderBottomColor: '#D5D7DC',
-    marginHorizontal:20, 
   },
   titleText: {
     fontFamily: 'Avenir-Black',

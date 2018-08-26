@@ -10,7 +10,6 @@ export const Pusher = {
 
       // (required) Called when a remote or local notification is opened or received
       onNotification: function(notification) {
-        console.log('NOTIFICATION:', notification)
         if (notification.userInteraction && notification.data.destinationView) {
           Actions[notification.data.destinationView]({ token })
         }
