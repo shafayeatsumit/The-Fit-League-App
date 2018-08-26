@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection:'row', 
-    paddingTop:30
+    paddingTop:15
   },
   hamburgerButton: {
     flex:1,  

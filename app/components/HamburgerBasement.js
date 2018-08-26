@@ -156,7 +156,7 @@ export default class HamburgerBasement extends Component {
         </TouchableHighlight>
         <View style={styles.basementNavColumn}>
           { this.state.links.map((link) => {
-            return <TouchableHighlight key={link.action} style={styles.basementNavLink} onPress={() => Actions.replace(link.action,{ token, image_url, ...link.props }) } underlayColor='rgba(255, 255, 255, 0.25)'>
+            return <TouchableHighlight key={link.action} style={styles.basementNavLink} onPress={() => Actions[link.action]({ token, image_url, ...link.props })} underlayColor='rgba(255, 255, 255, 0.25)'>
               <View style={styles.labelView}>
                 <Text style={styles.basementNavLinkText}>{ link.label }</Text>
                 { 
