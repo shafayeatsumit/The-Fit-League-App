@@ -37,7 +37,7 @@ class AddComment extends Component {
       chatter_kind_id: parseInt(emoji.id)
     }
 
-    // dtermines whether it's passed from workoutfeed or newchatterbox
+    // dtermines whether it's passed from workoutfeed or Chatterbox
     if(workoutId){
       params.workout_id =  parseInt(workoutId)
     }else if(recipients) {

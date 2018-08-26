@@ -1,250 +1,283 @@
 import React, { Component } from 'react';
-
-import {
-  StyleSheet,
-  View,
-  ScrollView,
-  TouchableOpacity,
-  TouchableHighlight,
-  Modal,
+import { 
   Text,
-  Image,
-  RefreshControl,
-  ActivityIndicator
+  StyleSheet, 
+  ScrollView,
+  AsyncStorage,
+  TouchableOpacity,
+  ActivityIndicator,
+  Modal,
+  View 
 } from 'react-native';
 
-import { AppEventsLogger } from 'react-native-fbsdk'
-
-import { Actions } from 'react-native-router-flux'
-
+import ChatterProvider from './ChatterProvider';
+import RecipientsList from './chatter_modal/RecipientsList';
+import AddComment from './chatter_modal/AddComment';
+import PickEmoji from './chatter_modal/PickEmoji';
+import HamburgerBasement from './HamburgerBasement';
+import SpeckledHeader from './SpeckledHeader';
 import { HttpUtils } from '../services/HttpUtils'
 import { SessionStore } from '../services/SessionStore'
 
-import { LeagueSharer } from '../services/LeagueSharer'
-
-import DynamicIcon from './DynamicIcon'
-import AddComment from './chatter_modal/AddComment';
-import PickEmoji from './chatter_modal/PickEmoji';
-
-const thumbsUp = require('../../assets/images/thumbsUp.png')
-const thumbsDown = require('../../assets/images/thumbsDown.png')
-const trophies = require('../../assets/images/trophies.png')
-
-// Dependency in app/models/chatter.rb in the Rails API.
-const actions = {
-  positive: [
-    { label: 'Fist Bump', icon: require('../../assets/images/fistBump.png') },
-    { label: 'High Five', icon: require('../../assets/images/highFive.png') },
-    { label: 'Thumbs Up', icon: require('../../assets/images/bigThumbsUp.png') },
-  ],
-  negative: [
-    { label: 'Gut Punch',   icon: require('../../assets/images/gutPunch.png') },
-    { label: 'Talk Sh*t',   icon: require('../../assets/images/talkSht.png') },
-    { label: 'Thumbs Down', icon: require('../../assets/images/bigThumbsDown.png') },
-  ]
-}
-
 export default class Chatterbox extends Component {
-  constructor(props) {
-    super(props)
-    this.showModal = this.showModal.bind(this)
-    this.hideModal = this.hideModal.bind(this)
-    this.getChatters = this.getChatters.bind(this)
-    this.copyInviteUrl = this.copyInviteUrl.bind(this)
-    this.getChattersByUrl = this.getChattersByUrl.bind(this)
-    this.switchModal = this.switchModal.bind(this)
-    this.state = { 
+  constructor(props){
+    super(props);
+    this.state = {
+      activeTab: 'youTab',                    //options(youTab, leagueTab)
+      activeModal: 'recipientsModal',        //options(emojiPicker, addComment, recipientsModal)
+      loading: false,
+      chatters: [],
       modalVisible: false,
-      loading: true,
-      refreshing: false,
+      recipientsList: [],
       emojiData: [],
-      activeModal:'emojiPicker' // ('emojiPicker', 'addComent')
     }
-  }
-
-  hideModal() {
-    this.setState({ modalVisible: false, emojiData:[], activeModal: 'emojiPicker' })
-  }
-
-  refresh() {
-    this.setState({ refreshing: true })
-    this.getChatters()
-  }
-
-  showModal(user) {
-    let { id } = user
-    this.setState({ modalVisible: true, workoutId: id })
-  }
-
-  switchModal(args) {
-    const { modalName, emoji } = args
-    if(modalName === 'addComment' ) {
-      this.setState({ activeModal:modalName, emojiData:emoji })
-    } else {
-      this.setState({ activeModal:modalName, emojiData:[] })
-    }
-  }
-
-  viewPlayer(chatter) {
-    Actions.playerCard({ player: {
-      name: chatter.attributes.user_name,
-      image_url: chatter.attributes.user_image_url,
-      bio: chatter.attributes.user_bio
-    }, image_url: this.props.image_url, token: this.props.token })
+    this.switchTab = this.switchTab.bind(this);
+    this.hideModal = this.hideModal.bind(this);
+    this.switchModal = this.switchModal.bind(this);
+    this.renderModal = this.renderModal.bind(this);
   }
 
   getChattersByUrl(url) {
+    // TODO: replace this with this.props.token
+    this.setState({loading: true})
     HttpUtils.get(url, this.props.token)
-      .then((responseData) => {
-        this.setState({ 
-          chatters: responseData.data, 
-          inviteUrl: responseData.meta.invite_url,
-          playoffs: responseData.meta.playoffs, 
-          leagueName: responseData.meta.league_name,
-          loading: false, refreshing: false 
-        })
-      }).catch((err) => {
-        this.setState({ loading: false, refreshing: false, chatters: [] })
+      .then((response)=> {
+        this.setState({ chatters: response.data, loading:false })
+      })
+      .catch((error)=> {
+        // TODO : sentry catch error
+        this.setState({loading: false})        
       }).done()
   }
 
   getChatters() {
     SessionStore.getLeagueId((leagueId) => {
+      const chatterboxUrl = 'leagues/' + leagueId.toString() + '/chatterbox/personal';
+      this.getChattersByUrl(chatterboxUrl)
       this.setState({leagueId})
-      this.getChattersByUrl('leagues/' + leagueId.toString() + '/chatters')
     }, () => {
-      this.getChattersByUrl('chatters')
+      // TODO: what is the use of this call back thing
     })
   }
 
-  getEmojis() {
-    HttpUtils.get('chatter_kinds', this.props.token)
-      .then((response) => this.setState({chatterKinds: response.data}))
+  switchModal(args) {
+    const { modalName, emoji, recipients } = args
+  
+    if(modalName === 'emojiPicker'){
+      this.setState({activeModal: modalName, recipientsList: recipients})
+    } else if (modalName === 'addComment') {
+      this.setState({activeModal: modalName, emojiData:emoji})
+    } else {
+      this.setState({activeModal: modalName})
+    }    
+  }
+
+
+  switchTab(tabName) {
+    const { leagueId } = this.state;
+    const personalChatterUrl = 'leagues/' + leagueId.toString() + '/chatterbox/personal';
+    const chatterboxUrl = 'leagues/' + leagueId.toString() + '/chatterbox';
+
+    this.setState({ activeTab: tabName})
+    tabName === 'youTab' ? this.getChattersByUrl(personalChatterUrl) : this.getChattersByUrl(chatterboxUrl)
+  }
+
+  hideModal() {
+    this.setState({ modalVisible: false, activeModal: 'recipientsModal' })
   }
 
   componentDidMount() {
     this.getChatters()
   }
 
-  copyInviteUrl() {
-    LeagueSharer.call(this.state.inviteUrl, this.state.leagueName, 'Chatterbox')
+  renderModal() {
+    const { activeModal } = this.state;
+    if (activeModal === 'recipientsModal') {
+      return (
+        <RecipientsList 
+          {...this.props} 
+          exitModal={this.hideModal} 
+          switchModal={this.switchModal}
+        />
+      )
+    }else if(activeModal === 'emojiPicker') {
+      return(
+        <PickEmoji
+          {...this.props}
+          exitModal={this.hideModal} 
+          switchModal={this.switchModal}
+        />
+      )
+    }else {
+      return (
+        <AddComment
+          {...this.props}
+          recipients={this.state.recipientsList}
+          emoji={this.state.emojiData}
+          leagueId={this.state.leagueId}
+          exitModal={this.hideModal}
+          switchModal={this.switchModal} 
+        />
+      ) 
+    }
   }
 
-
   render() {
-  
-    return ( 
-      <View style={styles.container}>
+    return (
+      <HamburgerBasement {...this.props}>
         <Modal
           animationType='fade'
           transparent={true}
           visible={this.state.modalVisible}
-          onRequestClose={this.hideModal}>
-          { this.state.modalVisible &&
-             <View style={styles.modalBackground}>
-              {
-                this.state.activeModal === 'addComment' ?
-                  <AddComment 
-                    {...this.props} 
-                    exitModal={this.hideModal} 
-                    switchModal={this.switchModal}
-                    leagueId={this.state.leagueId}
-                    emoji={this.state.emojiData}
-                    workoutId={this.state.workoutId}
-                  />
-                  :                
-                  <PickEmoji 
-                    {...this.props} 
-                    exitModal={this.hideModal} 
-                    switchModal={this.switchModal}
-                  />
-              }
-                
-             </View>             
-          }
-        </Modal>
-        <View style={styles.titleHolder}>
-          <Text style={styles.title}>Workout Feed</Text>
-        </View>
-        { this.state.loading ?
-          <View style={styles.loadingColumn}>
-            <ActivityIndicator size="large" color="#B6B7C2" />
+        >
+          <View style={styles.modalBackground}>
+            {this.renderModal()}
           </View>
-          :
-          <ScrollView refreshControl={
-            <RefreshControl
-              refreshing={this.state.refreshing}
-              onRefresh={this.refresh.bind(this)} />
-          } style={styles.chatterColumn}>
-            { this.state.playoffs && 
-              <Image source={trophies} style={styles.trophies} />
-            }
-            { this.state.chatters.map((c, i) => {
-                return <TouchableOpacity activeOpacity={1} style={styles.chatter} key={i}>
-                  <View style={styles.chatterRow}>
-                    <View style={styles.chatterAction}>
-                      <TouchableHighlight style={styles.chatterActionButton} onPress={() => this.showModal(c)} underlayColor='rgba(255, 255, 255, 0.75)'>
-                        <Image source={thumbsDown} />
-                      </TouchableHighlight>
-                    </View>
-                    <View style={styles.chatterDetails}>
-                      <TouchableHighlight onPress={() => this.viewPlayer(c)} underlayColor='transparent'>
-                        <Image style={styles.userImage} source={{ uri: c.attributes.user_image_url }} />
-                      </TouchableHighlight>
-                      <View style={styles.workoutIconContainer}>
-                        <DynamicIcon 
-                          label={c.attributes.kind} 
-                          shade={'dark'}
-                          {...StyleSheet.flatten(styles.workoutIcon)} />
-                      </View>
-                    </View>
-                    <View style={styles.chatterAction}>
-                      <TouchableHighlight style={styles.chatterActionButton} onPress={() => this.showModal(c)} underlayColor='rgba(255, 255, 255, 0.75)'>
-                        <Image source={thumbsUp} />
-                      </TouchableHighlight>
-                    </View>
+        </Modal>
+        <SpeckledHeader  {...this.props} title="Chatterbox" />
+        <View style={styles.bodyContainer}>
+          {/* tab container */}
+          <View style={styles.tabContainer}>
+            <TouchableOpacity style={styles.tabTouchable} onPress={() => this.switchTab('youTab')}>
+              <View style={[this.state.activeTab === 'youTab' ? styles.activeTabContent : styles.tabContent]}>
+                <Text style={[this.state.activeTab === 'youTab'? styles.activeTablabel : styles.tabLabel]}>YOU</Text>
+                {this.props.chatterInboxCount && 
+                  <View style={styles.chatterInbox} >                  
+                    <Text style={styles.chatterInboxText}>{this.props.chatterInboxCount}</Text>
                   </View>
-                  <View style={styles.chatterRow}>
-                    <View style={styles.chatterDetails}>
-                      <Text style={styles.chatterName}>{ c.attributes.user_name }</Text>
-                      <Text style={styles.chatterLabel}>{ c.attributes.kind }</Text>
-                      <Text style={styles.chatterQuantity}>{ c.attributes.quantity } { c.attributes.unit }s</Text>
-                    </View>
-                  </View>
-                </TouchableOpacity>
-              })
-            }
-            { this.state.chatters.length == 0 && 
-              <View style={styles.chatterRow}>
-                <View style={styles.chatterDetails}>
-                  <View style={styles.inviteUrlWrapper}>
-                    <Text style={styles.chatterLabel}>There's no chatter</Text>
-                    <Text style={styles.chatterLabel}>in your league yet.</Text>
-                  </View>
-                  { this.state.inviteUrl &&
-                    <TouchableHighlight onPress={this.copyInviteUrl} underlayColor='transparent'>
-                      <View style={styles.inviteUrlWrapper}>
-                        <Text style={styles.chatterLabel}>Invite your crew!</Text>
-                        <Text style={styles.inviteUrl}>{this.state.inviteUrl}</Text>
-                      </View>
-                    </TouchableHighlight>
-                  }
-                </View>
+                }
               </View>
-            }
-          </ScrollView>
-        }
-      </View>
-    )
-  }
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.tabTouchable} onPress={() => this.switchTab('leagueTab')}>
+              <View style={[this.state.activeTab === 'leagueTab' ? styles.activeTabContent : styles.tabContent]}>
+                <Text style={[this.state.activeTab === 'leagueTab'? styles.activeTablabel : styles.tabLabel]}>LEAGUE</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+          {/* tab container ends */}
 
+          {/* scrollable continer */}
+          <View style={styles.scrollContainer} >
+          {
+            this.state.loading ?          
+              <View style={styles.loadingConainer}>
+                <ActivityIndicator size="large"  color="#B6B7C2" />
+              </View>
+            :
+            <ScrollView style={{flex:1}}>
+              <ChatterProvider chatters={this.state.chatters} />
+            </ScrollView>
+          }
+            
+            
+          </View>          
+          {/* scrollable container end */}
+
+          {/* send message button */}
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity style={styles.button} onPress={()=> this.setState({modalVisible:true})}>
+              <Text style={styles.buttonText}>
+                Send Chatter
+              </Text>
+            </TouchableOpacity>          
+          </View>
+
+
+          {/* send message button Ends*/}
+        </View>
+      </HamburgerBasement>
+    );
+  }
 }
 
+
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    borderLeftWidth: 1,
-    borderLeftColor: '#B6B7C2'
+  bodyContainer: {
+    flex:8,
+    backgroundColor: 'white',
+    backgroundColor: '#F7F7F8'
+  },
+  buttonContainer: {
+    position: 'absolute', 
+    left: 0, 
+    right: 0, 
+    bottom: 10,
+    width:'80%',
+    height: 60,
+    marginHorizontal:'10%',
+    
+  },
+  button: {
+    width:'100%',
+    height: 60,
+    backgroundColor:'#2857ED',
+    justifyContent:'center', 
+    alignItems:'center',
+    borderRadius:5,
+  },
+  buttonText: {
+    fontFamily: 'Avenir-Light', 
+    fontWeight:'700', 
+    color:'white', 
+    fontSize:18    
+  },
+    tabContainer: {
+    flex:1.5,
+    flexDirection: 'row',
+    backgroundColor: 'white'    
+  },
+  tabTouchable: {
+    flex:1
+  },
+  activeTabContent: {
+    flex:1,
+    justifyContent:'center', 
+    alignItems:'center', 
+    flexDirection:'row', 
+    borderBottomColor:'#2857ED', 
+    borderBottomWidth:5
+  },
+  activeTablabel: {
+    fontSize:15, 
+    padding:10, 
+    fontFamily:'Avenir-Black', 
+    color:'#0E2442' 
+  },
+  tabContent: {
+    flex:1,
+    justifyContent:'center', 
+    alignItems:'center', 
+    flexDirection:'row'
+  },
+  tabLabel: {
+    fontSize:15, 
+    padding:10, 
+    fontFamily:'Avenir-Black', 
+    color:'gray' 
+  },
+  chatterInbox: {
+    height:30, 
+    width:30, 
+    borderRadius:15, 
+    backgroundColor:'#1DD65B', 
+    paddingHorizontal:10, 
+    justifyContent:'center',
+    alignItems:'center'
+  },
+  chatterInboxText: {
+    fontSize:15, 
+    fontWeight:'bold', 
+    color:'white'
+  },
+  scrollContainer: {
+    flex:12, 
+    backgroundColor:'#F7F7F8',
+    paddingTop:10    
+  } ,
+  loadingConainer: {
+    flex:1,
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   modalBackground: {
     backgroundColor:'rgba(0,0,0,0.8)', 
@@ -252,178 +285,5 @@ const styles = StyleSheet.create({
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center'
-  }, 
-  modalContainer: {
-    height: '80%',
-    width: '90%',
-    borderWidth: 0,    
-    backgroundColor: 'white',
-    borderRadius: 5,
-    overflow: 'hidden',
-  },    
-  titleHolder: {
-    borderLeftColor: '#1DD65B',
-    borderLeftWidth: 3,
-    marginTop: 15,
-    marginBottom: 10,
-  },
-  title: {
-    fontSize: 18,
-    fontFamily: 'Avenir-Black',
-    color: '#0E2442',
-    backgroundColor: 'transparent',
-    textAlign: 'center'
-  },
-  loadingColumn: {
-    flex: 1,
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  chatterColumn: {
-    flex: 1,
-    flexDirection: 'column',
-  },
-  trophies: {
-    resizeMode: 'repeat',
-    position: 'absolute',
-    width: '100%',
-    height: '100%'
-  },
-  chatter: {
-    height: 140,
-    marginTop: 20,
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center'  
-  },
-  chatterAction: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  chatterActionButton: {
-    padding: 10
-  },
-  chatterRow: {
-    flexDirection: 'row',
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  chatterDetails: {
-    flexDirection: 'column',
-    flex: 2,
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  userImage: {
-    height: 60,
-    width: 60,
-    borderRadius: 30
-  },
-  workoutIconContainer: {
-    marginTop: -20,
-    height: 30,
-    width: 30,
-    backgroundColor: 'white',
-    borderRadius: 15
-  },
-  workoutIcon: {
-    height: 30,
-    width: 30,
-    borderWidth: 1,
-    borderColor: '#7A8DA0',
-    borderRadius: 15
-  },
-  chatterName: {
-    fontSize: 16,
-    fontFamily: 'Avenir-Black',
-    color: '#0E2442',
-    backgroundColor: 'transparent',
-    textAlign: 'center'
-  },
-  chatterLabel: {
-    fontSize: 14,
-    fontFamily: 'Avenir-Light',
-    color: '#8691A0',
-    backgroundColor: 'transparent',
-    textAlign: 'center'
-  },
-  chatterQuantity: {
-    fontSize: 11,
-    fontFamily: 'Avenir-Light',
-    color: '#8691A0',
-    backgroundColor: 'transparent',
-    textAlign: 'center'
-  },
-  modal: {
-    flex: 1,
-    flexDirection: 'column',
-  },
-  modalHeaderHolder: {
-    flex: 1,
-    justifyContent: 'flex-end'
-  },
-  modalHeader: {
-    textAlign: 'center',
-    backgroundColor: 'transparent',
-    fontFamily: 'Avenir-Black',
-    color: 'black',
-    fontSize: 18,
-    padding: 20,
-  },
-  modalNevermindHolder: {
-    flex: 2,
-    justifyContent: 'flex-start'
-  },
-  negativeModalNevermind: {
-    backgroundColor: '#E9005A',
-    padding: 10,
-  },
-  positiveModalNevermind: {
-    backgroundColor: '#2857ED',
-    padding: 10,
-  },
-  modalNevermindText: {
-    fontFamily: 'Avenir-Black',
-    color: 'white',
-    textAlign: 'center',
-    fontSize: 18
-  },
-  actionRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    flex: 2
-  },
-  action: {
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: 100,
-    paddingTop: 20,
-    paddingBottom: 20
-  },
-  actionIcon: {
-    height: 75,
-    width: 75,
-  },
-  actionLabel: {
-    paddingTop: 20,
-    fontFamily: 'Avenir-Light',
-    color: '#8691A0',
-    textAlign: 'center',
-    fontSize: 12
-  },
-  inviteUrlWrapper: {
-    paddingTop: 80
-  },
-  inviteUrl: {
-    fontSize: 16,
-    fontFamily: 'Avenir-Black',
-    color: '#508CD8',
-    backgroundColor: 'transparent',
-    textAlign: 'center',
-  }
+  }          
 })

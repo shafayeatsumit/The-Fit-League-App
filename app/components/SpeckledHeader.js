@@ -20,10 +20,6 @@ export default class SpeckledHeader extends Component {
     
   }
 
-  // myPlayerCard() {
-  //   Actions.playerCard({ mine: true, image_url: this.props.image_url, token: this.props.token })
-  // }
-
   componentDidMount() {
     StatusBar.setBarStyle('light-content', true)
   }

@@ -18,7 +18,7 @@ import EditWorkoutSuccess from './EditWorkoutSuccess';
 import SadConnection from './SadConnection';
 import ProfileImage from './ProfileImage';
 import Settings from './Settings';
-import NewChatterbox from './NewChatterbox';
+import Chatterbox from './Chatterbox';
 import Test from './Test';
 
 const App = () => {
@@ -94,7 +94,7 @@ const App = () => {
         />
         <Scene
           key="chatterbox"
-          component={NewChatterbox}
+          component={Chatterbox}
           title="Chatterbox"
           
         />        
