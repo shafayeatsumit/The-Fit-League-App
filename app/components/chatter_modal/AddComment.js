@@ -55,7 +55,6 @@ class AddComment extends Component {
         exitModal()
       })
       .catch((error)=> {
-        console.log("Err",error)
         this.setState({ loading:false })
       })
 

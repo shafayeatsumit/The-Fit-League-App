@@ -1,7 +1,4 @@
 import React, { Component } from 'react';
-
-import t from 'tcomb-form-native';
-
 import {
   StyleSheet,
   Text,
@@ -10,7 +7,6 @@ import {
   View,
   Image,
   TextInput,
-  AsyncStorage,
   StatusBar,
   TouchableHighlight,
   AlertIOS

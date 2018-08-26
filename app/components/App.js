@@ -19,18 +19,11 @@ import SadConnection from './SadConnection';
 import ProfileImage from './ProfileImage';
 import Settings from './Settings';
 import Chatterbox from './Chatterbox';
-import Test from './Test';
 
 const App = () => {
   return (
     <Router>
       <Scene key="root" hideNavBar={true}>
-        {/* <Scene
-          key="test"
-          component={Test}
-          title="test"
-          initial
-        />        */}
         <Scene key="loading"
           component={Loading}
           title="Loading"

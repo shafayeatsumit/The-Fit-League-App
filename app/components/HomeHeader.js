@@ -25,7 +25,6 @@ export default class HomeHeader extends Component {
   }
 
   myPlayerCard() {
-    //Actions.playerCard({ mine: true, image_url: this.props.image_url, token: this.props.token })
     Actions.settings({ mine: true, image_url: this.props.image_url, token: this.props.token })
   }
 

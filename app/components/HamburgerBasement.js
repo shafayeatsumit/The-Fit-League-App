@@ -9,7 +9,6 @@ import {
   TouchableWithoutFeedback,
   TouchableHighlight,
   Image,
-  AsyncStorage,
   Linking
 } from 'react-native'
 

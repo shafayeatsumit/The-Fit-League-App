@@ -5,6 +5,7 @@
 	};
 	objectVersion = 46;
 	objects = {
+
 /* Begin PBXBuildFile section */
 		00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302AC1ABCB8CE00DB3ED1 /* libRCTActionSheet.a */; };
 		00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302BA1ABCB90400DB3ED1 /* libRCTGeolocation.a */; };
@@ -1588,7 +1589,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = TheFitLeague/TheFitLeague.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
@@ -1614,8 +1615,8 @@
 					"-lc++",
 				);
 				PRODUCT_NAME = TheFitLeague;
-				PROVISIONING_PROFILE = "05e24e68-9194-4de7-8113-82c692bed3be";
-				PROVISIONING_PROFILE_SPECIFIER = shafs_dev_profile;
+				PROVISIONING_PROFILE = "fd0014c5-e3a4-4fda-ab35-723659e6a118";
+				PROVISIONING_PROFILE_SPECIFIER = "Shafayeat TFL App Store";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -1627,7 +1628,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = TheFitLeague/TheFitLeague.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = B7E4N9S37Z;
@@ -1652,8 +1653,8 @@
 					"-lc++",
 				);
 				PRODUCT_NAME = TheFitLeague;
-				PROVISIONING_PROFILE = "05e24e68-9194-4de7-8113-82c692bed3be";
-				PROVISIONING_PROFILE_SPECIFIER = shafs_dev_profile;
+				PROVISIONING_PROFILE = "fd0014c5-e3a4-4fda-ab35-723659e6a118";
+				PROVISIONING_PROFILE_SPECIFIER = "Shafayeat TFL App Store";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 			};

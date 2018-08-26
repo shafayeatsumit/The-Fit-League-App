@@ -16,11 +16,6 @@ const xOutIcon = require('../../assets/images/xOutDark.png');
 export default class OtherHeader extends Component {
   constructor(props) {
     super(props)
-    this.myPlayerCard = this.myPlayerCard.bind(this)
-  }
-
-  myPlayerCard() {
-    Actions.playerCard({ mine: true, image_url: this.props.image_url, token: this.props.token })
   }
 
   render() {
