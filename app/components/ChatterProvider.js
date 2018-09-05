@@ -54,7 +54,7 @@ const timeSince = (date) => {
 	  return dateStr;    
 };
 
-const palyOffCard = (value,indx) => {
+const playOffCard = (value,indx) => {
   return(
     <View style={styles.fullWidhtContainer} key={indx} onStartShouldSetResponder={() => true}>
       <View style={styles.fullWidthLeftView}>
@@ -132,7 +132,7 @@ class ChatterProvider extends Component {
             return bubbleCard(value, indx, trophyIcon)
           }else
            if(value.attributes.kind === 'PlayoffHeadsUp') {
-            return palyOffCard(value, indx)
+            return playOffCard(value, indx)
           }else if(value.attributes.kind === 'Sunday') {
             return sundayCard(value, indx)
           }else {

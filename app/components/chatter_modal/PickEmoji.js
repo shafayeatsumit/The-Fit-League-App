@@ -15,6 +15,20 @@ import { HttpUtils } from '../../services/HttpUtils'
 
 const exButton = require('../../../assets/images/exButton.png');
 
+
+const EmojiProvider = ({emoji, emojiPressed}) => {
+  return (
+    <View style={styles.emojiHolder}>
+      <TouchableHighlight onPress={() => emojiPressed(emoji)} underlayColor='rgba(255, 255, 255, 0.75)'>
+        <Image source={{uri: emoji.attributes.icon, width: 80, height: 80 }}/>
+      </TouchableHighlight>
+      <Text style={styles.emojiText}>
+        {emoji.attributes.label}
+      </Text>                            
+    </View>    
+  )
+}
+
 class DynamicEmoji extends Component {
   constructor(props) {
     super(props);
@@ -76,14 +90,11 @@ class DynamicEmoji extends Component {
                     this.state.chatterKinds.map((emoji, indx) => {
                     if (emoji.attributes.sentiment === 'positive') {
                       return (
-                        <View style={styles.emojiHolder} key={indx}>
-                          <TouchableHighlight onPress={this.emojiPressed.bind(this,emoji)} underlayColor='rgba(255, 255, 255, 0.75)'>
-                            <Image source={{uri: emoji.attributes.icon, width: 80, height: 80 }}/>
-                          </TouchableHighlight>
-                          <Text style={styles.emojiText}>
-                            {emoji.attributes.label}
-                          </Text>                            
-                        </View>
+                        <EmojiProvider 
+                          emoji={emoji}
+                          emojiPressed={this.emojiPressed}
+                          key={indx}                          
+                        />
                       )  
                     }
                   })}
@@ -105,14 +116,11 @@ class DynamicEmoji extends Component {
                   this.state.chatterKinds.map((emoji, indx) => {
                   if (emoji.attributes.sentiment === 'negative') {
                     return (
-                      <View style={styles.emojiHolder} key={indx}>
-                        <TouchableHighlight onPress={this.emojiPressed.bind(this,emoji)} underlayColor='rgba(255, 255, 255, 0.75)'>
-                          <Image source={{uri: emoji.attributes.icon, width: 80, height: 80}}/>
-                        </TouchableHighlight>
-                        <Text style={styles.emojiText}>
-                            {emoji.attributes.label}
-                          </Text>                            
-                      </View>
+                      <EmojiProvider 
+                        emoji={emoji}
+                        emojiPressed={this.emojiPressed}                          
+                        key={indx}
+                      />
                     )  
                   }
                 })} 

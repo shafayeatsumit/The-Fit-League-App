@@ -72,8 +72,8 @@ export default class Chatterbox extends Component {
   }
 
   showModal(user) {
-    let { id } = user
-    this.setState({ modalVisible: true, workoutId: id })
+    let { id, attributes } = user
+    this.setState({ modalVisible: true, workoutId: id, user_image_url: attributes.user_image_url })
   }
 
   switchModal(args) {
@@ -151,6 +151,7 @@ export default class Chatterbox extends Component {
                     leagueId={this.state.leagueId}
                     emoji={this.state.emojiData}
                     workoutId={this.state.workoutId}
+                    userImageUrl={this.state.user_image_url}
                   />
                   :                
                   <PickEmoji 

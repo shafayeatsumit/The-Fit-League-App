@@ -28,7 +28,7 @@ class AddComment extends Component {
   }
 
   handleSave() {
-    const { recipients , emoji, leagueId, workoutId, exitModal } = this.props;  
+    const { recipients , emoji, leagueId, workoutId, exitModal, userImageUrl } = this.props;  
 
     const params = {
       league_id: parseInt(leagueId),
@@ -53,19 +53,19 @@ class AddComment extends Component {
       .then((response)=> {
         this.setState({ loading:false })
         exitModal()
+        this.props.fireChatter({uri:emoji.attributes.icon}, { uri: userImageUrl })
       })
       .catch((error)=> {
         this.setState({ loading:false })
       })
-
+    
+    
   }
 
   exitModal() {
     this.props.switchModal('recipientsModal') 
     this.props.exitModal()   
   }
-
-
 
   render() {
     return (
