@@ -4,6 +4,7 @@ import {
   StyleSheet, 
   ScrollView,
   TouchableHighlight,
+  TouchableOpacity,
   Image,
   ActivityIndicator,
   View 
@@ -109,10 +110,11 @@ class RecipientsList extends Component {
           :
           <View style={styles.modalBody}>
             <View style={styles.allRecipientsContainer}>
-              <TouchableHighlight                              
+              <TouchableOpacity                              
                   underlayColor='transparent'
                   style={styles.checkboxTouchable}
-                  onPress = {this.selectAllRecipipents}              
+                  onPress = {this.selectAllRecipipents}
+                  activeOpacity={0.8}              
                 >             
                 {  this.state.allRecipientsCheckBox || selectedRecipients.length === recipients.length
                   ?
@@ -120,10 +122,11 @@ class RecipientsList extends Component {
                   :
                   <Image source={checkboxOutline} style={styles.checkboxOutlineImage}/>
                 }
-              </TouchableHighlight>
-              <Text style={styles.allmembersText}>
-                ALL  LEAGUE  MEMBERS
-              </Text>                          
+                <Text style={styles.allmembersText}>
+                  ALL  LEAGUE  MEMBERS
+                </Text>                 
+              </TouchableOpacity>
+                         
             </View>
             <View style={styles.scrollableHolder}>
               <ScrollView >
@@ -132,10 +135,11 @@ class RecipientsList extends Component {
                     const recipientSelected = this.state.selectedRecipients.includes(recipient)
                     return(
                       <View style={styles.recipientContainer} key={indx}>
-                        <TouchableHighlight                              
+                        <TouchableOpacity                              
                           underlayColor='transparent'
                           style={styles.checkboxTouchable}
-                          onPress = {() => this.clickRecipient(recipient)}              
+                          onPress = {() => this.clickRecipient(recipient)}
+                          activeOpacity={0.8}              
                         >             
                           {
                             recipientSelected ?
@@ -143,8 +147,9 @@ class RecipientsList extends Component {
                             :
                             <Image source={checkboxOutline} style={styles.checkboxOutlineImage}/>
                           }
-                        </TouchableHighlight>               
-                        <Text style={styles.recipientName}>{recipient.attributes.name}</Text>
+                          <Text style={styles.recipientName}>{recipient.attributes.name}</Text>
+                        </TouchableOpacity>               
+                        
                       </View>  
                     )
                   })
@@ -235,9 +240,11 @@ const styles = StyleSheet.create({
   },
   checkboxTouchable: {
     paddingRight: 15,
+    flexDirection:'row'
   },
   allmembersText: {
     fontFamily:'Avenir-Light', 
+    paddingLeft: 10,
     color:'#0E2442', 
     fontSize:14,
     fontWeight:'600'
@@ -248,7 +255,7 @@ const styles = StyleSheet.create({
     flexDirection:'row'
   },
   recipientName: {
-    // paddingTop:10 ,
+    paddingLeft:10,
     fontWeight:'500',
     textAlign: 'center', 
     fontFamily: 'Avenir-Light', 
