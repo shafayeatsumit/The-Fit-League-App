@@ -125,6 +125,7 @@ export default class Chatterbox extends Component {
           exitModal={this.hideModal}
           switchModal={this.switchModal}
           reloadChatterbox={() => this.reloadChatterbox()} 
+          parent="chatterbox"
         />
       ) 
     }

@@ -27,8 +27,19 @@ class AddComment extends Component {
     this.exitModal = this.exitModal.bind(this)
   }
 
+  sendChatterSuccess() {
+    const {parent} = this.props;
+    if(parent === "workoutfeed"){
+      this.props.fireChatter({uri:emoji.attributes.icon}, { uri: userImageUrl })
+    }else if(parent === "chatterbox") {
+      this.props.reloadChatterbox()
+    }else{
+      //TODO: for matchups when implemented
+    }
+  }
+
   handleSave() {
-    const { recipients , emoji, leagueId, workoutId, exitModal, userImageUrl } = this.props;  
+    const { recipientsData , emoji, leagueId, workoutId, exitModal, userImageUrl } = this.props;  
 
     const params = {
       league_id: parseInt(leagueId),
@@ -40,11 +51,11 @@ class AddComment extends Component {
     // dtermines whether it's passed from workoutfeed or Chatterbox
     if(workoutId){
       params.workout_id =  parseInt(workoutId)
-    }else if(recipients) {
-      recipients === 'all' ? 
+    }else if(recipientsData) {
+      recipientsData.wholeLeague  ? 
         params.whole_league = true 
       :
-        params.recipient_ids = recipients.map((recipient) => parseInt(recipient.id))         
+        params.recipient_ids = recipientsData.recipients.map((recipient) => parseInt(recipient.id))         
     }
 
 
@@ -52,9 +63,9 @@ class AddComment extends Component {
     HttpUtils.post('chatters', params, this.props.token)
       .then((response)=> {
         this.setState({ loading:false })
-        this.props.reloadChatterbox()
+        this.sendChatterSuccess()        
         exitModal()
-        //this.props.fireChatter({uri:emoji.attributes.icon}, { uri: userImageUrl })
+        
       })
       .catch((error)=> {
         this.setState({ loading:false })

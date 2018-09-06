@@ -152,6 +152,7 @@ export default class Chatterbox extends Component {
                     emoji={this.state.emojiData}
                     workoutId={this.state.workoutId}
                     userImageUrl={this.state.user_image_url}
+                    parent="workoutfeed"
                   />
                   :                
                   <PickEmoji 
