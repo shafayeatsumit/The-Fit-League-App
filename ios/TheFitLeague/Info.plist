@@ -31,7 +31,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>8</string>
 	<key>FacebookAppID</key>
 	<string>551820571820555</string>
 	<key>FacebookDisplayName</key>
@@ -55,7 +55,7 @@
 		<true/>
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string/>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>This app does not require access to the microphone.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
@@ -68,6 +68,7 @@
 		<string>Avenir-Light.ttf</string>
 		<string>Avenir.ttc</string>
 		<string>Fenwick.ttf</string>
+		<string>Avenir-Heavy.ttf</string>
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>

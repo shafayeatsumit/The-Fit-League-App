@@ -52,8 +52,9 @@ class AddComment extends Component {
     HttpUtils.post('chatters', params, this.props.token)
       .then((response)=> {
         this.setState({ loading:false })
+        this.props.reloadChatterbox()
         exitModal()
-        this.props.fireChatter({uri:emoji.attributes.icon}, { uri: userImageUrl })
+        //this.props.fireChatter({uri:emoji.attributes.icon}, { uri: userImageUrl })
       })
       .catch((error)=> {
         this.setState({ loading:false })

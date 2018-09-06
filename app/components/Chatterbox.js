@@ -49,6 +49,14 @@ export default class Chatterbox extends Component {
       }).done()
   }
 
+  reloadChatterbox() {
+    const { leagueId, activeTab } = this.state;
+    const personalChatterUrl = 'leagues/' + leagueId.toString() + '/chatterbox/personal';
+    const chatterboxUrl = 'leagues/' + leagueId.toString() + '/chatterbox';
+
+    activeTab === 'youTab' ? this.getChattersByUrl(personalChatterUrl) : this.getChattersByUrl(chatterboxUrl)
+  }
+
   getChatters() {
     SessionStore.getLeagueId((leagueId) => {
       const chatterboxUrl = 'leagues/' + leagueId.toString() + '/chatterbox/personal';
@@ -115,7 +123,8 @@ export default class Chatterbox extends Component {
           emoji={this.state.emojiData}
           leagueId={this.state.leagueId}
           exitModal={this.hideModal}
-          switchModal={this.switchModal} 
+          switchModal={this.switchModal}
+          reloadChatterbox={() => this.reloadChatterbox()} 
         />
       ) 
     }
