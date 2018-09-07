@@ -79,7 +79,7 @@ class RecipientsList extends Component {
     const { selectedRecipients, allRecipientsCheckBox, recipients } = this.state;
     
     if (allRecipientsCheckBox || selectedRecipients.length === recipients.length ){
-      this.props.switchModal({modalName: 'emojiPicker', recipientsData: {wholeLeague:true, recipients:selectedRecipients} })
+      this.props.switchModal({modalName: 'emojiPicker', recipientsData: {wholeLeague:true} })
     }else{
       this.props.switchModal({modalName: 'emojiPicker', recipientsData:{wholeLeague:false, recipients:selectedRecipients}})
     }

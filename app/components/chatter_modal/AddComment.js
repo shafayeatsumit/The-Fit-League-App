@@ -39,7 +39,7 @@ class AddComment extends Component {
   }
 
   handleSave() {
-    const { recipientsData , emoji, leagueId, workoutId, exitModal, userImageUrl } = this.props;  
+    const { recipientsData , emoji, leagueId, workoutId, exitModal } = this.props;  
 
     const params = {
       league_id: parseInt(leagueId),
@@ -48,7 +48,7 @@ class AddComment extends Component {
       chatter_kind_id: parseInt(emoji.id)
     }
 
-    // dtermines whether it's passed from workoutfeed or Chatterbox
+    // TODO: logic needs to reset when matchups page implemented
     if(workoutId){
       params.workout_id =  parseInt(workoutId)
     }else if(recipientsData) {
@@ -69,9 +69,7 @@ class AddComment extends Component {
       })
       .catch((error)=> {
         this.setState({ loading:false })
-      })
-    
-    
+      })    
   }
 
   exitModal() {

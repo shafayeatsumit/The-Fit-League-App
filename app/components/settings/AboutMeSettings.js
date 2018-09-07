@@ -57,7 +57,7 @@ export default class AboutMeSettings extends Component {
               <Text style={styles.explainText}>
                 This little bio appears on your Player Card.
               </Text>
-              <Text style={styles.explainText}>Everyone will see it. it's really important.</Text>
+              <Text style={styles.explainText}>Everyone will see it. It's really important.</Text>
               <Text style={styles.explainText}>Be funny. Do it. </Text>
             </View>
             <TextInput
