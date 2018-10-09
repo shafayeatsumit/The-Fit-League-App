@@ -9,7 +9,6 @@ import {
   TouchableWithoutFeedback,
   TouchableHighlight,
   Image,
-  Alert,
   Linking
 } from 'react-native'
 
@@ -35,6 +34,8 @@ const WORKOUTS_LINK = { label: 'Your Workouts', action: 'workouts', props: {} }
 const MATCHUP_LINK =  { label: 'Your Matchup', action: 'matchup', props: {} }
 const LEAGUE_LINK =   { label: 'Your League',  action: 'league' }
 const RULES_LINK =    { label: 'Game Rules',  action: 'rules' }
+const SETTINGS_LINK = { label: 'Settings',  action: 'settings' }
+const CHATTERBOX_LINK = { label: 'Chatterbox', action: 'chatterbox'}
 
 const LINKS_BY_FEATURE = {
   matchup: MATCHUP_LINK
@@ -50,7 +51,7 @@ export default class HamburgerBasement extends Component {
     this.viewRules = this.viewRules.bind(this)
     this.state = { 
       leagueRequired: !props.ignoreLeagueRequirement,
-      links: [HOME_LINK, WORKOUTS_LINK, RULES_LINK],
+      links: [HOME_LINK, CHATTERBOX_LINK, WORKOUTS_LINK, RULES_LINK],
       basementShowing: false,
       noLeague: false,
       currentLeague: null,
@@ -68,23 +69,27 @@ export default class HamburgerBasement extends Component {
   }
 
   setLeagueLinks(league) {
-    let links = [HOME_LINK, WORKOUTS_LINK]
+    const chatterInboxCount =  league.attributes.chatter_inbox_count
+    let chatterboxLink = Object.assign({ props: {chatterInboxCount}}, CHATTERBOX_LINK)
+    let links = [HOME_LINK, chatterboxLink, WORKOUTS_LINK]
+    SessionStore.save({chatterInboxCount: league.attributes.chatter_inbox_count })
     league.attributes.features.forEach((feature) => {
       if (LINKS_BY_FEATURE[feature]) links.push(LINKS_BY_FEATURE[feature])
     })
     let leagueLink = Object.assign({ props: { title: league.attributes.name } }, LEAGUE_LINK);
     links.push(leagueLink)
     // May want this to depend on league type?
-    links.push(RULES_LINK)
-    SessionStore.save({ leagueId: league.id }, () => {    
-      this.setState({ links, currentLeague: league, noLeague: false })
+    links.push(RULES_LINK, SETTINGS_LINK)
+    // league.attributes.chatter_inbox_count
+    SessionStore.save({ leagueId: league.id, chatterInboxCount }, () => {    
+      this.setState({ links, currentLeague: league, noLeague: false, chatterInboxCount })
     })
   }
 
   componentDidMount() {
     let { token } = this.props
     HttpUtils.get('leagues', token).then((responseData) => {
-      if (responseData.data.length > 0) {
+      if (responseData.data.length > 0) {  
         SessionStore.getLeagueId((leagueId) => {
           let currentLeague = responseData.data.filter((league) => league.id === leagueId)[0]
           this.setLeagueLinks(currentLeague ? currentLeague : responseData.data[0])
@@ -127,6 +132,7 @@ export default class HamburgerBasement extends Component {
   render() {
     const { basementSpace } = this.state
     const { token, image_url } = this.props
+
     return (
       <View style={styles.basement}>
         <NoLeagueModal show={this.state.leagueRequired && this.state.noLeague} viewRules={this.viewRules} callback={this.setLeagueLinks} token={this.props.token} />
@@ -149,9 +155,16 @@ export default class HamburgerBasement extends Component {
         </TouchableHighlight>
         <View style={styles.basementNavColumn}>
           { this.state.links.map((link) => {
-            return <TouchableHighlight key={link.action} style={styles.basementNavLink} onPress={() => Actions[link.action]({ token, image_url, ...link.props }) } underlayColor='rgba(255, 255, 255, 0.25)'>
-              <View>
+            return <TouchableHighlight key={link.action} style={styles.basementNavLink} onPress={() => Actions[link.action]({ token, image_url, ...link.props })} underlayColor='rgba(255, 255, 255, 0.25)'>
+              <View style={styles.labelView}>
                 <Text style={styles.basementNavLinkText}>{ link.label }</Text>
+                { 
+                  (link.label === 'Chatterbox' && this.state.chatterInboxCount) &&
+                  <View style={styles.chatterInboxView}>
+                    <Text style={styles.basementNavLinkText}>{ this.state.chatterInboxCount }</Text>
+                  </View>                                  
+                }
+
               </View>
             </TouchableHighlight>
           })}
@@ -248,5 +261,17 @@ const styles = StyleSheet.create({
     color: 'white',
     fontFamily: 'Avenir-Black',
     fontSize: 16,
+  },
+  labelView: {
+    flexDirection: 'row'
+  },
+  chatterInboxView: {
+    height:20, 
+    marginLeft:10, 
+    width:20, 
+    borderRadius:10, 
+    backgroundColor:'#2ED461', 
+    justifyContent:'center', 
+    alignItems:'center'
   }
 })

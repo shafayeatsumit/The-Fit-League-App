@@ -15,8 +15,10 @@ import NewWorkoutWhat from './NewWorkoutWhat';
 import NewWorkoutHowMany from './NewWorkoutHowMany';
 import NewWorkoutSuccess from './NewWorkoutSuccess';
 import EditWorkoutSuccess from './EditWorkoutSuccess';
-import SadConnection from './SadConnection'
-import ProfileImage from './ProfileImage'
+import SadConnection from './SadConnection';
+import ProfileImage from './ProfileImage';
+import Settings from './Settings';
+import Chatterbox from './Chatterbox';
 
 const App = () => {
   return (
@@ -25,6 +27,7 @@ const App = () => {
         <Scene key="loading"
           component={Loading}
           title="Loading"
+          true
           initial
         />
         <Scene
@@ -41,6 +44,11 @@ const App = () => {
           key="home"
           component={Home}
           title="Home"
+        />
+        <Scene
+          key="settings"
+          component={Settings}
+          title="Settings"
         />
         <Scene
           key="newWorkoutWhen"
@@ -77,6 +85,12 @@ const App = () => {
           component={League}
           title="Your League"
         />
+        <Scene
+          key="chatterbox"
+          component={Chatterbox}
+          title="Chatterbox"
+          
+        />        
         <Scene
           key="workouts"
           component={Workouts}

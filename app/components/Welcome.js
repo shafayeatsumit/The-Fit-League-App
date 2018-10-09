@@ -1,7 +1,4 @@
 import React, { Component } from 'react';
-
-import t from 'tcomb-form-native';
-
 import {
   StyleSheet,
   Text,
@@ -10,7 +7,6 @@ import {
   View,
   Image,
   TextInput,
-  ActivityIndicator,
   StatusBar,
   TouchableHighlight,
   AlertIOS
@@ -94,9 +90,9 @@ export default class Welcome extends Component {
             AppEventsLogger.logEvent('Joined League On Registration')
           }
           HttpUtils.post('login', params).then((responseData) => {
-            let { token, image_url, email, name } = responseData.data.attributes
+            let { token, email, name } = responseData.data.attributes
             AppEventsLogger.logEvent('Logged in with Facebook')
-            SessionStore.save({ token, imageUrl: image_url, leagueId: responseData.meta.league_id })
+            SessionStore.save({ token, leagueId: responseData.meta.league_id })
             Session.save(token)
             Actions.home({ token })
           }).catch((error) => {
@@ -184,6 +180,7 @@ export default class Welcome extends Component {
                     style={styles.input}
                     value={this.state.email}
                     placeholder='Email'
+                    autoCapitalize='none'
                     placeholderTextColor='white'
                     underlineColorAndroid='rgba(0,0,0,0)'
                     onChangeText={(email) => this.setState({ email })}

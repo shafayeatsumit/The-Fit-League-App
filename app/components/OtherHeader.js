@@ -11,15 +11,11 @@ import {
 import { Actions } from 'react-native-router-flux'
 
 const hamburger = require('../../assets/images/hamburgerDark.png');
+const xOutIcon = require('../../assets/images/xOutDark.png');
 
 export default class OtherHeader extends Component {
   constructor(props) {
     super(props)
-    this.myPlayerCard = this.myPlayerCard.bind(this)
-  }
-
-  myPlayerCard() {
-    Actions.playerCard({ mine: true, image_url: this.props.image_url, token: this.props.token })
   }
 
   render() {
@@ -28,16 +24,14 @@ export default class OtherHeader extends Component {
         <View>
           <View style={styles.topBar}>
             <TouchableHighlight style={styles.hamburgerButton} onPress={this.context.toggleBasement} underlayColor='transparent'>
-              <Image style={styles.hamburgerButtonIcon} source={hamburger} />
+              <Image  source={hamburger} />
             </TouchableHighlight>
             <View style={styles.topBarSpacer}></View>
-            <View style={styles.userImageHolder}>
-              { this.props.image_url && 
-                <TouchableHighlight onPress={this.myPlayerCard} underlayColor='transparent'>
-                  <Image style={styles.userImage} source={{uri: this.props.image_url}} />
-                </TouchableHighlight>
-              }
-            </View>
+            
+            <TouchableHighlight style={styles.xOutButton} onPress={()=> Actions.home({token: this.props.token})} underlayColor='transparent'>
+              <Image  source={xOutIcon} style={styles.xOutIcon}/>
+            </TouchableHighlight>
+            
           </View>
           <View style={styles.title}>
             <Text style={styles.titleText}>{ this.props.title }</Text>
@@ -71,16 +65,15 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
     paddingRight: 20,
   },
-  userImageHolder: {
+  xOutButton: {
     flex: 1,
-    paddingRight: 20
+    paddingTop: 10,
+    paddingLeft: 20,
+    paddingRight:20,
   },
-  userImage: {
-    borderColor: 'white',
-    borderRadius: 18,
-    borderWidth: 2,
-    height: 36,
-    width: 36,
+  xOutIcon: {
+    height:25,
+    width:25
   },
   title: {
     alignItems: 'center',

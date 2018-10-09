@@ -11,7 +11,7 @@ import { HttpUtils } from '../services/HttpUtils'
 import { SessionStore } from '../services/SessionStore'
 
 import Widget from './Widget'
-import Chatterbox from './Chatterbox'
+import WorkoutFeed from './WorkoutFeed'
 
 export default class Widgets extends Component {
   
@@ -52,7 +52,7 @@ export default class Widgets extends Component {
           }
           <View style={styles.widgetSpacer}></View>
         </View>
-        <Chatterbox token={this.props.token} image_url={this.props.image_url} fireChatter={this.props.fireChatter} />
+        <WorkoutFeed token={this.props.token} image_url={this.props.image_url} fireChatter={this.props.fireChatter} />
       </View>
     )
   }

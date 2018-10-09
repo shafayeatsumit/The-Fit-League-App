@@ -40,7 +40,7 @@ const sadConnection = (token) => {
   }
 }
 
-const TIMEOUT = 15000
+const TIMEOUT = 15000 
 
 const hitEndpoint = (method, endpoint, token, body) => {
   let headers = headersFor(token)

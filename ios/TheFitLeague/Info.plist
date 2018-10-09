@@ -17,7 +17,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>2.06</string>
+	<string>2.09</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleURLTypes</key>
@@ -31,7 +31,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>2</string>
 	<key>FacebookAppID</key>
 	<string>551820571820555</string>
 	<key>FacebookDisplayName</key>
@@ -45,6 +45,15 @@
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+		<key>NSAllowsArbitraryLoadsInWebContent</key>
+		<true/>
+		<key>NSAllowsLocalNetworking</key>
+		<true/>
+	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
 	<key>NSMicrophoneUsageDescription</key>
@@ -53,10 +62,13 @@
 	<string>This app does require access to the photo library.</string>
 	<key>UIAppFonts</key>
 	<array>
+		<string>Avenir-Medium.ttf</string>
 		<string>Avenir-Black.ttf</string>
 		<string>Toronto-Gothic.ttf</string>
 		<string>Avenir-Light.ttf</string>
 		<string>Avenir.ttc</string>
+		<string>Fenwick.ttf</string>
+		<string>Avenir-Heavy.ttf</string>
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>
@@ -66,15 +78,6 @@
 	<array>
 		<string>armv7</string>
 	</array>
-  <key>NSAppTransportSecurity</key>
-  <dict>
-    <key>NSAllowsArbitraryLoads</key>
-    <true/>
-    <key>NSAllowsArbitraryLoadsInWebContent</key>
-    <true/>
-    <key>NSAllowsLocalNetworking</key>
-    <true/>
-  </dict>
 	<key>UIRequiresFullScreen</key>
 	<true/>
 	<key>UISupportedInterfaceOrientations</key>
